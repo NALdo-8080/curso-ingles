@@ -46,3 +46,4 @@ curso-de-ingles/
 ## 🚀 Despliegue en GitHub Pages
 
 Este repositorio está configurado para publicarse de forma estática directamente desde la rama principal (`main`) a través de **GitHub Pages**.
+

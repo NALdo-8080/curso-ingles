@@ -848,12 +848,49 @@
 
 <script>
 const PRONUN_SAMPLE_WORDS = [
+  // Conversación Cotidiana
   { en: "Think about the future", ipa: "/θɪŋk əˈbaʊt ðə ˈfjuːtʃər/", es: "Piensa sobre el futuro" },
   { en: "Could you please help me?", ipa: "/kʊd juː pliːz hɛlp miː/", es: "¿Podrías ayudarme por favor?" },
   { en: "I've lived here since 2020", ipa: "/aɪv lɪvd hɪr sɪns ˈtwɛnti ˈtwɛnti/", es: "He vivido aquí desde 2020" },
   { en: "I'm looking forward to it", ipa: "/aɪm ˈlʊkɪŋ ˈfɔːrwərd tuː ɪt/", es: "Lo espero con entusiasmo" },
   { en: "Have you ever been to Rome?", ipa: "/hæv juː ˈɛvər bɪn tuː roʊm/", es: "¿Alguna vez has ido a Roma?" },
-  { en: "She usually wakes up at seven", ipa: "/ʃiː ˈjuːʒuəli weɪks ʌp æt ˈsɛvn/", es: "Ella suele despertarse a las siete" }
+  { en: "She usually wakes up at seven", ipa: "/ʃiː ˈjuːʒuəli weɪks ʌp æt ˈsɛvn/", es: "Ella suele despertarse a las siete" },
+  { en: "It's a pleasure to meet you", ipa: "/ɪts ə ˈplɛʒər tuː miːt juː/", es: "Es un verdadero placer conocerte" },
+  { en: "How's everything going with you?", ipa: "/haʊz ˈɛvriθɪŋ ˈɡoʊɪŋ wɪð juː/", es: "¿Cómo va todo contigo?" },
+  { en: "What do you do for a living?", ipa: "/wʌt duː juː duː fər ə ˈlɪvɪŋ/", es: "¿A qué te dedicas profesionalmente?" },
+  { en: "Let's grab a cup of coffee", ipa: "/lɛts ɡræb ə kʌp əv ˈkɒfi/", es: "Vamos por una taza de café" },
+  { en: "I couldn't agree with you more", ipa: "/aɪ ˈkʊdnt əˈɡriː wɪð juː mɔːr/", es: "No podría estar más de acuerdo" },
+  { en: "Never mind, it doesn't matter", ipa: "/ˈnɛvər maɪnd ɪt ˈdʌznt ˈmætər/", es: "Olvídalo, no tiene importancia" },
+
+  // Ámbito Profesional y Negocios
+  { en: "Let's schedule a quick meeting", ipa: "/lɛts ˈskɛdʒuːl ə kwɪk ˈmiːtɪŋ/", es: "Agendemos una reunión rápida" },
+  { en: "I will keep you in the loop", ipa: "/aɪ wɪl kiːp juː ɪn ðə luːp/", es: "Te mantendré informado del tema" },
+  { en: "Could you send me the report?", ipa: "/kʊd juː sɛnd miː ðə rɪˈpɔːrt/", es: "¿Podrías enviarme el informe?" },
+  { en: "We are running out of time", ipa: "/wiː ɑːr ˈrʌnɪŋ aʊt əv taɪm/", es: "Nos estamos quedando sin tiempo" },
+  { en: "That sounds like a solid plan", ipa: "/ðæt saʊndz laɪk ə ˈsɒlɪd plæn/", es: "Eso suena como un plan sólido" },
+  { en: "I'll get back to you soon", ipa: "/aɪl ɡɛt bæk tuː juː suːn/", es: "Me pondré en contacto pronto" },
+  { en: "Let's get straight to the point", ipa: "/lɛts ɡɛt streɪt tuː ðə pɔɪnt/", es: "Vayamos directo al punto central" },
+  { en: "We must meet this deadline", ipa: "/wiː mʌst miːt ðɪs ˈdɛdlaɪn/", es: "Debemos cumplir con esta fecha límite" },
+
+  // Viajes, Ciudad y Restaurante
+  { en: "Where is the nearest subway station?", ipa: "/wɛr ɪz ðə ˈnɪrɪst ˈsʌbweɪ ˈsteɪʃən/", es: "¿Dónde está la estación de metro más cercana?" },
+  { en: "Could we have the bill, please?", ipa: "/kʊd wiː hæv ðə bɪl pliːz/", es: "¿Nos trae la cuenta, por favor?" },
+  { en: "How much is a round-trip ticket?", ipa: "/haʊ mʌtʃ ɪz ə raʊnd trɪp ˈtɪkɪt/", es: "¿Cuánto cuesta un boleto de ida y vuelta?" },
+  { en: "I have a table reserved for two", ipa: "/aɪ hæv ə ˈteɪbl rɪˈzɜːrvd fər tuː/", es: "Tengo una mesa reservada para dos" },
+  { en: "Is there free Wi-Fi available here?", ipa: "/ɪz ðɛr friː ˈwaɪfaɪ əˈveɪləbl hɪr/", es: "¿Hay Wi-Fi gratuito disponible aquí?" },
+  { en: "Excuse me, I need some directions", ipa: "/ɪkˈskjuːz miː aɪ niːd sʌm dəˈrɛkʃənz/", es: "Disculpe, necesito algunas indicaciones" },
+
+  // Modismos, Fluidez y Habla Conectada
+  { en: "It's a piece of cake", ipa: "/ɪts ə piːs əv keɪk/", es: "Es pan comido (muy fácil)" },
+  { en: "Better late than never", ipa: "/ˈbɛtər leɪt ðæn ˈnɛvər/", es: "Más vale tarde que nunca" },
+  { en: "Break a leg on your presentation!", ipa: "/breɪk ə lɛɡ ɒn jɔːr ˌprɛzənˈteɪʃən/", es: "¡Mucha suerte en tu presentación!" },
+  { en: "Take it easy and have fun", ipa: "/teɪk ɪt ˈiːzi ænd hæv fʌn/", es: "Tómalo con calma y diviértete" },
+  { en: "Actions speak louder than words", ipa: "/ˈækʃənz spiːk ˈlaʊdər ðæn wɜːrdz/", es: "Los hechos valen más que las palabras" },
+  { en: "To make a long story short", ipa: "/tuː meɪk ə lɔːŋ ˈstɔːri ʃɔːrt/", es: "Para resumirte la historia..." },
+  { en: "I'm feeling a bit under the weather", ipa: "/aɪm ˈfiːlɪŋ ə bɪt ˈʌndər ðə ˈwɛðər/", es: "Me siento un poco indispuesto" },
+  { en: "So far, so good", ipa: "/soʊ fɑːr soʊ ɡʊd/", es: "Hasta ahora, todo marcha bien" },
+  { en: "Let's call it a day and rest", ipa: "/lɛts kɔːl ɪt ə deɪ ænd rɛst/", es: "Demos por terminado el trabajo por hoy" },
+  { en: "Time flies when you're learning", ipa: "/taɪm flaɪz wɛn jʊr ˈlɜːrnɪŋ/", es: "El tiempo vuela cuando estás aprendiendo" }
 ];
 
 function renderDashboard() {
@@ -899,7 +936,7 @@ function renderPronunWidget() {
   if (!container) return;
   container.innerHTML = '';
 
-  const shuffled = [...PRONUN_SAMPLE_WORDS].sort(() => 0.5 - Math.random()).slice(0, 4);
+  const shuffled = [...PRONUN_SAMPLE_WORDS].sort(() => 0.5 - Math.random()).slice(0, 6);
   shuffled.forEach(item => {
     const card = document.createElement('div');
     card.className = 'pronun-card';

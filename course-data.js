@@ -39,6 +39,9 @@ const UNITS = [
           { en: "Think about the future.", ipa: "/θɪŋk əˈbaʊt ðə ˈfjuːtʃər/", es: "Piensa sobre el futuro." },
           { en: "This is my brother.", ipa: "/ðɪs ɪz maɪ ˈbrʌðər/", es: "Este es mi hermano." },
           { en: "A cup of coffee, please.", ipa: "/ə kʌp əv ˈkɒfi pliːz/", es: "Una taza de café, por favor." }
+        ,
+          { en: "The weather is very pleasant today.", ipa: "/ðə ˈwɛðər ɪz ˈvɛri ˈplɛznt təˈdeɪ/", es: "El clima está muy agradable hoy." },
+          { en: "Thank you for your valuable advice.", ipa: "/θæŋk juː fər jɔːr ˈvæljuəbl ədˈvaɪs/", es: "Gracias por tu valioso consejo." }
         ],
         takeaways: [
           "El inglés no se lee como se escribe: las vocales cambian según la acentuación de la palabra.",
@@ -99,6 +102,9 @@ const UNITS = [
           { en: "Hello, nice to meet you. I'm Carlos.", ipa: "/həˈloʊ naɪs tuː miːt juː aɪm ˈkɑːrloʊs/", es: "Hola, encantado de conocerte. Soy Carlos." },
           { en: "How is it going? - Pretty good, thanks!", ipa: "/haʊ ɪz ɪt ˈɡoʊɪŋ - ˈprɪti ɡʊd θæŋks/", es: "¿Cómo te va? - ¡Bastante bien, gracias!" },
           { en: "She is a software engineer.", ipa: "/ʃiː ɪz ə ˈsɔːftwer ˌendʒɪˈnɪr/", es: "Ella es ingeniera de software." }
+        ,
+          { en: "Good morning! How are you doing today?", ipa: "/ɡʊd ˈmɔːrnɪŋ haʊ ɑːr juː ˈduːɪŋ təˈdeɪ/", es: "¡Buenos días! ¿Cómo estás hoy?" },
+          { en: "They are our new colleagues from Canada.", ipa: "/ðeɪ ɑːr ˈaʊər nuː ˈkɒliːɡz frəm ˈkænədə/", es: "Ellos son nuestros nuevos colegas de Canadá." }
         ],
         takeaways: [
           "El pronombre 'I' (yo) siempre se escribe en mayúscula sin importar dónde esté en la frase.",
@@ -156,6 +162,9 @@ const UNITS = [
           { en: "I'm 28 years old and I'm from Mexico.", ipa: "/aɪm ˈtwenti eɪt jɪərz oʊld ænd aɪm frəm ˈmɛksɪkoʊ/", es: "Tengo 28 años y soy de México." },
           { en: "They aren't ready yet.", ipa: "/ðeɪ ɑːrnt ˈrɛdi jɛt/", es: "Ellos no están listos todavía." },
           { en: "Are you ready for the meeting?", ipa: "/ɑːr juː ˈrɛdi fər ðə ˈmiːtɪŋ/", es: "¿Estás listo para la reunión?" }
+        ,
+          { en: "We are extremely excited about the project.", ipa: "/wiː ɑːr ɪkˈstriːmli ɪkˈsaɪtɪd əˈbaʊt ðə ˈprɒdʒɛkt/", es: "Estamos sumamente entusiasmados con el proyecto." },
+          { en: "Is she at home or is she still at work?", ipa: "/ɪz ʃiː æt hoʊm ɔːr ɪz ʃiː stɪl æt wɜːrk/", es: "¿Está ella en casa o todavía está en el trabajo?" }
         ],
         takeaways: [
           "To Be cubre tanto 'ser' como 'estar': el contexto define el significado exacto.",
@@ -238,6 +247,9 @@ const UNITS = [
           { en: "She drinks coffee every morning.", ipa: "/ʃiː drɪŋks ˈkɔːfi ˈɛvri ˈmɔːrnɪŋ/", es: "Ella bebe café todas las mañanas." },
           { en: "He studies computer science at university.", ipa: "/hiː ˈstʌdiz kəmˈpjuːtər ˈsaɪəns æt ˌjuːnɪˈvɜːrsɪti/", es: "Él estudia informática en la universidad." },
           { en: "They live in a beautiful apartment.", ipa: "/ðeɪ lɪv ɪn ə ˈbjuːtɪfl əˈpɑːrtmənt/", es: "Ellos viven en un departamento hermoso." }
+        ,
+          { en: "He studies English grammar every afternoon.", ipa: "/hiː ˈstʌdiz ˈɪŋɡlɪʃ ˈɡræmər ˈɛvri ˌæftərˈnuːn/", es: "Él estudia gramática inglesa todas las tardes." },
+          { en: "Do they take the train to downtown?", ipa: "/duː ðeɪ teɪk ðə treɪn tuː ˈdaʊntaʊn/", es: "¿Toman ellos el tren hacia el centro?" }
         ],
         takeaways: [
           "Usa Presente Simple para hechos permanentes, hábitos y rutinas.",
@@ -298,6 +310,9 @@ const UNITS = [
           { en: "Do you have any questions?", ipa: "/duː juː hæv ˈɛni ˈkwɛstʃənz/", es: "¿Tienes alguna pregunta?" },
           { en: "Does he work from home on Fridays?", ipa: "/dʌz hiː wɜːrk frəm hoʊm ɑːn ˈfraɪdeɪz/", es: "¿Él trabaja desde casa los viernes?" },
           { en: "No, she doesn't like spicy food.", ipa: "/noʊ ʃiː ˈdʌznt laɪk ˈspaɪsi fuːd/", es: "No, a ella no le gusta la comida picante." }
+        ,
+          { en: "There is some fresh orange juice in the fridge.", ipa: "/ðɛr ɪz sʌm frɛʃ ˈɔːrɪndʒ dʒuːs ɪn ðə frɪdʒ/", es: "Hay algo de jugo de naranja fresco en el refrigerador." },
+          { en: "We bought an umbrella and two notebooks.", ipa: "/wiː bɔːt æn ʌmˈbrɛlə ænd tuː ˈnoʊtbʊks/", es: "Compramos un paraguas y dos cuadernos." }
         ],
         takeaways: [
           "Toda pregunta en presente simple requiere el auxiliar 'Do' o 'Does' al principio.",
@@ -355,6 +370,9 @@ const UNITS = [
           { en: "I usually wake up at seven o'clock.", ipa: "/aɪ ˈjuːʒuəli weɪk ʌp æt ˈsɛvn əˈklɑːk/", es: "Normalmente me despierto a las siete en punto." },
           { en: "The project launch is in October on a Tuesday.", ipa: "/ðə ˈprɑːdʒɛkt lɔːntʃ ɪz ɪn ɑːkˈtoʊbər ɑːn ə ˈtuːzdeɪ/", es: "El lanzamiento del proyecto es en octubre en un martes." },
           { en: "He is never late for his presentations.", ipa: "/hiː ɪz ˈnɛvər leɪt fər hɪz ˌprɛznˈteɪʃənz/", es: "Él nunca llega tarde a sus presentaciones." }
+        ,
+          { en: "I hardly ever drink soda during the week.", ipa: "/aɪ ˈhɑːrdli ˈɛvər drɪŋk ˈsoʊdə ˈdjʊərɪŋ ðə wiːk/", es: "Casi nunca bebo refrescos entre semana." },
+          { en: "They always arrive right on time for class.", ipa: "/ðeɪ ˈɔːlweɪz əˈraɪv raɪt ɒn taɪm fər klæs/", es: "Ellos siempre llegan justo a tiempo a clase." }
         ],
         takeaways: [
           "Adverbio de frecuencia: ANTES de verbos normales ('I never smoke'), pero DESPUÉS de To Be ('I am never late').",
@@ -433,6 +451,9 @@ const UNITS = [
           { en: "Could you give me a piece of advice?", ipa: "/kʊd juː ɡɪv miː ə piːs əv ədˈvaɪs/", es: "¿Podrías darme un consejo?" },
           { en: "She has an interview at a European university.", ipa: "/ʃiː hæz ən ˈɪntərvjuː æt ə ˌjʊərəˈpiːən ˌjuːnɪˈvɜːrsɪti/", es: "Ella tiene una entrevista en una universidad europea." },
           { en: "We need more information before making a decision.", ipa: "/wiː niːd mɔːr ˌɪnfərˈmeɪʃn bɪˈfɔːr ˈmeɪkɪŋ ə dɪˈsɪʒn/", es: "Necesitamos más información antes de tomar una decisión." }
+        ,
+          { en: "Those books over there belong to our teacher.", ipa: "/ðoʊz bʊks ˈoʊvər ðɛr bɪˈlɔːŋ tuː ˈaʊər ˈtiːtʃər/", es: "Esos libros de allá pertenecen a nuestra profesora." },
+          { en: "This is my jacket, and that one is yours.", ipa: "/ðɪs ɪz maɪ ˈdʒækɪt ænd ðæt wʌn ɪz jɔːrz/", es: "Esta es mi chaqueta, y aquella es la tuya." }
         ],
         takeaways: [
           "'A' o 'An' dependen del SONIDO que sigue, no de la letra escrita ('an hour', 'a university').",
@@ -493,6 +514,9 @@ const UNITS = [
           { en: "Look at that beautiful modern building over there.", ipa: "/lʊk æt ðæt ˈbjuːtɪfl ˈmɑːdərn ˈbɪldɪŋ ˈoʊvər ðer/", es: "Mira ese hermoso edificio moderno de allá." },
           { en: "These documents are extremely important.", ipa: "/ðiːz ˈdɑːkjumənts ɑːr ɪkˈstriːmli ɪmˈpɔːrtnt/", es: "Estos documentos son sumamente importantes." },
           { en: "I bought a comfortable black leather chair.", ipa: "/aɪ bɔːt ə ˈkʌmftəbl blæk ˈlɛðər tʃer/", es: "Compré una cómoda silla de cuero negro." }
+        ,
+          { en: "The concert begins at eight o'clock in July.", ipa: "/ðə ˈkɒnsərt bɪˈɡɪnz æt eɪt əˈklɒk ɪn dʒuːˈlaɪ/", es: "El concierto empieza a las ocho en punto en julio." },
+          { en: "My laptop is on the desk in the bedroom.", ipa: "/maɪ ˈlæptɒp ɪz ɒn ðə dɛsk ɪn ðə ˈbɛdruːm/", es: "Mi laptop está sobre el escritorio en la recámara." }
         ],
         takeaways: [
           "Los adjetivos en inglés son invariables: nunca se les agrega 's' para pluralizarlos.",
@@ -550,6 +574,9 @@ const UNITS = [
           { en: "That is Sarah's laptop, not mine.", ipa: "/ðæt ɪz ˈsɛrəz ˈlæptɑːp nɑːt maɪn/", es: "Esa es la laptop de Sarah, no la mía." },
           { en: "Have you got a minute to talk?", ipa: "/hæv juː ɡɑːt ə ˈmɪnɪt tuː tɔːk/", es: "¿Tienes un minuto para hablar?" },
           { en: "Our company's headquarters are in London.", ipa: "/ˈaʊər ˈkʌmpəniz ˈhɛdkwɔːrtərz ɑːr ɪn ˈlʌndən/", es: "La sede central de nuestra empresa está en Londres." }
+        ,
+          { en: "How long does it take to get to the airport?", ipa: "/haʊ lɔːŋ dʌz ɪt teɪk tuː ɡɛt tuː ðə ˈɛrpɔːrt/", es: "¿Cuánto tiempo toma llegar al aeropuerto?" },
+          { en: "Who is responsible for organizing the meeting?", ipa: "/huː ɪz rɪˈspɒnsəbl fər ˈɔːrɡənaɪzɪŋ ðə ˈmiːtɪŋ/", es: "¿Quién es responsable de organizar la reunión?" }
         ],
         takeaways: [
           "Para personas y posesiones usa el genitivo 's ('John's phone'), no 'the phone of John'.",
@@ -630,6 +657,9 @@ const UNITS = [
           { en: "Why are you looking at me like that?", ipa: "/waɪ ɑːr juː ˈlʊkɪŋ æt miː laɪk ðæt/", es: "¿Por qué me estás mirando de esa manera?" },
           { en: "They are running in the park right now.", ipa: "/ðeɪ ɑːr ˈrʌnɪŋ ɪn ðə pɑːrk raɪt naʊ/", es: "Ellos están corriendo en el parque ahora mismo." },
           { en: "I am writing an important email to the team.", ipa: "/aɪ æm ˈraɪtɪŋ ən ɪmˈpɔːrtnt ˈiːmeɪl tuː ðə tiːm/", es: "Estoy escribiendo un correo importante para el equipo." }
+        ,
+          { en: "Look outside! It is raining heavily right now.", ipa: "/lʊk ˌaʊtˈsaɪd ɪt ɪz ˈreɪnɪŋ ˈhɛvɪli raɪt naʊ/", es: "¡Mira afuera! Está lloviendo fuerte en este momento." },
+          { en: "Are you preparing dinner for the guests?", ipa: "/ɑːr juː prɪˈpɛərɪŋ ˈdɪnər fər ðə ɡɛsts/", es: "¿Estás preparando la cena para los invitados?" }
         ],
         takeaways: [
           "Fórmula del Present Continuous: Sujeto + am/is/are + verbo con -ing.",
@@ -682,6 +712,9 @@ const UNITS = [
           { en: "I usually take the subway, but today I am walking.", ipa: "/aɪ ˈjuːʒuəli teɪk ðə ˈsʌbweɪ bʌt təˈdeɪ aɪ æm ˈwɔːkɪŋ/", es: "Normalmente tomo el metro, pero hoy estoy caminando." },
           { en: "Do you understand what I mean?", ipa: "/duː juː ˌʌndərˈstænd wʌt aɪ miːn/", es: "¿Entiendes lo que quiero decir?" },
           { en: "She wants to buy a new laptop this afternoon.", ipa: "/ʃiː wɑːnts tuː baɪ ə nuː ˈlæptɑːp ðɪs ˌæftərˈnuːn/", es: "Ella quiere comprar una nueva laptop esta tarde." }
+        ,
+          { en: "She watched a fascinating documentary yesterday.", ipa: "/ʃiː wɒtʃt ə ˈfæsɪneɪtɪŋ ˌdɒkjuˈmɛntri ˈjɛstərdeɪ/", es: "Ella vio un documental fascinante ayer." },
+          { en: "We visited our grandparents last weekend.", ipa: "/wiː ˈvɪzɪtɪd ˈaʊər ˈɡrænpeərənts læst ˌwiːkˈɛnd/", es: "Visitamos a nuestros abuelos el fin de semana pasado." }
         ],
         takeaways: [
           "Present Simple = Hábitos y verdades permanentes ('I work every day').",
@@ -742,6 +775,9 @@ const UNITS = [
           { en: "He is sitting at his desk, with his laptop on the table.", ipa: "/hiː ɪz ˈsɪtɪŋ æt hɪz dɛsk wɪð hɪz ˈlæptɑːp ɑːn ðə ˈteɪbl/", es: "Él está sentado en su escritorio, con su laptop sobre la mesa." },
           { en: "We met at the airport before boarding the plane.", ipa: "/wiː mɛt æt ði ˈerpɔːrt bɪˈfɔːr ˈbɔːrdɪŋ ðə pleɪn/", es: "Nos encontramos en el aeropuerto antes de abordar el avión." },
           { en: "Walk across the street and the coffee shop is on your left.", ipa: "/wɔːk əˈkrɔːs ðə striːt ænd ðə ˈkɔːfi ʃɑːp ɪz ɑːn jʊər lɛft/", es: "Cruza la calle y la cafetería está a tu izquierda." }
+        ,
+          { en: "Did you find your keys under the couch?", ipa: "/dɪd juː faɪnd jɔːr kiːz ˈʌndər ðə kaʊtʃ/", es: "¿Encontraste tus llaves debajo del sofá?" },
+          { en: "He wrote a letter and sent it by post.", ipa: "/hiː roʊt ə ˈlɛtər ænd sɛnt ɪt baɪ poʊst/", es: "Él escribió una carta y la envió por correo." }
         ],
         takeaways: [
           "IN = dentro de un espacio o volumen; ON = sobre una superficie o transporte grande; AT = punto específico.",
@@ -820,6 +856,9 @@ const UNITS = [
           { en: "I wanted to call you, but I worked until late.", ipa: "/aɪ ˈwɑːntɪd tuː kɔːl juː bʌt aɪ wɜːrkt ənˈtɪl leɪt/", es: "Quería llamarte, pero trabajé hasta tarde." },
           { en: "She watched a movie and decided to sleep.", ipa: "/ʃiː wɑːtʃt ə ˈmuːvi ænd dɪˈsaɪdɪd tuː sliːp/", es: "Ella vio una película y decidió dormir." },
           { en: "They played tennis and lived in Australia for a year.", ipa: "/ðeɪ pleɪd ˈtɛnɪs ænd lɪvd ɪn ɔːˈstreɪliə fər ə jɪər/", es: "Ellos jugaron tenis y vivieron en Australia durante un año." }
+        ,
+          { en: "I was sleeping peacefully when the phone rang.", ipa: "/aɪ wəz ˈsliːpɪŋ ˈpiːsfəli wɛn ðə foʊn ræŋ/", es: "Estaba durmiendo plácidamente cuando sonó el teléfono." },
+          { en: "While we were driving home, it started to snow.", ipa: "/waɪl wiː wɜːr ˈdraɪvɪŋ hoʊm ɪt ˈstɑːrtɪd tuː snoʊ/", es: "Mientras conducíamos a casa, comenzó a nevar." }
         ],
         takeaways: [
           "La terminación -ed solo suena como sílaba extra (/ɪd/) si el verbo termina en sonido T o D ('wanted', 'needed').",
@@ -880,6 +919,9 @@ const UNITS = [
           { en: "I went to New York and I bought a laptop.", ipa: "/aɪ wɛnt tuː nuː jɔːrk ænd aɪ bɔːt ə ˈlæptɑːp/", es: "Fui a Nueva York y compré una laptop." },
           { en: "Did you understand the instructions from the client?", ipa: "/dɪd juː ˌʌndərˈstænd ði ɪnˈstrʌkʃnz frəm ðə ˈklaɪənt/", es: "¿Entendiste las instrucciones del cliente?" },
           { en: "We didn't have enough time to finish the project.", ipa: "/wiː ˈdɪdnt hæv ɪˈnʌf taɪm tuː ˈfɪnɪʃ ðə ˈprɑːdʒɛkt/", es: "No tuvimos suficiente tiempo para terminar el proyecto." }
+        ,
+          { en: "Learning vocabulary is more rewarding than memorizing.", ipa: "/ˈlɜːrnɪŋ vəʊˈkæbjʊləri ɪz mɔːr rɪˈwɔːrdɪŋ ðæn ˈmɛməraɪzɪŋ/", es: "Aprender vocabulario es más gratificante que memorizar." },
+          { en: "This is by far the most peaceful city in the country.", ipa: "/ðɪs ɪz baɪ fɑːr ðə moʊst ˈpiːsfəl ˈsɪti ɪn ðə ˈkʌntri/", es: "Esta es por mucho la ciudad más pacífica del país." }
         ],
         takeaways: [
           "Verbos irregulares comunes: go->went, buy->bought, see->saw, make->made, have->had.",
@@ -938,6 +980,9 @@ const UNITS = [
           { en: "I was having dinner when my phone rang.", ipa: "/aɪ wəz ˈhævɪŋ ˈdɪnər wɛn maɪ foʊn ræŋ/", es: "Estaba cenando cuando sonó mi teléfono." },
           { en: "While we were discussing the strategy, the client arrived.", ipa: "/waɪl wiː wər dɪˈskʌsɪŋ ðə ˈstrætədʒi ðə ˈklaɪənt əˈraɪvd/", es: "Mientras discutíamos la estrategia, llegó el cliente." },
           { en: "She used to live in Tokyo before moving to London.", ipa: "/ʃiː juːst tuː lɪv ɪn ˈtoʊkioʊ bɪˈfɔːr ˈmuːvɪŋ tuː ˈlʌndən/", es: "Ella solía vivir en Tokio antes de mudarse a Londres." }
+        ,
+          { en: "Could you please explain that rule one more time?", ipa: "/kʊd juː pliːz ɪkˈspleɪn ðæt ruːl wʌn mɔːr taɪm/", es: "¿Podrías por favor explicar esa regla una vez más?" },
+          { en: "With regular practice, you will be able to speak fluently.", ipa: "/wɪð ˈrɛɡjʊlər ˈpræktɪs juː wɪl biː ˈeɪbl tuː spiːk ˈfluːəntli/", es: "Con práctica constante, serás capaz de hablar con fluidez." }
         ],
         takeaways: [
           "Past Continuous = was/were + -ing para acciones en desarrollo en el pasado.",
@@ -1016,6 +1061,9 @@ const UNITS = [
           { en: "I'm going to visit my parents this weekend.", ipa: "/aɪm ˈɡoʊɪŋ tuː ˈvɪzɪt maɪ ˈpɛrənts ðɪs ˈwiːkɛnd/", es: "Voy a visitar a mis padres este fin de semana." },
           { en: "Don't worry, I'll send you the report right now.", ipa: "/doʊnt ˈwɜːri aɪl sɛnd juː ðə rɪˈpɔːrt raɪt naʊ/", es: "No te preocupes, te enviaré el informe ahora mismo." },
           { en: "Look at the sky! It's going to rain any minute.", ipa: "/lʊk æt ðə skaɪ ɪts ˈɡoʊɪŋ tuː reɪn ˈɛni ˈmɪnɪt/", es: "¡Mira el cielo! Va a llover en cualquier momento." }
+        ,
+          { en: "Don't worry, I will carry that heavy suitcase for you.", ipa: "/doʊnt ˈwʌri aɪ wɪl ˈkæri ðæt ˈhɛvi ˈsuːtkeɪs fər juː/", es: "No te preocupes, yo cargaré esa maleta pesada por ti." },
+          { en: "They are going to launch their mobile app next month.", ipa: "/ðeɪ ɑːr ˈɡoʊɪŋ tuː lɔːntʃ ðɛr ˈmoʊbl æp nɛkst mʌnθ/", es: "Ellos van a lanzar su aplicación móvil el próximo mes." }
         ],
         takeaways: [
           "Going to = Planes organizados previamente y predicciones con evidencia visual evidente.",
@@ -1076,6 +1124,9 @@ const UNITS = [
           { en: "If we finish the project early, we will celebrate.", ipa: "/ɪf wiː ˈfɪnɪʃ ðə ˈprɑːdʒɛkt ˈɜːrli wiː wɪl ˈsɛləbreɪt/", es: "Si terminamos el proyecto temprano, lo celebraremos." },
           { en: "If you don't hurry, you will miss the train.", ipa: "/ɪf juː doʊnt ˈhɜːri juː wɪl mɪs ðə treɪn/", es: "Si no te apuras, perderás el tren." },
           { en: "What will you do if the client rejects the offer?", ipa: "/wʌt wɪl juː duː ɪf ðə ˈklaɪənt rɪˈdʒɛkts ði ˈɔːfər/", es: "¿Qué harás si el cliente rechaza la oferta?" }
+        ,
+          { en: "If you practice every day, your confidence will grow.", ipa: "/ɪf juː ˈpræktɪs ˈɛvri deɪ jɔːr ˈkɒnfɪdəns wɪl ɡroʊ/", es: "Si practicas todos los días, tu confianza crecerá." },
+          { en: "Unless we hurry, we will miss our morning train.", ipa: "/ənˈlɛs wiː ˈhʌri wiː wɪl mɪs ˈaʊər ˈmɔːrnɪŋ treɪn/", es: "A menos que nos demos prisa, perderemos el tren matutino." }
         ],
         takeaways: [
           "Estructura del Primer Condicional: If + Presente Simple, consecuencia con Will + infinitivo.",
@@ -1135,6 +1186,9 @@ const UNITS = [
           { en: "If I were you, I would take that opportunity.", ipa: "/ɪf aɪ wər juː aɪ wʊd teɪk ðæt ˌɑːpərˈtuːnəti/", es: "Si yo fuera tú, aprovecharía esa oportunidad." },
           { en: "If we had more time, we would redesign the entire system.", ipa: "/ɪf wiː hæd mɔːr taɪm wiː wʊd ˌriːdɪˈzaɪn ði ɪnˈtaɪər ˈsɪstəm/", es: "Si tuviéramos más tiempo, rediseñaríamos el sistema entero." },
           { en: "What would you do if you won the lottery?", ipa: "/wʌt wʊd juː duː ɪf juː wʌn ðə ˈlɑːtəri/", es: "¿Qué harías si ganaras la lotería?" }
+        ,
+          { en: "Have you ever tried traditional Japanese cuisine?", ipa: "/hæv juː ˈɛvər traɪd trəˈdɪʃənl ˌdʒæpəˈniːz kwɪˈziːn/", es: "¿Alguna vez has probado la cocina japonesa tradicional?" },
+          { en: "She has achieved all her professional goals this year.", ipa: "/ʃiː hæz əˈtʃiːvd ɔːl hɜːr prəˈfɛʃənl ɡoʊlz ðɪs jɪr/", es: "Ella ha alcanzado todas sus metas profesionales este año." }
         ],
         takeaways: [
           "Segundo condicional = If + Pasado Simple, consecuencia con Would + verbo base.",
@@ -1213,6 +1267,9 @@ const UNITS = [
           { en: "Could you please clarify that point for the team?", ipa: "/kʊd juː pliːz ˈklærəfaɪ ðæt pɔɪnt fər ðə tiːm/", es: "¿Podría por favor aclarar ese punto para el equipo?" },
           { en: "I can understand spoken English, but speaking is harder.", ipa: "/aɪ kæn ˌʌndərˈstænd ˈspoʊkən ˈɪŋɡlɪʃ bʌt ˈspiːkɪŋ ɪz ˈhɑːrdər/", es: "Puedo entender el inglés hablado, pero hablar es más difícil." },
           { en: "We will be able to launch the product next month.", ipa: "/wiː wɪl bi ˈeɪbl tuː lɔːntʃ ðə ˈprɑːdʌkt nɛkst mʌnθ/", es: "Podremos lanzar el producto el próximo mes." }
+        ,
+          { en: "I have known my best friend since childhood.", ipa: "/aɪ hæv noʊn maɪ bɛst frɛnd sɪns ˈtʃaɪldhʊd/", es: "Conozco a mi mejor amigo desde la infancia." },
+          { en: "Has the team finished the presentation yet?", ipa: "/hæz ðə tiːm ˈfɪnɪʃt ðə ˌprɛzənˈteɪʃən jɛt/", es: "¿El equipo ya terminó la presentación?" }
         ],
         takeaways: [
           "Los modales nunca llevan 's' en 3ª persona ni usan 'to' con el verbo siguiente.",
@@ -1272,6 +1329,9 @@ const UNITS = [
           { en: "You don't have to pay now; it's completely free.", ipa: "/juː doʊnt hæv tuː peɪ naʊ ɪts kəmˈpliːtli friː/", es: "No tienes que pagar ahora; es completamente gratis." },
           { en: "You mustn't share this confidential password.", ipa: "/juː ˈmʌsnt ʃer ðɪs ˌkɑːnfɪˈdɛnʃl ˈpæswɜːrd/", es: "No debes compartir esta contraseña confidencial (prohibido)." },
           { en: "You should practice your speaking with a native.", ipa: "/juː ʃʊd ˈpræktɪs jʊər ˈspiːkɪŋ wɪð ə ˈneɪtɪv/", es: "Deberías practicar tu expresión oral con un nativo." }
+        ,
+          { en: "If I won the lottery, I would travel around the world.", ipa: "/ɪf aɪ wʌn ðə ˈlɒtəri aɪ wʊd ˈtrævl əˈraʊnd ðə wɜːrld/", es: "Si ganara la lotería, viajaría por todo el mundo." },
+          { en: "If she had more free time, she would take up painting.", ipa: "/ɪf ʃiː hæd mɔːr friː taɪm ʃiː wʊd teɪk ʌp ˈpeɪntɪŋ/", es: "Si ella tuviera más tiempo libre, empezaría a pintar." }
         ],
         takeaways: [
           "Should = Consejo amistoso ('You should rest').",
@@ -1333,6 +1393,9 @@ const UNITS = [
           { en: "The lights are on in his office; he must be working.", ipa: "/ðə laɪts ɑːr ɑːn ɪn hɪz ˈɔːfɪs hiː mʌst bi ˈwɜːrkɪŋ/", es: "Las luces están encendidas en su oficina; debe estar trabajando." },
           { en: "That can't be true! It makes no sense at all.", ipa: "/ðæt kænt bi truː ɪt meɪks noʊ sɛns æt ɔːl/", es: "¡Eso no puede ser verdad! No tiene ningún sentido." },
           { en: "We might see an increase in sales next quarter.", ipa: "/wiː maɪt siː ən ˈɪnkriːs ɪn seɪlz nɛkst ˈkwɔːrtər/", es: "Podríamos ver un aumento en las ventas el próximo trimestre." }
+        ,
+          { en: "You must turn off your mobile devices during takeoff.", ipa: "/juː mʌst tɜːrn ɔːf jɔːr ˈmoʊbl dɪˈvaɪsɪz ˈdjʊərɪŋ ˈteɪkˌɔːf/", es: "Debes apagar tus dispositivos móviles durante el despegue." },
+          { en: "You should get plenty of sleep before the big interview.", ipa: "/juː ʃʊd ɡɛt ˈplɛnti əv sliːp bɪˈfɔːr ðə bɪɡ ˈɪntərvjuː/", es: "Deberías dormir bien antes de la gran entrevista." }
         ],
         takeaways: [
           "Must be = Certeza lógica positiva ('Debe de ser...').",
@@ -1411,6 +1474,9 @@ const UNITS = [
           { en: "I have worked with international clients for five years.", ipa: "/aɪ hæv wɜːrkt wɪð ˌɪntərˈnæʃnəl ˈklaɪənts fər faɪv jɪərz/", es: "He trabajado con clientes internacionales durante cinco años." },
           { en: "She has already published three scientific papers.", ipa: "/ʃiː hæz ɔːlˈrɛdi ˈpʌblɪʃt θriː ˌsaɪənˈtɪfɪk ˈpeɪpərz/", es: "Ella ya ha publicado tres artículos científicos." },
           { en: "Have you ever traveled to another continent?", ipa: "/hæv juː ˈɛvər ˈtrævld tuː əˈnʌðər ˈkɑːntɪnənt/", es: "¿Alguna vez has viajado a otro continente?" }
+        ,
+          { en: "Penicillin was discovered by Alexander Fleming in 1928.", ipa: "/ˌpɛnəˈsɪlɪn wəz dɪˈskʌvərd baɪ ˌælɪɡˈzændər ˈflɛmɪŋ ɪn ˈnaɪnˈtiːn ˈtwɛnti eɪt/", es: "La penicilina fue descubierta por Alexander Fleming en 1928." },
+          { en: "Millions of emails are sent across the globe every minute.", ipa: "/ˈmɪljənz əv ˈiːmeɪlz ɑːr sɛnt əˈkrɒs ðə ɡloʊb ˈɛvri ˈmɪnɪt/", es: "Millones de correos son enviados en todo el planeta cada minuto." }
         ],
         takeaways: [
           "Fórmula: Sujeto + have/has + Participio Pasado (3ª columna de la tabla de verbos).",
@@ -1470,6 +1536,9 @@ const UNITS = [
           { en: "Have you ever spoken with a native speaker?", ipa: "/hæv juː ˈɛvər ˈspoʊkən wɪð ə ˈneɪtɪv ˈspiːkər/", es: "¿Alguna vez has hablado con un nativo?" },
           { en: "I have just sent you the link, check your inbox.", ipa: "/aɪ hæv dʒʌst sɛnt juː ðə lɪŋk tʃɛk jʊər ˈɪnbɑːks/", es: "Acabo de enviarte el enlace, revisa tu bandeja de entrada." },
           { en: "We haven't received the approval yet.", ipa: "/wiː ˈhævnt rɪˈsiːvd ði əˈpruːvl jɛt/", es: "No hemos recibido la aprobación todavía." }
+        ,
+          { en: "The mentor who guided me throughout my career retired today.", ipa: "/ðə ˈmɛntɔːr huː ˈɡaɪdɪd miː θruːˈaʊt maɪ kəˈrɪr rɪˈtaɪərd təˈdeɪ/", es: "El mentor que me guió a lo largo de mi carrera se jubiló hoy." },
+          { en: "This is the company where my brother works as a designer.", ipa: "/ðɪs ɪz ðə ˈkʌmpəni wɛr maɪ ˈbrʌðər wɜːrks æz ə dɪˈzaɪnər/", es: "Esta es la empresa donde mi hermano trabaja como diseñador." }
         ],
         takeaways: [
           "EVER = en preguntas ('Have you ever...?'); NEVER = nunca en la vida ('I have never...').",
@@ -1523,6 +1592,9 @@ const UNITS = [
           { en: "I have lived in this city since 2019.", ipa: "/aɪ hæv lɪvd ɪn ðɪs ˈsɪti sɪns ˈtwɛnti ˈnaɪntiːn/", es: "He vivido en esta ciudad desde 2019 (todavía vivo aquí)." },
           { en: "I lived in Boston for two years when I was in college.", ipa: "/aɪ lɪvd ɪn ˈbɔːstən fər tuː jɪərz wɛn aɪ wəz ɪn ˈkɑːlɪdʒ/", es: "Viví en Boston por dos años cuando estaba en la universidad (ya no vivo allí)." },
           { en: "We have worked together for five months.", ipa: "/wiː hæv wɜːrkt təˈɡɛðər fər faɪv mʌnθs/", es: "Hemos trabajado juntos durante cinco meses." }
+        ,
+          { en: "If I had known you were in town, I would have invited you.", ipa: "/ɪf aɪ hæd noʊn juː wɜːr ɪn taʊn aɪ wʊd hæv ɪnˈvaɪtɪd juː/", es: "Si hubiera sabido que estabas en la ciudad, te habría invitado." },
+          { en: "She wouldn't have missed the flight if she had set an alarm.", ipa: "/ʃiː ˈwʊdnt hæv mɪst ðə flaɪt ɪf ʃiː hæd sɛt æn əˈlɑːrm/", es: "Ella no habría perdido el vuelo si hubiera puesto una alarma." }
         ],
         takeaways: [
           "Si hay fecha cerrada (yesterday, in 2015, ago) -> Pasado Simple obligatorio.",
@@ -1609,6 +1681,9 @@ const UNITS = [
           { en: "I am looking forward to our meeting tomorrow.", ipa: "/aɪ æm ˈlʊkɪŋ ˈfɔːrwərd tuː ˈaʊər ˈmiːtɪŋ təˈmɑːroʊ/", es: "Espero con ansias nuestra reunión de mañana." },
           { en: "We need to figure out why the server crashed.", ipa: "/wiː niːd tuː ˈfɪɡjər aʊt waɪ ðə ˈsɜːrvər kræʃt/", es: "Necesitamos descifrar por qué se cayó el servidor." },
           { en: "They had to call off the event due to bad weather.", ipa: "/ðeɪ hæd tuː kɔːl ɔːf ði ɪˈvɛnt duː tuː bæd ˈwɛðər/", es: "Tuvieron que cancelar el evento debido al mal clima." }
+        ,
+          { en: "Please don't give up on your dreams, keep moving forward.", ipa: "/pliːz doʊnt ɡɪv ʌp ɒn jɔːr driːmz kiːp ˈmuːvɪŋ ˈfɔːrwərd/", es: "Por favor no te rindas con tus sueños, sigue avanzando." },
+          { en: "I ran into an old classmate while shopping at the market.", ipa: "/aɪ ræn ˈɪntuː æn oʊld ˈklæsmeɪt waɪl ˈʃɒpɪŋ æt ðə ˈmɑːrkɪt/", es: "Me topé con un viejo compañero mientras compraba en el mercado." }
         ],
         takeaways: [
           "Un Phrasal Verb tiene un significado figurado que no se puede traducir palabra por palabra.",
@@ -1670,6 +1745,9 @@ const UNITS = [
           { en: "I hope this email finds you well. I'm following up on our project.", ipa: "/aɪ hoʊp ðɪs ˈiːmeɪl faɪndz juː wɛl aɪm ˈfɑːloʊɪŋ ʌp ɑːn ˈaʊər ˈprɑːdʒɛkt/", es: "Espero que este correo te encuentre bien. Le hago seguimiento a nuestro proyecto." },
           { en: "Would you mind sending me the latest draft by Friday?", ipa: "/wʊd juː maɪnd ˈsɛndɪŋ miː ðə ˈleɪtɪst dræft baɪ ˈfraɪdeɪ/", es: "¿Te molestaría enviarme el último borrador para el viernes?" },
           { en: "Please let me know if you have any questions or feedback.", ipa: "/pliːz lɛt miː noʊ ɪf juː hæv ˈɛni ˈkwɛstʃənz ɔːr ˈfiːdbæk/", es: "Por favor avísame si tienes alguna pregunta o comentario." }
+        ,
+          { en: "He mentioned that he had already applied for the scholarship.", ipa: "/hiː ˈmɛnʃənd ðæt hiː hæd ɔːlˈrɛdi əˈplaɪd fər ðə ˈskɒlərʃɪp/", es: "Él mencionó que ya había postulado a la beca." },
+          { en: "The teacher asked if everyone had understood the lesson.", ipa: "/ðə ˈtiːtʃər æskt ɪf ˈɛvriwʌn hæd ˌʌndərˈstʊd ðə ˈlɛsn/", es: "El profesor preguntó si todos habían entendido la lección." }
         ],
         takeaways: [
           "Nunca traduzcas órdenes directas: usa 'Would you mind + -ing' o 'Could you possibly...'.",
@@ -1730,6 +1808,9 @@ const UNITS = [
           { en: "Actually, I am currently working on a different project.", ipa: "/ˈæktʃuəli aɪ æm ˈkɜːrəntli ˈwɜːrkɪŋ ɑːn ə ˈdɪfrənt ˈprɑːdʒɛkt/", es: "En realidad, actualmente estoy trabajando en un proyecto diferente." },
           { en: "He is a very sensible person who makes smart decisions.", ipa: "/hiː ɪz ə ˈvɛri ˈsɛnsəbl ˈpɜːrsn huː meɪks smɑːrt dɪˈsɪʒnz/", es: "Él es una persona muy sensata que toma decisiones inteligentes." },
           { en: "Did you attend the international conference yesterday?", ipa: "/dɪd juː əˈtɛnd ði ˌɪntərˈnæʃnəl ˈkɑːnfərəns ˈjɛstərdeɪ/", es: "¿Asististe a la conferencia internacional ayer?" }
+        ,
+          { en: "I'm gonna grab a bite to eat before we leave.", ipa: "/aɪm ˈɡənə ɡræb ə baɪt tuː iːt bɪˈfɔːr wiː liːv/", es: "Voy a comer un bocado rápido antes de que nos vayamos." },
+          { en: "What did you say your name was again?", ipa: "/wʌt dɪdʒə seɪ jɔːr neɪm wəz əˈɡɛn/", es: "¿Cómo dijiste que te llamabas de nuevo?" }
         ],
         takeaways: [
           "Actually = 'En realidad' (usa 'currently' para decir 'actualmente').",
