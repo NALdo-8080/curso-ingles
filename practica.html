@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Studio & Labs — English Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/site.css">
+
+<script>
+  (function() {
+    try {
+      var t = localStorage.getItem('english_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  })();
+</script>
+
+<style>
+:root {
+  --studio-bg: #f8fafc;
+  --studio-surface: #ffffff;
+  --studio-surface-2: #f1f5f9;
+  --studio-surface-hover: #e2e8f0;
+  --studio-border: #e2e8f0;
+  --studio-border-light: rgba(0, 0, 0, 0.06);
+  --accent-indigo: #2563eb;
+  --accent-indigo-hover: #1d4ed8;
+  --accent-indigo-soft: #eff6ff;
+  --accent-cyan: #0284c7;
+  --accent-emerald: #059669;
+  --accent-emerald-soft: #ecfdf5;
+  --accent-amber: #d97706;
+  --accent-amber-soft: #fffbeb;
+  --accent-red: #e11d48;
+  --accent-red-soft: #fff1f2;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --telemetry-bg: #f8fafc;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+[data-theme="dark"] {
+  --studio-bg: #0b111e;
+  --studio-surface: #111a2e;
+  --studio-surface-2: #18233c;
+  --studio-surface-hover: #1f2e4e;
+  --studio-border: #233252;
+  --studio-border-light: rgba(255, 255, 255, 0.08);
+  --accent-indigo: #3b82f6;
+  --accent-indigo-hover: #60a5fa;
+  --accent-indigo-soft: rgba(59, 130, 246, 0.15);
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #10b981;
+  --accent-emerald-soft: rgba(16, 185, 129, 0.12);
+  --accent-amber: #f59e0b;
+  --accent-amber-soft: rgba(245, 158, 11, 0.12);
+  --accent-red: #f43f5e;
+  --accent-red-soft: rgba(244, 63, 94, 0.12);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-dim: #64748b;
+  --telemetry-bg: #0d1527;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  background-color: var(--studio-bg);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+/* NAVBAR */
+.navbar {
+  height: 56px;
+  background: var(--studio-surface);
+  border-bottom: 1px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none !important;
+  color: var(--text-main) !important;
+  background: var(--studio-surface-2);
+  border: 1.5px solid var(--studio-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.back-btn:visited {
+  color: var(--text-main) !important;
+}
+.back-btn:hover {
+  background: var(--studio-surface-hover);
+  border-color: var(--accent-indigo);
+  color: var(--accent-indigo) !important;
+  transform: translateY(-1px);
+}
+[data-theme="dark"] .back-btn {
+  background: #18233c;
+  border-color: #2c3c5c;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .back-btn:visited {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .back-btn:hover {
+  background: #233252;
+  border-color: #60a5fa;
+  color: #60a5fa !important;
+}
+.brand-pill {
+  font-size: 11px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.nav-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.xp-badge {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-amber);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* STUDIO SPLIT LAYOUT */
+.studio-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+/* LEFT PANEL (SPEC & INSTRUCTIONS) */
+.left-spec-panel {
+  background: var(--studio-surface);
+  border-right: 1px solid var(--studio-border);
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.spec-header {
+  border-bottom: 1px solid var(--studio-border);
+  padding-bottom: 16px;
+}
+.spec-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.spec-lab-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.spec-xp-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent-amber);
+  background: var(--accent-amber-soft);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+.spec-title {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-main);
+}
+
+.spec-section {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.spec-sec-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-indigo);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.spec-sec-content {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.spec-instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.spec-instructions-list li {
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.spec-instructions-list li::before {
+  content: "➔";
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* HINT CARD */
+.hint-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+.hint-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-amber);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hint-text {
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* RIGHT PANEL (ARENA & TELEMETRY) */
+.right-arena-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--studio-bg);
+  overflow: hidden;
+}
+
+.arena-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.arena-card {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 24px;
+}
+.arena-card-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --------------------------------------------------------------------------
+   EXERCISE WIDGETS
+   -------------------------------------------------------------------------- */
+
+/* 1. CLASSIFICATION BINS */
+.chip-pool {
+  background: var(--studio-surface-2);
+  border: 1.5px dashed var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+  min-height: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+.chip-pool.drag-over {
+  border-color: var(--accent-indigo);
+  background: var(--accent-indigo-soft);
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.category-col {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+.category-col.drag-over {
+  border-color: var(--accent-indigo);
+  background: var(--accent-indigo-soft);
+}
+.category-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-indigo);
+  border-bottom: 1px solid var(--studio-border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.category-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.interactive-chip {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: grab;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+.interactive-chip:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+.interactive-chip.selected {
+  border-color: var(--accent-indigo);
+  background: var(--accent-indigo-soft);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+.interactive-chip.in-category {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: var(--studio-surface);
+}
+.interactive-chip.in-category:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+.interactive-chip .return-hint-badge {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--accent-red);
+  margin-left: 4px;
+}
+
+/* 2. SEQUENCE SORT (SENTENCE BUILDER) */
+.sequence-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sequence-tray {
+  background: var(--studio-surface-2);
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  min-height: 72px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.sequence-tray:empty::before {
+  content: "Toca las palabras de abajo para armar la oración aquí...";
+  color: var(--text-dim);
+  font-size: 13.5px;
+  font-style: italic;
+}
+.sequence-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--studio-border);
+}
+.word-chip {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.word-chip:hover {
+  background: var(--studio-surface-hover);
+  border-color: var(--accent-indigo);
+  transform: translateY(-2px);
+}
+
+/* 3. FILL BLANKS */
+.cloze-container {
+  font-size: 16px;
+  line-height: 2.2;
+  color: var(--text-main);
+  background: var(--studio-surface-2);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--studio-border);
+}
+.cloze-select {
+  background: var(--studio-surface);
+  border: 1.5px solid var(--accent-indigo);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+/* 4. ERROR SPOTTER */
+.error-sentence-box {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffb86c;
+  background: rgba(255, 184, 108, 0.1);
+  border: 1px solid rgba(255, 184, 108, 0.3);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  margin-bottom: 20px;
+}
+.error-option-card {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.15s;
+  font-size: 14.5px;
+}
+.error-option-card:hover {
+  background: var(--studio-surface-hover);
+  border-color: var(--accent-indigo);
+}
+.error-option-card.selected {
+  border-color: var(--accent-indigo);
+  background: var(--accent-indigo-soft);
+}
+
+/* TELEMETRY & ACTIONS CONSOLE */
+.telemetry-console {
+  background: var(--telemetry-bg);
+  border-top: 1px solid var(--studio-border);
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.telemetry-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.telemetry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.telemetry-btn-primary {
+  background: linear-gradient(135deg, var(--accent-indigo), #4f46e5);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+}
+.telemetry-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.5);
+}
+.telemetry-btn-secondary {
+  background: var(--studio-surface-2);
+  border-color: var(--studio-border);
+  color: var(--text-muted);
+}
+.telemetry-btn-secondary:hover {
+  color: var(--text-main);
+  background: var(--studio-surface-hover);
+}
+
+.telemetry-status-box {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  color: var(--text-muted);
+}
+.telemetry-status-box.success {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+}
+.telemetry-status-box.error {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+/* NEXT LESSON UNLOCK BANNER */
+.next-lesson-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(56, 189, 248, 0.15));
+  border: 1.5px solid var(--accent-emerald);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  margin-top: 12px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* MOBILE TABS (< 960px) */
+.mobile-tabs {
+  display: none;
+}
+.mobile-go-lab-wrap {
+  display: none;
+}
+.btn-go-lab-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--accent-indigo);
+  color: #ffffff;
+  border: none;
+  padding: 13px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  touch-action: manipulation;
+  transition: all 0.2s;
+}
+.btn-go-lab-action:hover {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 960px) {
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .mobile-tabs {
+    display: flex;
+    background: var(--studio-surface-2);
+    border-bottom: 1px solid var(--studio-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .mobile-tab-btn {
+    flex: 1;
+    padding: 12px 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    touch-action: manipulation;
+  }
+  .mobile-tab-btn.active {
+    color: var(--accent-indigo);
+    border-bottom-color: var(--accent-indigo);
+    background: rgba(99, 102, 241, 0.08);
+  }
+  [data-theme="light"] .mobile-tab-btn.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+    background: #eff6ff;
+  }
+  .studio-layout {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+  .left-spec-panel, .right-arena-panel {
+    display: none;
+    height: auto;
+    overflow: visible;
+    padding: 18px 14px 70px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .left-spec-panel.mobile-active, .right-arena-panel.mobile-active {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-go-lab-wrap {
+    display: block;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 680px) {
+  .navbar {
+    padding: 0 10px;
+    height: 56px;
+    overflow-x: hidden;
+  }
+  .nav-left {
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .nav-right {
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .brand-pill, .nav-title {
+    display: none !important;
+  }
+  .back-btn {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 36px !important;
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .xp-badge {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    padding: 0 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bins-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .telemetry-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .telemetry-actions-bar > div:last-child {
+    width: 100%;
+  }
+  #btn-validate-solution {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 14px;
+  }
+  .next-lesson-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  #btn-next-lesson-flow {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar { padding: 0 6px; height: 52px; }
+  .nav-left { gap: 4px; }
+  .nav-right { gap: 4px; }
+  .back-btn { padding: 5px 7px !important; font-size: 11px !important; height: 32px !important; }
+  .xp-badge { font-size: 10px; padding: 0 6px; height: 32px; }
+  .theme-toggle { width: 32px; height: 32px; min-width: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="back-btn">Inicio</a>
+    <a href="temario.html" class="back-btn">Temario</a>
+    <a id="btn-back-theory" href="teoria.html" class="back-btn">
+      <span>📖</span> Teoría
+    </a>
+    <span class="brand-pill">Language Studio</span>
+    <span class="nav-title" id="nav-lesson-heading">Lección 1: Lab</span>
+  </div>
+
+  <div class="nav-right">
+    <div class="xp-badge" id="nav-xp-counter">⚡ 0 XP</div>
+    <button class="theme-toggle" onclick="StorageManager.toggleTheme()" style="background:var(--studio-surface-2);border:1px solid var(--studio-border);color:var(--text-main);padding:6px 10px;border-radius:8px;cursor:pointer;">
+      <span id="theme-toggle-icon">☀️</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Tab Bar (< 960px) -->
+<nav class="mobile-tabs" id="mobile-tabs-bar">
+  <button type="button" class="mobile-tab-btn active" id="tab-instructions-btn">
+    <span>📋 Instrucciones</span>
+  </button>
+  <button type="button" class="mobile-tab-btn" id="tab-lab-btn">
+    <span>⚡ Laboratorio</span>
+  </button>
+</nav>
+
+<!-- STUDIO WORKSPACE -->
+<div class="studio-layout">
+  <!-- LEFT PANEL: SPEC & INSTRUCTIONS -->
+  <aside class="left-spec-panel mobile-active">
+    <div class="spec-header">
+      <div class="spec-tag-row">
+        <span class="spec-lab-tag" id="spec-unit-tag">Unidad 1</span>
+        <span class="spec-xp-tag">+100 XP</span>
+      </div>
+      <h2 class="spec-title" id="spec-lab-title">Cargando Laboratorio...</h2>
+    </div>
+
+    <!-- OBJETIVO -->
+    <div class="spec-section">
+      <div class="spec-sec-title">🎯 Objetivo Lingüístico</div>
+      <div class="spec-sec-content" id="spec-objective-text"></div>
+    </div>
+
+    <!-- INSTRUCCIONES -->
+    <div class="spec-section">
+      <div class="spec-sec-title">📋 Instrucciones de Ejecución</div>
+      <ul class="spec-instructions-list" id="spec-instructions-list"></ul>
+    </div>
+
+    <!-- PISTA -->
+    <div class="hint-box">
+      <div class="hint-header">
+        <span>💡 Pista Técnica</span>
+      </div>
+      <div class="hint-text" id="spec-hint-text"></div>
+    </div>
+
+    <!-- TAKEAWAYS RECAP -->
+    <div class="spec-section">
+      <div class="spec-sec-title">⚡ Regla Clave a Recordar</div>
+      <div class="spec-sec-content" id="spec-rule-recap"></div>
+    </div>
+
+    <!-- Mobile Go To Lab CTA -->
+    <div class="mobile-go-lab-wrap">
+      <button type="button" class="btn-go-lab-action" id="pane-go-to-lab-btn">
+        ⚡ Ir al Laboratorio ➔
+      </button>
+    </div>
+  </aside>
+
+  <!-- RIGHT PANEL: ARENA & TELEMETRY -->
+  <main class="right-arena-panel">
+    <div class="arena-scrollable">
+      <div class="arena-card">
+        <div class="arena-card-title">
+          <span id="arena-exercise-title">Lienzo Interactivo de Práctica</span>
+          <button id="arena-audio-btn" class="audio-btn" title="Escuchar frase completa" style="display:none;">🔊</button>
+        </div>
+        <div id="arena-workspace"></div>
+      </div>
+
+      <!-- NEXT LESSON CELEBRATION BANNER -->
+      <div class="next-lesson-banner" id="next-lesson-banner">
+        <div>
+          <strong style="color:var(--accent-emerald);">¡Laboratorio Superado con Éxito (+100 XP)!</strong>
+          <div style="font-size:12.5px;color:var(--text-muted);">Has desbloqueado la siguiente lección en tu track.</div>
+        </div>
+        <a href="#" class="telemetry-btn telemetry-btn-primary" id="btn-next-lesson-flow">
+          Siguiente Lección ➔
+        </a>
+      </div>
+    </div>
+
+    <!-- TELEMETRY CONSOLE -->
+    <div class="telemetry-console">
+      <div class="telemetry-actions-bar">
+        <div style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px;" id="telemetry-timestamp">
+          <span>📡</span> Estado: Listo para evaluación
+        </div>
+        <div>
+          <button class="telemetry-btn telemetry-btn-primary" id="btn-validate-solution" onclick="validateExercise()">
+            🚀 Validar y Enviar (+100 XP)
+          </button>
+        </div>
+      </div>
+      <div class="telemetry-status-box" id="telemetry-status">
+        <span>📡</span> Modifica los elementos y haz clic en "Validar y Enviar" para comprobar tu respuesta.
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- UNIT BADGE CELEBRATION MODAL -->
+<div class="badge-modal-overlay" id="badge-celebration-modal" style="display:none;">
+  <div class="badge-modal-content">
+    <div class="badge-modal-icon" id="modal-badge-icon">🎖️</div>
+    <div style="font-size:12px;font-weight:800;color:var(--accent-amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">
+      ¡NUEVA INSIGNIA DE UNIDAD DESBLOQUEADA!
+    </div>
+    <h2 style="font-size:24px;font-weight:800;color:var(--text-main);margin-bottom:12px;" id="modal-badge-title">
+      Phonetics Pioneer
+    </h2>
+    <p style="font-size:14.5px;color:var(--text-muted);line-height:1.6;margin-bottom:24px;" id="modal-badge-desc">
+      ¡Felicitaciones! Has completado el 100% de las lecciones y laboratorios de esta unidad.
+    </p>
+    <button class="telemetry-btn telemetry-btn-primary" style="width:100%;justify-content:center;padding:12px;" onclick="closeBadgeModal()">
+      Continuar Aprendiendo ➔
+    </button>
+  </div>
+</div>
+
+<script src="course-data.js"></script>
+<script src="storage.js"></script>
+
+<script>
+let currentLessonNum = 1;
+let currentLessonObj = null;
+let currentExerciseState = {};
+
+function formatMarkdown(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^\*]+?)\*/g, '<em>$1</em>');
+}
+
+function getUrlLesson() {
+  const params = new URLSearchParams(window.location.search);
+  const n = parseInt(params.get('lesson'), 10);
+  return (n >= 1 && n <= 27) ? n : 1;
+}
+
+function findLesson(n) {
+  for (const u of UNITS) {
+    const l = u.lessons.find(item => item.n === n);
+    if (l) return { lesson: l, unit: u };
+  }
+  return null;
+}
+
+function loadPractice(n) {
+  currentLessonNum = n;
+  StorageManager.setLastActiveLesson(n);
+  const res = findLesson(n);
+  if (!res) return;
+
+  const { lesson, unit } = res;
+  currentLessonObj = lesson;
+
+  document.title = `Lab ${lesson.n}: ${lesson.title} — English Track`;
+  document.getElementById('nav-lesson-heading').textContent = `Lección ${lesson.n}: Lab`;
+  document.getElementById('btn-back-theory').href = `teoria.html?lesson=${lesson.n}`;
+
+  // Spec Panel
+  document.getElementById('spec-unit-tag').textContent = unit.title.split(':')[0];
+  document.getElementById('spec-lab-title').textContent = lesson.exercise.title || lesson.title;
+  document.getElementById('spec-objective-text').innerHTML = formatMarkdown(lesson.p1);
+
+  const instList = document.getElementById('spec-instructions-list');
+  instList.innerHTML = '';
+  lesson.instructions.forEach(ins => {
+    const li = document.createElement('li');
+    li.innerHTML = formatMarkdown(ins);
+    instList.appendChild(li);
+  });
+
+  document.getElementById('spec-hint-text').innerHTML = formatMarkdown(lesson.hint);
+  document.getElementById('spec-rule-recap').innerHTML = formatMarkdown(lesson.takeaways[0] || '');
+
+  // Render Exercise Arena
+  document.getElementById('arena-exercise-title').innerHTML = formatMarkdown(lesson.exercise.title);
+  renderExerciseArena(lesson.exercise);
+
+  // Check if already completed
+  if (StorageManager.isExercisePassed(lesson.n)) {
+    showAlreadyPassedTelemetry();
+  } else {
+    document.getElementById('next-lesson-banner').style.display = 'none';
+  }
+}
+
+// --------------------------------------------------------------------------
+// RENDERERS FOR EXERCISES
+// --------------------------------------------------------------------------
+function renderExerciseArena(ex) {
+  const arena = document.getElementById('arena-workspace');
+  arena.innerHTML = '';
+  currentExerciseState = {};
+
+  const audioBtn = document.getElementById('arena-audio-btn');
+  const targetAudio = ex.audioText || (currentLessonObj.audioSentences && currentLessonObj.audioSentences[0] ? currentLessonObj.audioSentences[0].en : '');
+  if (targetAudio) {
+    audioBtn.style.display = 'inline-flex';
+    audioBtn.title = 'Escuchar audio de este ejercicio';
+    audioBtn.onclick = () => {
+      audioBtn.classList.add('playing');
+      StorageManager.speak(targetAudio, () => {
+        audioBtn.classList.remove('playing');
+      });
+    };
+  } else {
+    audioBtn.style.display = 'none';
+  }
+
+  switch(ex.type) {
+    case 'classification_bins':
+      renderClassificationBins(arena, ex);
+      break;
+    case 'sequence_sort':
+      renderSequenceSort(arena, ex);
+      break;
+    case 'fill_blanks':
+      renderFillBlanks(arena, ex);
+      break;
+    case 'error_spotter':
+      renderErrorSpotter(arena, ex);
+      break;
+    default:
+      renderClassificationBins(arena, ex);
+  }
+}
+
+// 1. CLASSIFICATION BINS (Drag & Drop + Click-to-assign + Click-to-return)
+function renderClassificationBins(arena, ex) {
+  currentExerciseState = {};
+  let selectedChipId = null;
+
+  const helperText = document.createElement('div');
+  helperText.style.fontSize = '13px';
+  helperText.style.color = 'var(--text-muted)';
+  helperText.style.marginBottom = '12px';
+  helperText.innerHTML = '💡 <strong>Arrastra cada concepto a su categoría</strong> o selecciónalo con un clic. <em>Para devolver una respuesta que pusiste mal, simplemente haz clic sobre ella (o arrástrala de vuelta arriba).</em>';
+  arena.appendChild(helperText);
+
+  const pool = document.createElement('div');
+  pool.className = 'chip-pool';
+  pool.id = 'unassigned-chip-pool';
+  pool.title = 'Banco de conceptos (puedes devolver fichas arrastrándolas aquí)';
+
+  // Dropzone on pool to return chips
+  pool.ondragover = (e) => { e.preventDefault(); pool.classList.add('drag-over'); };
+  pool.ondragleave = () => { pool.classList.remove('drag-over'); };
+  pool.ondrop = (e) => {
+    e.preventDefault();
+    pool.classList.remove('drag-over');
+    const itemId = e.dataTransfer.getData('text/plain');
+    returnChipToPool(itemId);
+  };
+
+  // Click on pool when a chip is selected
+  pool.onclick = () => {
+    if (selectedChipId) {
+      returnChipToPool(selectedChipId);
+      clearSelection();
+    }
+  };
+
+  ex.items.forEach(item => {
+    const chip = document.createElement('div');
+    chip.className = 'interactive-chip';
+    chip.id = `chip-${item.id}`;
+    chip.draggable = true;
+    chip.textContent = item.text;
+    chip.title = 'Haz clic para seleccionar o arrastra a una categoría';
+
+    // Click behavior
+    chip.onclick = (e) => {
+      e.stopPropagation();
+
+      // Si la ficha ya está asignada a una categoría, UN CLIC LA DEVUELVE AL BANCO
+      if (chip.parentElement && chip.parentElement.id !== 'unassigned-chip-pool') {
+        returnChipToPool(item.id);
+        clearSelection();
+        return;
+      }
+
+      // Si está en el banco inicial, seleccionar / deseleccionar
+      if (selectedChipId === item.id) {
+        clearSelection();
+      } else {
+        clearSelection();
+        selectedChipId = item.id;
+        chip.classList.add('selected');
+      }
+    };
+
+    // Drag start
+    chip.ondragstart = (e) => {
+      e.dataTransfer.setData('text/plain', item.id);
+    };
+
+    pool.appendChild(chip);
+  });
+
+  const grid = document.createElement('div');
+  grid.className = 'category-grid';
+
+  ex.categories.forEach(cat => {
+    const col = document.createElement('div');
+    col.className = 'category-col';
+    col.dataset.catId = cat.id;
+
+    col.innerHTML = `
+      <div class="category-title">${cat.title}</div>
+      <div class="category-items" id="cat-items-${cat.id}"></div>
+    `;
+
+    // Dropzone
+    col.ondragover = (e) => { e.preventDefault(); col.classList.add('drag-over'); };
+    col.ondragleave = () => { col.classList.remove('drag-over'); };
+    col.ondrop = (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const itemId = e.dataTransfer.getData('text/plain');
+      assignChipToCat(itemId, cat.id);
+    };
+
+    // Click col when a chip is selected
+    col.onclick = () => {
+      if (selectedChipId) {
+        assignChipToCat(selectedChipId, cat.id);
+        clearSelection();
+      }
+    };
+
+    grid.appendChild(col);
+  });
+
+  arena.appendChild(pool);
+  arena.appendChild(grid);
+
+  function assignChipToCat(itemId, catId) {
+    const chip = document.getElementById(`chip-${itemId}`);
+    if (!chip) return;
+    const targetItems = document.getElementById(`cat-items-${catId}`);
+    targetItems.appendChild(chip);
+    currentExerciseState[itemId] = catId;
+    chip.classList.remove('selected');
+    chip.classList.add('in-category');
+    chip.title = 'Haz clic para devolver al banco de palabras';
+    const itemData = ex.items.find(it => it.id === itemId);
+    chip.innerHTML = `${itemData ? itemData.text : chip.textContent} <span class="return-hint-badge" title="Devolver">↩</span>`;
+  }
+
+  function returnChipToPool(itemId) {
+    const chip = document.getElementById(`chip-${itemId}`);
+    if (!chip) return;
+    pool.appendChild(chip);
+    delete currentExerciseState[itemId];
+    chip.classList.remove('selected');
+    chip.classList.remove('in-category');
+    chip.title = 'Haz clic para seleccionar o arrastra a una categoría';
+    const itemData = ex.items.find(it => it.id === itemId);
+    chip.textContent = itemData ? itemData.text : chip.textContent;
+  }
+
+  function clearSelection() {
+    selectedChipId = null;
+    document.querySelectorAll('.interactive-chip').forEach(c => c.classList.remove('selected'));
+  }
+}
+
+// 2. SEQUENCE SORT (Sentence Builder)
+function renderSequenceSort(arena, ex) {
+  currentExerciseState = { order: [] };
+
+  const container = document.createElement('div');
+  container.className = 'sequence-workspace';
+
+  const tray = document.createElement('div');
+  tray.className = 'sequence-tray';
+  tray.id = 'sequence-tray';
+
+  const pool = document.createElement('div');
+  pool.className = 'sequence-pool';
+  pool.id = 'sequence-pool';
+
+  // Shuffle pool items
+  const shuffled = [...ex.items].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach(item => {
+    const chip = document.createElement('button');
+    chip.className = 'word-chip';
+    chip.id = `word-${item.id}`;
+    chip.textContent = item.text;
+
+    chip.onclick = () => {
+      if (chip.parentElement === pool) {
+        tray.appendChild(chip);
+        currentExerciseState.order.push(item.id);
+        StorageManager.speak(item.text); // Audio feedback
+      } else {
+        pool.appendChild(chip);
+        currentExerciseState.order = currentExerciseState.order.filter(id => id !== item.id);
+      }
+    };
+
+    pool.appendChild(chip);
+  });
+
+  container.appendChild(tray);
+  container.appendChild(pool);
+  arena.appendChild(container);
+}
+
+// 3. FILL BLANKS
+function renderFillBlanks(arena, ex) {
+  currentExerciseState = {};
+
+  const box = document.createElement('div');
+  box.className = 'cloze-container';
+
+  let html = ex.sentence;
+  ex.blanks.forEach(b => {
+    const selectHtml = `
+      <select class="cloze-select" id="blank-${b.id}" onchange="currentExerciseState['${b.id}'] = this.value">
+        <option value="">[ Elige una opción ]</option>
+        ${b.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+      </select>
+    `;
+    html = html.replace('___', selectHtml);
+  });
+
+  box.innerHTML = html;
+  arena.appendChild(box);
+}
+
+// 4. ERROR SPOTTER
+function renderErrorSpotter(arena, ex) {
+  currentExerciseState = { selectedOption: null };
+
+  const sentBox = document.createElement('div');
+  sentBox.className = 'error-sentence-box';
+  sentBox.innerHTML = `⚠️ Oración con error: <em>"${ex.sentence}"</em>`;
+
+  const desc = document.createElement('div');
+  desc.style.fontSize = '14px';
+  desc.style.color = 'var(--text-muted)';
+  desc.style.marginBottom = '16px';
+  desc.innerHTML = formatMarkdown(ex.errorDescription);
+
+  arena.appendChild(sentBox);
+  arena.appendChild(desc);
+
+  ex.options.forEach(opt => {
+    const card = document.createElement('div');
+    card.className = 'error-option-card';
+    card.id = `opt-${opt.id}`;
+    card.innerHTML = `
+      <input type="radio" name="error-spot-radio" style="accent-color:var(--accent-indigo);">
+      <span style="font-weight:600;">${formatMarkdown(opt.text)}</span>
+    `;
+    card.onclick = () => {
+      document.querySelectorAll('.error-option-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const radio = card.querySelector('input');
+      radio.checked = true;
+      currentExerciseState.selectedOption = opt.id;
+    };
+    arena.appendChild(card);
+  });
+}
+
+// --------------------------------------------------------------------------
+// VALIDATION & TELEMETRY
+// --------------------------------------------------------------------------
+function validateExercise() {
+  const ex = currentLessonObj.exercise;
+  const result = ex.evaluator(currentExerciseState);
+  const statusEl = document.getElementById('telemetry-status');
+  const timeEl = document.getElementById('telemetry-timestamp');
+
+  timeEl.textContent = `Evaluado: ${new Date().toLocaleTimeString()}`;
+
+  if (result.pass) {
+    statusEl.className = 'telemetry-status-box success';
+    statusEl.innerHTML = `<span>✅</span> ${formatMarkdown(result.msg)}`;
+
+    // Persist and check if unit completed (Badge!)
+    const newBadge = StorageManager.setExercisePassed(currentLessonObj.n, currentExerciseState);
+
+    // Show Next Lesson Banner
+    const nextBanner = document.getElementById('next-lesson-banner');
+    const nextBtn = document.getElementById('btn-next-lesson-flow');
+    nextBanner.style.display = 'flex';
+
+    if (currentLessonObj.n < 27) {
+      nextBtn.href = `teoria.html?lesson=${currentLessonObj.n + 1}`;
+      nextBtn.textContent = `Comenzar Lección ${currentLessonObj.n + 1} ➔`;
+    } else {
+      nextBtn.href = 'index.html';
+      nextBtn.textContent = '🎉 ¡Completaste todo el Curso!';
+    }
+
+    // Award Badge Celebration Modal if Unit was completed!
+    if (newBadge) {
+      showBadgeCelebration(newBadge);
+    }
+  } else {
+    statusEl.className = 'telemetry-status-box error';
+    statusEl.innerHTML = `<span>❌</span> ${formatMarkdown(result.msg)}`;
+  }
+}
+
+function showAlreadyPassedTelemetry() {
+  const statusEl = document.getElementById('telemetry-status');
+  statusEl.className = 'telemetry-status-box success';
+  statusEl.innerHTML = `<span>✅</span> Laboratorio completado anteriormente (+100 XP otorgados).`;
+
+  const nextBanner = document.getElementById('next-lesson-banner');
+  const nextBtn = document.getElementById('btn-next-lesson-flow');
+  nextBanner.style.display = 'flex';
+  if (currentLessonObj.n < 27) {
+    nextBtn.href = `teoria.html?lesson=${currentLessonObj.n + 1}`;
+    nextBtn.textContent = `Ir a Lección ${currentLessonObj.n + 1} ➔`;
+  } else {
+    nextBtn.href = 'index.html';
+    nextBtn.textContent = 'Ver Dashboard';
+  }
+}
+
+function resetExercise() {
+  renderExerciseArena(currentLessonObj.exercise);
+  const statusEl = document.getElementById('telemetry-status');
+  statusEl.className = 'telemetry-status-box';
+  statusEl.innerHTML = `<span>📡</span> Ejercicio reiniciado. Haz tus elecciones y presiona Validar.`;
+}
+
+function showBadgeCelebration(badge) {
+  document.getElementById('modal-badge-icon').textContent = badge.icon;
+  document.getElementById('modal-badge-title').textContent = `${badge.title} (${badge.titleEs})`;
+  document.getElementById('modal-badge-desc').textContent = `${badge.description} ¡Has dominado completamente la ${badge.unitTitle}!`;
+  document.getElementById('badge-celebration-modal').style.display = 'flex';
+}
+
+function closeBadgeModal() {
+  document.getElementById('badge-celebration-modal').style.display = 'none';
+}
+
+// Mobile Tabs Switching (< 960px)
+function switchMobileTab(target) {
+  const tabInstructions = document.getElementById('tab-instructions-btn');
+  const tabLab = document.getElementById('tab-lab-btn');
+  const paneLeft = document.querySelector('.left-spec-panel');
+  const paneRight = document.querySelector('.right-arena-panel');
+
+  if (target === 'lab') {
+    if (tabLab) tabLab.classList.add('active');
+    if (tabInstructions) tabInstructions.classList.remove('active');
+    if (paneRight) paneRight.classList.add('mobile-active');
+    if (paneLeft) paneLeft.classList.remove('mobile-active');
+  } else {
+    if (tabInstructions) tabInstructions.classList.add('active');
+    if (tabLab) tabLab.classList.remove('active');
+    if (paneLeft) paneLeft.classList.add('mobile-active');
+    if (paneRight) paneRight.classList.remove('mobile-active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  StorageManager.init();
+  const n = getUrlLesson();
+  loadPractice(n);
+
+  const tabInstructions = document.getElementById('tab-instructions-btn');
+  const tabLab = document.getElementById('tab-lab-btn');
+  const paneGoLabBtn = document.getElementById('pane-go-to-lab-btn');
+
+  if (tabInstructions) tabInstructions.addEventListener('click', () => switchMobileTab('instructions'));
+  if (tabLab) tabLab.addEventListener('click', () => switchMobileTab('lab'));
+  if (paneGoLabBtn) paneGoLabBtn.addEventListener('click', () => switchMobileTab('lab'));
+});
+</script>
+</body>
+</html>
+

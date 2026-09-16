@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temario Completo (27 Lecciones) — English Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/site.css">
+
+<script>
+  (function() {
+    try {
+      var t = localStorage.getItem('datacamp_english_course_v1_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  })();
+</script>
+
+<style>
+/* NAVBAR (Top sticky bar) */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg-surface);
+  border-bottom: 1.5px solid var(--border);
+  height: 64px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 24px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+  white-space: nowrap;
+}
+
+.nav-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.nav-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  text-decoration: none !important;
+  color: var(--text-main);
+  font-weight: 800;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 17px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text-main);
+  font-size: 15px;
+}
+.brand-text span {
+  color: var(--primary);
+}
+
+.nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.nav-link:hover {
+  color: var(--primary);
+  background: var(--bg-surface-alt);
+}
+.nav-link.active {
+  color: var(--primary);
+  background: var(--primary-light);
+  font-weight: 800;
+}
+
+.nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.xp-counter-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px;
+  background: var(--amber-light);
+  border: 1.5px solid var(--amber-border);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  height: 36px;
+}
+
+.theme-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 !important;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+.theme-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+
+/* Layout & Page Header */
+.temario-page-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.temario-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.temario-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--border-strong);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.temario-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.temario-subtitle {
+  font-size: 15.5px;
+  color: var(--text-secondary);
+  max-width: 680px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+
+/* Real-Time Search & Filters */
+.temario-toolbar {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-surface-alt);
+  color: var(--text-main);
+  font-size: 14.5px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-input-field:focus {
+  border-color: var(--primary);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill-btn {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-pill-btn:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-main);
+  border-color: var(--border-strong);
+}
+
+.filter-pill-btn.active {
+  background: var(--primary);
+  color: #ffffff !important;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+/* Badges Showcase Section */
+.badges-showcase-box {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.badges-showcase-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.badges-showcase-title {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badges-toggle-arrow {
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.badges-showcase-box.open .badges-toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.badges-carousel-grid {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.badges-showcase-box.open .badges-carousel-grid {
+  display: grid;
+}
+
+.badge-item-mini {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.badge-item-mini:hover {
+  transform: translateY(-2px);
+}
+
+.badge-item-mini.earned {
+  border-color: var(--emerald);
+  background: linear-gradient(135deg, var(--bg-surface-alt) 0%, rgba(16, 185, 129, 0.08) 100%);
+}
+
+.badge-item-mini .badge-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.badge-item-mini .badge-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.badge-item-mini .badge-unit {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.badge-item-mini.earned .badge-status-text {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--emerald);
+  margin-top: 4px;
+}
+
+.badge-item-mini:not(.earned) {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+}
+
+.badge-item-mini:not(.earned) .badge-status-text {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Accordion Units List (Modeled after curso ML) */
+.syllabus-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.unit-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.unit-card:hover {
+  border-color: var(--border-strong);
+}
+
+.unit-card.completed {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.unit-head {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  background: var(--bg-surface);
+  transition: background 0.15s ease;
+}
+
+.unit-head:hover {
+  background: var(--bg-surface-hover);
+}
+
+.unit-info-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.unit-badge-circle {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.unit-card.completed .unit-badge-circle {
+  border-color: var(--emerald);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.unit-text-block {
+  min-width: 0;
+  flex: 1;
+}
+
+.unit-title-line {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.unit-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+.unit-level-tag {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.unit-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.unit-stat-pill {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.unit-card.completed .unit-stat-pill {
+  color: var(--emerald);
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.unit-expand-arrow {
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.unit-card.open .unit-expand-arrow {
+  transform: rotate(180deg);
+}
+
+.unit-lessons-body {
+  display: none;
+  padding: 4px 20px 20px;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-surface-alt);
+}
+
+.unit-card.open .unit-lessons-body {
+  display: flex;
+}
+
+.lesson-row-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.15s ease;
+}
+
+.lesson-row-card:hover {
+  border-color: var(--border-strong);
+}
+
+.lesson-row-card.locked {
+  opacity: 0.5;
+}
+
+.lesson-left-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.lesson-status-bubble {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: transparent;
+  flex-shrink: 0;
+}
+
+.lesson-status-bubble.done {
+  border-color: var(--emerald);
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emerald);
+  font-weight: 800;
+}
+
+.lesson-title-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  min-width: 0;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.lesson-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.lesson-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.lesson-btn.btn-theory {
+  background: var(--bg-surface-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.lesson-btn.btn-theory:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.lesson-btn.btn-lab {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+}
+
+.lesson-btn.btn-lab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.lesson-btn.btn-locked {
+  background: var(--bg-surface-alt);
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* External Practice Row inside Unit */
+.unit-ext-row {
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: rgba(37, 99, 235, 0.06);
+  border: 1.5px dashed rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.unit-ext-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.unit-ext-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.unit-ext-title {
+  font-size: 12.5px;
+  color: var(--text-main);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unit-ext-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.unit-ext-link:hover {
+  text-decoration: underline;
+}
+
+/* Empty search notice */
+.empty-search-box {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Responsive Mobile Ergonomics (< 680px and < 400px) */
+@media (max-width: 680px) {
+  .temario-page-container {
+    padding: 20px 12px 60px;
+  }
+  .temario-title {
+    font-size: 25px;
+  }
+  .temario-subtitle {
+    font-size: 13.5px;
+    margin-bottom: 18px;
+  }
+  .temario-toolbar {
+    padding: 14px;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .search-input-field {
+    font-size: 13.5px;
+    padding: 10px 12px 10px 38px;
+  }
+  .filter-pills-row {
+    gap: 6px;
+  }
+  .filter-pill-btn {
+    padding: 5px 11px;
+    font-size: 12px;
+  }
+  .unit-head {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .unit-info-group {
+    gap: 10px;
+  }
+  .unit-badge-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
+    border-radius: 9px;
+  }
+  .unit-title-line {
+    font-size: 14px;
+  }
+  .unit-meta-line {
+    font-size: 11px;
+  }
+  .unit-stat-pill {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  .unit-lessons-body {
+    padding: 4px 12px 14px;
+    gap: 8px;
+  }
+  .lesson-row-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .lesson-left-content {
+    width: 100%;
+  }
+  .lesson-actions-group {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .lesson-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    padding: 0 12px;
+    height: 56px;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  .nav-left {
+    gap: 8px;
+  }
+  .brand-text {
+    font-size: 14px;
+  }
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+  .nav-actions {
+    gap: 6px;
+  }
+  .xp-counter-pill {
+    padding: 4px 8px;
+    font-size: 11.5px;
+    height: 32px;
+  }
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .temario-title {
+    font-size: 24px;
+  }
+  .navbar {
+    padding: 0 8px;
+    height: 52px;
+    gap: 6px;
+  }
+  .back-btn {
+    padding: 5px 8px !important;
+    font-size: 11.5px !important;
+    height: 32px !important;
+  }
+  .brand-text {
+    display: none !important;
+  }
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  .xp-counter-pill {
+    font-size: 11px;
+    padding: 3px 6px;
+    height: 30px;
+    gap: 3px;
+  }
+  .theme-btn {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+  }
+  .filter-pill-btn {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+  .lesson-btn {
+    font-size: 11px;
+    padding: 7px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar {
+    padding: 0 5px;
+    gap: 4px;
+  }
+  .back-btn {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+  }
+  .brand-icon {
+    display: none !important;
+  }
+  .xp-counter-pill {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="back-btn">Inicio</a>
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon">🇬🇧</div>
+      <div class="brand-text">Curso de <span>Inglés</span></div>
+    </a>
+  </div>
+
+  <div class="nav-links">
+    <a href="temario.html" class="nav-link active">Temario</a>
+    <a href="teoria.html?lesson=1" class="nav-link">Teoría</a>
+    <a href="practica.html?lesson=1" class="nav-link">Laboratorio</a>
+  </div>
+
+  <div class="nav-actions">
+    <div class="xp-counter-pill" id="nav-xp-counter">⚡ 0 XP</div>
+    <button class="theme-btn" onclick="StorageManager.toggleTheme()" aria-label="Cambiar tema">
+      <span id="theme-toggle-icon">🌙</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN TEMARIO CONTAINER -->
+<main class="temario-page-container">
+
+  <!-- HERO / BANNER -->
+  <header class="temario-hero">
+    <div class="temario-tag">
+      <span>📚</span> Ruta Formativa Oficial
+    </div>
+    <h1 class="temario-title">Temario del Curso (27 Lecciones)</h1>
+    <p class="temario-subtitle">
+      Plan de estudios estructurado en 9 unidades temáticas de A1 a B2: teoría explicada de forma directa, pronunciación nativa y laboratorios prácticos interactivos con insignia al completar cada unidad.
+    </p>
+  </header>
+
+  <!-- SEARCH & LEVEL FILTERS -->
+  <div class="temario-toolbar">
+    <div class="search-input-wrap">
+      <span class="search-input-icon">🔍</span>
+      <input type="text" id="lesson-search-input" class="search-input-field" 
+             placeholder="Buscar lección o tema (ej. Verbo To Be, Pasado Simple, Phrasal Verbs, Modales...)"
+             oninput="handleSearch(this.value)">
+    </div>
+
+    <div class="filter-pills-row">
+      <button class="filter-pill-btn active" id="filter-btn-todos" onclick="setFilter('todos')">
+        <span>🌐</span> Todos (27)
+      </button>
+      <button class="filter-pill-btn" id="filter-btn-basico" onclick="setFilter('basico')">
+        <span>🟢</span> Básico A1 (9)
+      </button>
+      <button class="filter-pill-btn" id="filter-btn-intermedio" onclick="setFilter('intermedio')">
+        <span>🔵</span> Intermedio A2-B1 (9)
+      </button>
+      <button class="filter-pill-btn" id="filter-btn-avanzado" onclick="setFilter('avanzado')">
+        <span>🟣</span> Avanzado B2 (9)
+      </button>
+    </div>
+  </div>
+
+  <!-- BADGES ACCORDION / SHOWCASE -->
+  <div class="badges-showcase-box" id="badges-accordion-box">
+    <div class="badges-showcase-head" onclick="toggleBadgesShowcase()">
+      <div class="badges-showcase-title">
+        <span>🏆</span> Vitrina de Insignias de Unidad (<span id="badges-earned-count">0/9</span> Desbloqueadas)
+      </div>
+      <span class="badges-toggle-arrow">▼</span>
+    </div>
+    <div class="badges-carousel-grid" id="badges-grid-list"></div>
+  </div>
+
+  <!-- SYLLABUS UNITS LIST -->
+  <div class="syllabus-accordion-list" id="units-accordion-container"></div>
+
+</main>
+
+<script src="course-data.js"></script>
+<script src="storage.js"></script>
+
+<script>
+let currentFilter = 'todos';
+let searchQuery = '';
+
+function getUrlParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+function setFilter(filter, updateHistory = true) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-pill-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`filter-btn-${filter}`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  if (updateHistory) {
+    const url = new URL(window.location);
+    if (filter === 'todos') {
+      url.searchParams.delete('level');
+    } else {
+      url.searchParams.set('level', filter);
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  renderSyllabus();
+}
+
+function handleSearch(val) {
+  searchQuery = val.trim().toLowerCase();
+  renderSyllabus();
+}
+
+function toggleBadgesShowcase() {
+  const box = document.getElementById('badges-accordion-box');
+  if (box) box.classList.toggle('open');
+}
+
+function renderBadges() {
+  const container = document.getElementById('badges-grid-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  let earnedCount = 0;
+  UNITS.forEach(u => {
+    const isEarned = StorageManager.isBadgeEarned(u.unitId);
+    if (isEarned) earnedCount++;
+
+    const item = document.createElement('div');
+    item.className = `badge-item-mini ${isEarned ? 'earned' : ''}`;
+    item.title = isEarned ? `Insignia de Unidad Obtenida: ${u.badge.name}` : `Completa las 3 lecciones de la ${u.title.split(':')[0]} para desbloquear esta insignia`;
+    item.innerHTML = `
+      <div class="badge-icon">${u.badge.icon}</div>
+      <div class="badge-name">${u.badge.name}</div>
+      <div class="badge-unit">${u.title.split(':')[0]}</div>
+      <div class="badge-status-text">${isEarned ? '✓ Obtenida' : '🔒 Bloqueada'}</div>
+    `;
+    container.appendChild(item);
+  });
+
+  const countEl = document.getElementById('badges-earned-count');
+  if (countEl) countEl.textContent = `${earnedCount}/9`;
+}
+
+function renderSyllabus() {
+  const container = document.getElementById('units-accordion-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  let filteredUnits = UNITS;
+
+  // Filter by Level
+  if (currentFilter === 'basico') {
+    filteredUnits = UNITS.filter(u => u.unitId >= 1 && u.unitId <= 3);
+  } else if (currentFilter === 'intermedio') {
+    filteredUnits = UNITS.filter(u => u.unitId >= 4 && u.unitId <= 6);
+  } else if (currentFilter === 'avanzado') {
+    filteredUnits = UNITS.filter(u => u.unitId >= 7 && u.unitId <= 9);
+  }
+
+  // Filter by Search Query
+  if (searchQuery) {
+    filteredUnits = filteredUnits.map(u => {
+      const matchingLessons = u.lessons.filter(l => 
+        l.title.toLowerCase().includes(searchQuery) ||
+        u.title.toLowerCase().includes(searchQuery) ||
+        (l.p1 && l.p1.toLowerCase().includes(searchQuery))
+      );
+      return matchingLessons.length > 0 ? { ...u, lessons: matchingLessons } : null;
+    }).filter(Boolean);
+  }
+
+  if (filteredUnits.length === 0) {
+    container.innerHTML = `
+      <div class="empty-search-box">
+        <div style="font-size:32px;margin-bottom:10px;">🔍</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--text-main);margin-bottom:6px;">No se encontraron temas</h3>
+        <p style="font-size:14px;color:var(--text-muted);">Intenta con términos como "To Be", "Pasado", "Modales", "Preguntas" o "Condicionales".</p>
+      </div>
+    `;
+    return;
+  }
+
+  const lastActiveLessonNum = StorageManager.getLastActiveLesson();
+
+  filteredUnits.forEach((unit, idx) => {
+    const isBadgeEarned = StorageManager.isBadgeEarned(unit.unitId);
+    const unitDoneCount = unit.lessons.filter(l => StorageManager.isDone(l.n)).length;
+    const isCompleted = (unitDoneCount === unit.lessons.length && unit.lessons.length > 0);
+
+    // If searching or if unit matches last active lesson or first unit in filtered list, auto-expand
+    const hasActiveLesson = unit.lessons.some(l => l.n === lastActiveLessonNum);
+    const shouldOpen = Boolean(searchQuery) || hasActiveLesson || (idx === 0 && currentFilter !== 'todos');
+
+    const card = document.createElement('div');
+    card.className = `unit-card ${isCompleted ? 'completed' : ''} ${shouldOpen ? 'open' : ''}`;
+    card.id = `unit-accordion-${unit.unitId}`;
+
+    card.innerHTML = `
+      <div class="unit-head" onclick="toggleUnitAccordion('${card.id}')">
+        <div class="unit-info-group">
+          <div class="unit-badge-circle">${unit.badge.icon}</div>
+          <div class="unit-text-block">
+            <div class="unit-title-line">${unit.title}</div>
+            <div class="unit-meta-line">
+              <span class="unit-level-tag">${unit.level}</span>
+              <span>•</span>
+              <span>Insignia: <strong>${unit.badge.name}</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="unit-meta-right">
+          <span class="unit-stat-pill">${unitDoneCount} / ${unit.lessons.length}</span>
+          <span class="unit-expand-arrow">▼</span>
+        </div>
+      </div>
+
+      <div class="unit-lessons-body">
+        ${unit.lessons.map(lesson => {
+          const isDone = StorageManager.isDone(lesson.n);
+          const isAccessible = StorageManager.canAccessLessonNumber(lesson.n);
+          const canPractice = StorageManager.canAccessPractice(lesson.n);
+
+          return `
+            <div class="lesson-row-card ${!isAccessible ? 'locked' : ''}">
+              <div class="lesson-left-content">
+                <span class="lesson-status-bubble ${isDone ? 'done' : ''}">${isDone ? '✓' : ''}</span>
+                <span class="lesson-title-text">${lesson.n}. ${lesson.title}</span>
+              </div>
+              <div class="lesson-actions-group">
+                <a href="${isAccessible ? `teoria.html?lesson=${lesson.n}` : 'javascript:void(0)'}" 
+                   class="lesson-btn btn-theory ${!isAccessible ? 'btn-locked' : ''}" 
+                   title="${isAccessible ? 'Leer teoría y pronunciación' : 'Completa el laboratorio anterior para desbloquear'}">
+                  📖 Teoría
+                </a>
+                <a href="${canPractice ? `practica.html?lesson=${lesson.n}` : 'javascript:void(0)'}" 
+                   class="lesson-btn ${canPractice ? 'btn-lab' : 'btn-locked'}" 
+                   title="${canPractice ? 'Entrar al laboratorio' : 'Supera el quiz de teoría para desbloquear el laboratorio'}">
+                  ${canPractice ? '⚡ Lab (+100 XP)' : '🔒 Lab'}
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('')}
+
+        ${unit.externalPractice ? `
+          <div class="unit-ext-row">
+            <div class="unit-ext-left">
+              <span class="unit-ext-tag">${unit.externalPractice.provider} // ${unit.externalPractice.badge}:</span>
+              <span class="unit-ext-title">${unit.externalPractice.title}</span>
+            </div>
+            <a href="${unit.externalPractice.url}" target="_blank" rel="noopener noreferrer" class="unit-ext-link">
+              Practicar ↗
+            </a>
+          </div>
+        ` : ''}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function toggleUnitAccordion(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) card.classList.toggle('open');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  StorageManager.init();
+  const xp = StorageManager.getXP();
+  document.getElementById('nav-xp-counter').textContent = `⚡ ${xp.toLocaleString()} XP`;
+
+  // Check URL level filter
+  const initialLevel = getUrlParam('level');
+  if (initialLevel && ['basico', 'intermedio', 'avanzado'].includes(initialLevel)) {
+    setFilter(initialLevel, false);
+  } else {
+    setFilter('todos', false);
+  }
+
+  renderBadges();
+});
+</script>
+</body>
+</html>
+
