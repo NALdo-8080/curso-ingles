@@ -893,6 +893,7 @@
   </div>
 
   <div class="nav-actions">
+    <div id="nav-auth-container"></div>
     <div class="xp-counter-pill" id="nav-xp-counter">⚡ 0 XP</div>
     <button class="theme-btn" onclick="StorageManager.toggleTheme()" aria-label="Cambiar tema">
       <span id="theme-toggle-icon">🌙</span>
@@ -955,6 +956,9 @@
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="auth-ui.js"></script>
 <script src="course-data.js"></script>
 <script src="storage.js"></script>
 
@@ -1148,8 +1152,17 @@ function toggleUnitAccordion(cardId) {
 
 document.addEventListener('DOMContentLoaded', () => {
   StorageManager.init();
-  const xp = StorageManager.getXP();
-  document.getElementById('nav-xp-counter').textContent = `⚡ ${xp.toLocaleString()} XP`;
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  const navXp = document.getElementById('nav-xp-counter');
+  if (navXp) {
+    if (user && user.role === 'estudiante') {
+      navXp.style.display = 'inline-flex';
+      const xp = StorageManager.getXP();
+      navXp.textContent = `⚡ ${xp.toLocaleString()} XP`;
+    } else {
+      navXp.style.display = 'none';
+    }
+  }
 
   // Check URL level filter
   const initialLevel = getUrlParam('level');

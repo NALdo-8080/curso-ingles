@@ -799,6 +799,7 @@ html, body {
   </div>
 
   <div class="nav-right">
+    <div id="nav-auth-container"></div>
     <div class="xp-badge" id="nav-xp-counter">⚡ 0 XP</div>
     <button class="theme-toggle" onclick="StorageManager.toggleTheme()" style="background:var(--studio-surface-2);border:1px solid var(--studio-border);color:var(--text-main);padding:6px 10px;border-radius:8px;cursor:pointer;">
       <span id="theme-toggle-icon">☀️</span>
@@ -923,6 +924,9 @@ html, body {
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="auth-ui.js"></script>
 <script src="course-data.js"></script>
 <script src="storage.js"></script>
 

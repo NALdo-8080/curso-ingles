@@ -612,3 +612,692 @@ a {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ==========================================================================
+   LMS — Paneles de Profesor, Seguimiento de Alumnos y Gestión de Clases
+   ========================================================================== */
+.lms-section-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.lms-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.lms-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+}
+
+.lms-panel-title .icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--indigo-light);
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+}
+
+.lms-class-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lms-select {
+  padding: 8px 14px;
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-size: 13.5px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.lms-select:focus {
+  border-color: var(--primary);
+}
+
+.lms-code-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-light);
+  border: 1.5px dashed var(--primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.lms-copy-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lms-copy-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Métricas del Grupo del Profesor */
+.teacher-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.teacher-kpi-box {
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.teacher-kpi-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.teacher-kpi-val {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+/* Tabla de Estudiantes */
+.teacher-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.teacher-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13.5px;
+}
+
+.teacher-table th {
+  background: var(--bg-surface-alt);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+
+.teacher-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.teacher-table tr:last-child td {
+  border-bottom: none;
+}
+
+.teacher-table tr:hover td {
+  background: var(--bg-surface-alt);
+}
+
+.student-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-info-name {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.student-info-email {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.student-progress-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 130px;
+}
+
+.student-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.student-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #059669);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.student-percent-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  width: 38px;
+  text-align: right;
+  color: var(--text-main);
+}
+
+.student-metric-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+}
+
+.student-metric-tag.xp {
+  color: var(--amber);
+  background: var(--amber-light);
+  border-color: var(--amber-border);
+}
+
+.student-metric-tag.quizzes {
+  color: var(--primary);
+  background: var(--primary-light);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.student-metric-tag.labs {
+  color: var(--emerald);
+  background: var(--emerald-light);
+  border-color: var(--emerald-border);
+}
+
+/* Empty State */
+.lms-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.lms-empty-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.lms-empty-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.lms-empty-desc {
+  font-size: 13.5px;
+  max-width: 440px;
+  margin: 0 auto 16px;
+  line-height: 1.5;
+}
+
+/* Tarjetas de clases inscritas (Estudiante) */
+.student-classes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.student-class-card {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-class-name {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.student-class-teacher {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-class-date {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+/* Filtros de estado y diagnósticos para el maestro */
+.teacher-control-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--bg-surface-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.teacher-filter-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.teacher-filter-btn {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.teacher-filter-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+
+.teacher-filter-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.teacher-filter-btn.active .filter-count-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.filter-count-badge {
+  background: var(--bg-surface-alt);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.teacher-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  min-width: 220px;
+  flex: 1;
+  max-width: 320px;
+}
+
+.teacher-search-box input {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+}
+
+/* Badges de diagnóstico de alumno */
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-tag.al_dia {
+  background: var(--emerald-light);
+  color: var(--emerald);
+  border: 1px solid var(--emerald-border);
+}
+
+.status-tag.falta_avanzar {
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+}
+
+.status-tag.sin_iniciar {
+  background: var(--rose-light);
+  color: var(--rose);
+  border: 1px solid var(--rose);
+}
+
+/* Avatar de alumno */
+.student-row-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--indigo));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Banner de estado de estudiante en el dashboard */
+.student-auth-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 13.5px;
+}
+
+.student-auth-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-auth-tag {
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: var(--emerald-light);
+  color: var(--emerald);
+  border: 1px solid var(--emerald-border);
+}
+
+.btn-export-csv {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  color: var(--text-main);
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-export-csv:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+}
+
+/* ==========================================================================
+   TARJETA DE BIENVENIDA PARA VISITANTES (PROGRESO BLOQUEADO HASTA INICIAR SESIÓN)
+   ========================================================================== */
+.guest-welcome-card {
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-alt) 100%);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  margin: 36px 0;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.guest-welcome-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--indigo), var(--emerald));
+}
+
+.guest-card-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.guest-icon-wrap {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: var(--radius-lg);
+  background: var(--primary-light);
+  border: 1.5px solid rgba(37, 99, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+}
+
+.guest-text-col {
+  flex: 1;
+}
+
+.guest-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.guest-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.guest-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 18px;
+  max-width: 720px;
+}
+
+.guest-actions-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.guest-demo-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 4px;
+}
+
+.btn-demo-quick {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-demo-quick:hover {
+  background: var(--bg-surface-alt);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-demo-quick.teacher {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--indigo);
+  background: rgba(99, 102, 241, 0.05);
+}
+.btn-demo-quick.teacher:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: var(--indigo);
+}
+
+.btn-demo-quick.student {
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--emerald);
+  background: rgba(16, 185, 129, 0.05);
+}
+.btn-demo-quick.student:hover {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--emerald);
+}
+
+/* Modal Demo Accounts Box */
+.demo-accounts-modal-box {
+  background: var(--bg-surface-alt);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-top: 18px;
+}
+
+.demo-modal-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.demo-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .guest-card-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .guest-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .guest-actions-row .btn,
+  .guest-actions-row .btn-demo-quick {
+    width: 100%;
+    justify-content: center;
+  }
+  .demo-modal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+

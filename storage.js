@@ -1,6 +1,6 @@
 /**
  * storage.js - Motor de Persistencia, Gamificación XP y Sistema de Insignias
- * Gestiona el almacenamiento del estado del estudiante en localStorage para el curso de inglés.
+ * Sincronización híbrida: Caché síncrono en localStorage + Sincronización en la nube con Supabase.
  */
 
 const BADGES_METADATA = [
@@ -90,6 +90,8 @@ const BADGES_METADATA = [
 const StorageManager = {
   KEY: 'datacamp_english_course_v1',
   cache: null,
+  syncTimeout: null,
+  pendingLessonSync: new Set(),
 
   init() {
     try {
@@ -98,8 +100,9 @@ const StorageManager = {
         if (raw) this.cache = JSON.parse(raw);
       }
     } catch(e) {
-      console.warn("Storage no disponible, usando memoria.", e);
+      console.warn("Storage local no disponible, usando memoria.", e);
     }
+
     if (!this.cache) {
       this.cache = {
         xp: 0,
@@ -113,6 +116,7 @@ const StorageManager = {
         speechRate: 0.95
       };
     }
+
     if (!this.cache.unlockedHints) this.cache.unlockedHints = {};
     if (!this.cache.badges) this.cache.badges = {};
     if (!this.cache.lastLesson) this.cache.lastLesson = 1;
@@ -127,6 +131,172 @@ const StorageManager = {
       }
     }
     this.applyTheme();
+
+    // Conexión reactiva con Supabase
+    this.setupCloudSync();
+  },
+
+  // Configura la sincronización con Supabase cuando hay sesión activa
+  setupCloudSync() {
+    if (typeof window === 'undefined') return;
+
+    // Escuchar cambios de autenticación
+    if (window.AuthService) {
+      window.AuthService.onAuthStateChange(async (event, user) => {
+        if (user) {
+          await this.syncFromSupabase();
+        }
+      });
+    }
+
+    // Intentar sincronizar al inicio si ya hay sesión
+    setTimeout(() => {
+      this.syncFromSupabase();
+    }, 300);
+  },
+
+  // Descarga el progreso de Supabase y lo fusiona con el local
+  async syncFromSupabase() {
+    if (!window.AuthService || !window.ProgressSyncService) return;
+    const user = window.AuthService.getUser();
+    if (!user) return;
+
+    try {
+      const remote = await window.ProgressSyncService.loadUserProgress(user.id);
+      if (remote) {
+        let modified = false;
+
+        // Si el usuario tenía datos locales anónimos previos, migrarlos a Supabase
+        const hadLocalData = (this.cache.xp > 0 || Object.keys(this.cache.done || {}).length > 0);
+        const hadRemoteData = (remote.xp > 0 || Object.keys(remote.done || {}).length > 0);
+
+        if (hadLocalData && !hadRemoteData) {
+          // Subir progreso local acumulado a la cuenta recién creada
+          await this.pushAllToCloud(user.id);
+          return;
+        }
+
+        // Fusionar XP: el valor mayor o suma de lecciones
+        if (remote.xp > (this.cache.xp || 0)) {
+          this.cache.xp = remote.xp;
+          modified = true;
+        }
+
+        // Fusionar lecciones aprobadas
+        if (remote.done) {
+          Object.keys(remote.done).forEach(k => {
+            if (!this.cache.done[k]) {
+              this.cache.done[k] = remote.done[k];
+              modified = true;
+            }
+          });
+        }
+
+        // Fusionar quizzes
+        if (remote.quizzes) {
+          Object.keys(remote.quizzes).forEach(k => {
+            if (!this.cache.quizzes[k]) {
+              this.cache.quizzes[k] = true;
+              modified = true;
+            }
+          });
+        }
+
+        // Fusionar laboratorios
+        if (remote.exercises) {
+          Object.keys(remote.exercises).forEach(k => {
+            if (!this.cache.exercises[k]) {
+              this.cache.exercises[k] = remote.exercises[k];
+              modified = true;
+            }
+          });
+        }
+
+        // Fusionar badges
+        if (remote.badges) {
+          Object.keys(remote.badges).forEach(k => {
+            if (!this.cache.badges[k]) {
+              this.cache.badges[k] = remote.badges[k];
+              modified = true;
+            }
+          });
+        }
+
+        if (modified) {
+          this.save();
+          this.animateXP();
+          // Notificar actualización a la página
+          window.dispatchEvent(new CustomEvent('storage:synced', { detail: this.cache }));
+        }
+      }
+    } catch (e) {
+      console.warn("[StorageManager] Advertencia sincronizando con nube:", e);
+    }
+  },
+
+  // Sube todo el progreso local a Supabase (usado tras primer registro)
+  async pushAllToCloud(userId) {
+    if (!window.ProgressSyncService || !userId) return;
+
+    try {
+      for (let i = 1; i <= 27; i++) {
+        const isDone = this.isDone(i);
+        const quizPassed = this.isQuizPassed(i);
+        const exPassed = this.isExercisePassed(i);
+
+        if (isDone || quizPassed || exPassed) {
+          const lessonXP = (quizPassed ? 50 : 0) + (exPassed ? 100 : 0);
+          await window.ProgressSyncService.syncLessonProgress(userId, i, {
+            done: isDone,
+            quizPassed: quizPassed,
+            exercisePassed: exPassed,
+            xp: lessonXP,
+            exerciseState: this.getExerciseState(i)
+          });
+        }
+      }
+
+      // Sincronizar insignias locales
+      for (let u = 1; u <= 9; u++) {
+        if (this.isBadgeEarned(u)) {
+          const meta = BADGES_METADATA.find(b => b.unitId === u);
+          if (meta) {
+            await window.ProgressSyncService.syncBadge(userId, u, meta.badgeId);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("[StorageManager] Error en pushAllToCloud:", e);
+    }
+  },
+
+  // Cola de sincronización asíncrona para una lección
+  queueSyncLesson(lessonNum) {
+    this.pendingLessonSync.add(lessonNum);
+
+    if (this.syncTimeout) clearTimeout(this.syncTimeout);
+    this.syncTimeout = setTimeout(async () => {
+      const user = window.AuthService ? window.AuthService.getUser() : null;
+      if (!user || !window.ProgressSyncService) return;
+
+      const lessonsToSync = Array.from(this.pendingLessonSync);
+      this.pendingLessonSync.clear();
+
+      for (const n of lessonsToSync) {
+        const isDone = this.isDone(n);
+        const quizPassed = this.isQuizPassed(n);
+        const exPassed = this.isExercisePassed(n);
+        const lessonXP = (quizPassed ? 50 : 0) + (exPassed ? 100 : 0);
+
+        await window.ProgressSyncService.syncLessonProgress(user.id, n, {
+          done: isDone,
+          quizPassed: quizPassed,
+          exercisePassed: exPassed,
+          xp: lessonXP,
+          exerciseState: this.getExerciseState(n)
+        });
+      }
+    }, 400);
   },
 
   save() {
@@ -176,10 +346,20 @@ const StorageManager = {
 
   animateXP() {
     if (typeof document !== 'undefined') {
+      const user = (typeof window !== 'undefined' && window.AuthService) ? window.AuthService.getUser() : null;
       const el = document.getElementById('nav-xp-counter');
-      if (el) el.textContent = `⚡ ${(this.cache.xp || 0).toLocaleString()} XP`;
+      if (el) {
+        if (user && user.role === 'estudiante') {
+          el.style.display = 'inline-flex';
+          el.textContent = `⚡ ${(this.cache.xp || 0).toLocaleString()} XP`;
+        } else {
+          el.style.display = 'none';
+        }
+      }
       const dashEl = document.getElementById('dash-xp-counter');
-      if (dashEl) dashEl.textContent = `${(this.cache.xp || 0).toLocaleString()} XP`;
+      if (dashEl) {
+        dashEl.textContent = (user && user.role === 'estudiante') ? `${(this.cache.xp || 0).toLocaleString()} XP` : '0 XP';
+      }
     }
   },
 
@@ -197,6 +377,7 @@ const StorageManager = {
       delete this.cache.done[String(n)];
     }
     this.save();
+    this.queueSyncLesson(n);
   },
 
   isQuizPassed(n) {
@@ -242,6 +423,7 @@ const StorageManager = {
       this.checkLessonCompletion(n);
     }
     this.save();
+    this.queueSyncLesson(n);
   },
 
   getExerciseState(n) {
@@ -281,6 +463,7 @@ const StorageManager = {
       newBadgeAwarded = this.checkUnitCompletionForLesson(n);
     }
     this.save();
+    this.queueSyncLesson(n);
     return newBadgeAwarded;
   },
 
@@ -330,6 +513,13 @@ const StorageManager = {
         badgeId: badge.badgeId
       };
       this.save();
+
+      // Sincronizar con Supabase
+      const user = window.AuthService ? window.AuthService.getUser() : null;
+      if (user && window.ProgressSyncService) {
+        window.ProgressSyncService.syncBadge(user.id, unitNum, badge.badgeId);
+      }
+
       return badge;
     }
     return null;
@@ -444,13 +634,12 @@ const StorageManager = {
       if (onEnd) onEnd();
       return;
     }
-    window.speechSynthesis.cancel(); // Cancel any ongoing audio
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = this.cache?.speechRate || 0.95;
     utterance.pitch = 1.0;
 
-    // Try selecting a natural English voice
     const voices = window.speechSynthesis.getVoices();
     const enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel')));
     if (enVoice) utterance.voice = enVoice;
@@ -468,4 +657,3 @@ if (typeof window !== 'undefined') {
   window.BADGES_METADATA = BADGES_METADATA;
   document.addEventListener('DOMContentLoaded', () => StorageManager.init());
 }
-

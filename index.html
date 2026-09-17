@@ -701,6 +701,7 @@
   </div>
 
   <div class="nav-actions">
+    <div id="nav-auth-container"></div>
     <div class="xp-counter-pill" id="nav-xp-counter">⚡ 0 XP</div>
     <button class="theme-btn" onclick="StorageManager.toggleTheme()" aria-label="Cambiar tema" title="Cambiar tema claro/oscuro">
       <span id="theme-toggle-icon">🌙</span>
@@ -786,8 +787,37 @@
     <div class="pronun-cards-grid" id="pronun-cards-container"></div>
   </section>
 
-  <!-- DASHBOARD DE PROGRESO -->
-  <section class="dashboard-card" id="dashboard">
+  <!-- TARJETA PARA VISITANTES: PROGRESO BLOQUEADO HASTA INICIAR SESIÓN -->
+  <section class="guest-welcome-card" id="guest-welcome-card">
+    <div class="guest-card-content">
+      <div class="guest-icon-wrap">🔒</div>
+      <div class="guest-text-col">
+        <div class="guest-badge-pill">✨ Tu Panel Personal de Aprendizaje</div>
+        <h2 class="guest-title">Inicia sesión para ver y guardar tu progreso</h2>
+        <p class="guest-desc">
+          Para ver tus lecciones completadas, acumular puntos de experiencia (XP), desbloquear insignias y conectarte con la clase de tu profesor, ingresa con tu cuenta o pruébalo con nuestras cuentas demo.
+        </p>
+        <div class="guest-actions-row">
+          <button class="btn btn-primary" onclick="AuthUI.openAuthModal('login')">
+            👤 Iniciar Sesión / Registrarme
+          </button>
+          <span class="guest-demo-divider">o prueba rápida:</span>
+          <button class="btn-demo-quick teacher" onclick="AuthUI.loginAsDemoTeacher()" title="Accede inmediatamente como profesor con alumnos de muestra">
+            👨‍🏫 Probar como Maestro
+          </button>
+          <button class="btn-demo-quick student" onclick="AuthUI.loginAsDemoStudent()" title="Accede inmediatamente como estudiante con progreso de muestra">
+            🎓 Probar como Estudiante
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD DE PROGRESO DEL ESTUDIANTE (VISIBLE SOLO TRAS INICIAR SESIÓN) -->
+  <section class="dashboard-card" id="dashboard" style="display:none;">
+    <!-- Banner de estado del estudiante (visible si está autenticado como estudiante) -->
+    <div id="student-status-header" class="student-auth-banner" style="display:none;"></div>
+
     <div class="dash-header">
       <div class="dash-title">
         <span>📊</span> Tu Progreso de Aprendizaje
@@ -822,9 +852,137 @@
 
     <div class="dash-footer" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
       <div>
-        <span>Tu avance se guarda de forma segura en tu navegador.</span>
+        <span id="dash-storage-note">Tu avance se guarda de forma segura en tu navegador y en la nube.</span>
         <div style="font-weight:700;color:var(--emerald);margin-top:2px;" id="dash-status-summary">¡Listo para continuar!</div>
       </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN PROFESOR: SUPERVISIÓN Y RESUMEN DE ALUMNOS (Visible solo para rol 'profesor') -->
+  <section class="lms-section-card" id="teacher-dashboard-panel" style="display:none;">
+    <div class="lms-panel-header">
+      <div class="lms-panel-title">
+        <span class="icon-badge">👨‍🏫</span>
+        <div>
+          <div>Panel del Maestro — Resumen y Progreso de Alumnos</div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-secondary);margin-top:2px;">
+            Monitorea con precisión quién avanza al día, quién está en progreso y a quién le falta por avanzar.
+          </div>
+        </div>
+      </div>
+      <div class="lms-class-selector-wrap">
+        <select id="teacher-class-select" class="lms-select" onchange="switchTeacherClass(this.value)">
+          <option value="">Cargando clases...</option>
+        </select>
+        <div id="teacher-code-badge-wrap" style="display:none;">
+          <span class="lms-code-chip">
+            Código: <strong id="teacher-current-code">---</strong>
+            <button class="lms-copy-btn" onclick="copyClassCode()" title="Copiar código para compartir con alumnos">📋 Copiar</button>
+          </span>
+        </div>
+        <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()" style="font-size:13px;padding:8px 14px;">
+          ➕ Nueva Clase
+        </button>
+        <button class="btn-export-csv" onclick="exportClassToCSV()" title="Descargar calificaciones y avance en Excel/CSV">
+          📥 Exportar Calificaciones
+        </button>
+      </div>
+    </div>
+
+    <!-- KPIs Diagnósticos Semáforo del Grupo -->
+    <div class="teacher-kpi-grid">
+      <div class="teacher-kpi-box">
+        <span class="teacher-kpi-label">👥 Total Alumnos</span>
+        <span class="teacher-kpi-val" id="kpi-students-count">0</span>
+      </div>
+      <div class="teacher-kpi-box" style="border-left: 4px solid var(--emerald);">
+        <span class="teacher-kpi-label" style="color:var(--emerald);">🟢 Avanzando al Día</span>
+        <span class="teacher-kpi-val" id="kpi-al-dia-count" style="color:var(--emerald);">0</span>
+      </div>
+      <div class="teacher-kpi-box" style="border-left: 4px solid var(--amber);">
+        <span class="teacher-kpi-label" style="color:var(--amber);">🟡 Falta Avanzar</span>
+        <span class="teacher-kpi-val" id="kpi-falta-avanzar-count" style="color:var(--amber);">0</span>
+      </div>
+      <div class="teacher-kpi-box" style="border-left: 4px solid var(--rose);">
+        <span class="teacher-kpi-label" style="color:var(--rose);">🔴 Sin Iniciar</span>
+        <span class="teacher-kpi-val" id="kpi-sin-iniciar-count" style="color:var(--rose);">0</span>
+      </div>
+      <div class="teacher-kpi-box">
+        <span class="teacher-kpi-label">📈 Avance Promedio</span>
+        <span class="teacher-kpi-val" id="kpi-avg-progress" style="color:var(--primary);">0%</span>
+      </div>
+      <div class="teacher-kpi-box">
+        <span class="teacher-kpi-label">⚡ XP del Grupo</span>
+        <span class="teacher-kpi-val" id="kpi-avg-xp" style="color:var(--amber);">0 XP</span>
+      </div>
+    </div>
+
+    <!-- Barra de Filtros Rápidos por Estado y Buscador -->
+    <div class="teacher-control-toolbar">
+      <div class="teacher-filter-pills">
+        <button class="teacher-filter-btn active" id="btn-filter-all" onclick="filterTeacherStudents('all')">
+          👥 Todos <span class="filter-count-badge" id="badge-count-all">0</span>
+        </button>
+        <button class="teacher-filter-btn" id="btn-filter-al_dia" onclick="filterTeacherStudents('al_dia')">
+          🟢 Avanzando <span class="filter-count-badge" id="badge-count-al_dia">0</span>
+        </button>
+        <button class="teacher-filter-btn" id="btn-filter-falta_avanzar" onclick="filterTeacherStudents('falta_avanzar')">
+          🟡 Falta avanzar <span class="filter-count-badge" id="badge-count-falta_avanzar">0</span>
+        </button>
+        <button class="teacher-filter-btn" id="btn-filter-sin_iniciar" onclick="filterTeacherStudents('sin_iniciar')">
+          🔴 Sin iniciar <span class="filter-count-badge" id="badge-count-sin_iniciar">0</span>
+        </button>
+      </div>
+      <div class="teacher-search-box">
+        <span>🔍</span>
+        <input type="text" id="teacher-student-search" placeholder="Buscar alumno por nombre o correo..." oninput="searchTeacherStudents(this.value)">
+      </div>
+    </div>
+
+    <!-- Tabla de Estudiantes -->
+    <div class="teacher-table-wrap">
+      <table class="teacher-table">
+        <thead>
+          <tr>
+            <th>Estudiante</th>
+            <th>Diagnóstico</th>
+            <th>Última Lección</th>
+            <th>Quizzes</th>
+            <th>Laboratorios</th>
+            <th>XP Acumulado</th>
+            <th>Avance Global</th>
+            <th>Última Actividad</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-students-tbody">
+          <tr>
+            <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
+              Cargando datos de la clase...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECCIÓN ESTUDIANTE: MIS CLASES (Visible para rol 'estudiante') -->
+  <section class="lms-section-card" id="student-classes-panel" style="display:none;">
+    <div class="lms-panel-header">
+      <div class="lms-panel-title">
+        <span class="icon-badge">🎒</span>
+        <div>
+          <div>Mis Clases y Profesores</div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-secondary);margin-top:2px;">
+            Clases donde estás formalmente inscrito. Tu profesor puede revisar tus lecciones y ayudarte a mejorar.
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="AuthUI.openJoinClassModal()" style="font-size:13px;padding:8px 14px;">
+        ➕ Unirse a otra clase
+      </button>
+    </div>
+    <div id="student-classes-container" class="student-classes-list">
+      <!-- Tarjetas dinámicas -->
     </div>
   </section>
 </div>
@@ -843,6 +1001,9 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="auth-ui.js"></script>
 <script src="course-data.js"></script>
 <script src="storage.js"></script>
 
@@ -894,38 +1055,58 @@ const PRONUN_SAMPLE_WORDS = [
 ];
 
 function renderDashboard() {
-  const xp = StorageManager.getXP();
-  document.getElementById('nav-xp-counter').textContent = `⚡ ${xp.toLocaleString()} XP`;
-  document.getElementById('dash-xp-counter').textContent = `${xp.toLocaleString()} XP`;
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  const isStudent = !!(user && user.role === 'estudiante');
+  const xp = isStudent ? StorageManager.getXP() : 0;
+
+  const navXpEl = document.getElementById('nav-xp-counter');
+  if (navXpEl) {
+    if (isStudent) {
+      navXpEl.style.display = 'inline-flex';
+      navXpEl.textContent = `⚡ ${xp.toLocaleString()} XP`;
+    } else {
+      navXpEl.style.display = 'none';
+    }
+  }
+
+  const dashXpEl = document.getElementById('dash-xp-counter');
+  if (dashXpEl) dashXpEl.textContent = `${xp.toLocaleString()} XP`;
 
   let quizzesPassed = 0;
   let labsPassed = 0;
   let lessonsDone = 0;
 
-  for (let i = 1; i <= 27; i++) {
-    if (StorageManager.isQuizPassed(i)) quizzesPassed++;
-    if (StorageManager.isExercisePassed(i)) labsPassed++;
-    if (StorageManager.isDone(i)) lessonsDone++;
+  if (isStudent) {
+    for (let i = 1; i <= 27; i++) {
+      if (StorageManager.isQuizPassed(i)) quizzesPassed++;
+      if (StorageManager.isExercisePassed(i)) labsPassed++;
+      if (StorageManager.isDone(i)) lessonsDone++;
+    }
   }
 
   const percent = Math.round((lessonsDone / 27) * 100);
-  document.getElementById('dash-progress-val').textContent = `${percent}%`;
-  document.getElementById('dash-quizzes-val').textContent = `${quizzesPassed} / 27`;
-  document.getElementById('dash-labs-val').textContent = `${labsPassed} / 27`;
-  document.getElementById('dash-progress-bar').style.width = `${percent}%`;
+  const progVal = document.getElementById('dash-progress-val');
+  if (progVal) progVal.textContent = `${percent}%`;
+  const quizzesVal = document.getElementById('dash-quizzes-val');
+  if (quizzesVal) quizzesVal.textContent = `${quizzesPassed} / 27`;
+  const labsVal = document.getElementById('dash-labs-val');
+  if (labsVal) labsVal.textContent = `${labsPassed} / 27`;
+  const progBar = document.getElementById('dash-progress-bar');
+  if (progBar) progBar.style.width = `${percent}%`;
 
   // Hero continue button
-  const lastLesson = StorageManager.getLastActiveLesson();
-  const maxUnlocked = StorageManager.getMaxUnlockedLesson();
-  const activeLesson = Math.max(lastLesson, maxUnlocked);
   const heroBtn = document.getElementById('btn-hero-continue');
-
-  if (lessonsDone > 0) {
-    heroBtn.href = `teoria.html?lesson=${activeLesson}`;
-    heroBtn.innerHTML = `🚀 Continuar Lección ${activeLesson} ➔`;
-  } else {
-    heroBtn.href = `teoria.html?lesson=1`;
-    heroBtn.innerHTML = `🚀 Comenzar Lección 1 ➔`;
+  if (heroBtn) {
+    if (isStudent && lessonsDone > 0) {
+      const lastLesson = StorageManager.getLastActiveLesson();
+      const maxUnlocked = StorageManager.getMaxUnlockedLesson();
+      const activeLesson = Math.max(lastLesson, maxUnlocked);
+      heroBtn.href = `teoria.html?lesson=${activeLesson}`;
+      heroBtn.innerHTML = `🚀 Continuar Lección ${activeLesson} ➔`;
+    } else {
+      heroBtn.href = `teoria.html?lesson=1`;
+      heroBtn.innerHTML = `🚀 Comenzar Lección 1 ➔`;
+    }
   }
 
   renderPronunWidget();
@@ -977,9 +1158,397 @@ function confirmReset() {
   renderDashboard();
 }
 
+// =============================================================================
+// LMS DASHBOARD: LÓGICA DE PROFESOR Y ESTUDIANTE
+// =============================================================================
+let currentTeacherClasses = [];
+let selectedClassId = null;
+let currentClassStudents = [];
+let activeStudentFilter = 'all'; // 'all' | 'al_dia' | 'falta_avanzar' | 'sin_iniciar'
+let studentSearchQuery = '';
+
+// Callback disparado automáticamente por AuthUI ante cualquier cambio de sesión
+window.onLMSAuthChanged = function() {
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  renderDashboard();
+
+  const teacherPanel = document.getElementById('teacher-dashboard-panel');
+  const studentPanel = document.getElementById('student-classes-panel');
+  const studentDashboard = document.getElementById('dashboard');
+  const guestCard = document.getElementById('guest-welcome-card');
+  const studentHeader = document.getElementById('student-status-header');
+  const navXpEl = document.getElementById('nav-xp-counter');
+
+  if (user && user.role === 'profesor') {
+    // Para el profesor: ocultar dashboard individual de estudiante y tarjeta de invitado, mostrar panel de supervisión
+    if (guestCard) guestCard.style.display = 'none';
+    if (studentDashboard) studentDashboard.style.display = 'none';
+    if (studentPanel) studentPanel.style.display = 'none';
+    if (teacherPanel) teacherPanel.style.display = 'block';
+    if (navXpEl) navXpEl.style.display = 'none';
+    loadTeacherDashboard();
+  } else if (user && user.role === 'estudiante') {
+    // Para el estudiante: mostrar dashboard personal con banner de bienvenida y clases
+    if (guestCard) guestCard.style.display = 'none';
+    if (teacherPanel) teacherPanel.style.display = 'none';
+    if (studentDashboard) studentDashboard.style.display = 'block';
+    if (studentPanel) studentPanel.style.display = 'block';
+    if (navXpEl) {
+      navXpEl.style.display = 'inline-flex';
+      navXpEl.textContent = `⚡ ${StorageManager.getXP().toLocaleString()} XP`;
+    }
+
+    if (studentHeader) {
+      studentHeader.style.display = 'flex';
+      studentHeader.innerHTML = `
+        <div class="student-auth-info">
+          <span class="student-auth-tag">🎓 Cuenta de Estudiante</span>
+          <strong>${user.nombre}</strong> <span style="color:var(--text-muted);font-size:12px;">(${user.email})</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text-secondary);">
+          <span>☁️ Tu avance se sincroniza en vivo</span>
+          <button class="lms-copy-btn" onclick="AuthUI.openJoinClassModal()">🎒 Unirse a Clase</button>
+        </div>
+      `;
+    }
+    loadStudentDashboard();
+  } else {
+    // Modo invitado / no autenticado:
+    // EL PROGRESO NO SE TIENE QUE VER HASTA QUE SE INICIE SESIÓN
+    if (guestCard) guestCard.style.display = 'block';
+    if (studentDashboard) studentDashboard.style.display = 'none';
+    if (teacherPanel) teacherPanel.style.display = 'none';
+    if (studentPanel) studentPanel.style.display = 'none';
+    if (navXpEl) navXpEl.style.display = 'none';
+  }
+};
+
+async function loadTeacherDashboard() {
+  if (!window.ClassService) return;
+  const select = document.getElementById('teacher-class-select');
+  const codeWrap = document.getElementById('teacher-code-badge-wrap');
+  const tbody = document.getElementById('teacher-students-tbody');
+
+  try {
+    currentTeacherClasses = await window.ClassService.getTeacherClasses();
+
+    if (!currentTeacherClasses || currentTeacherClasses.length === 0) {
+      select.innerHTML = '<option value="">(Sin clases creadas aún)</option>';
+      if (codeWrap) codeWrap.style.display = 'none';
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8">
+            <div class="lms-empty-state">
+              <div class="lms-empty-icon">📚</div>
+              <div class="lms-empty-title">Aún no has creado ninguna clase</div>
+              <div class="lms-empty-desc">
+                Crea tu primera clase con el botón "➕ Nueva Clase" para generar un código único que tus estudiantes usarán para registrarse en tu grupo.
+              </div>
+              <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()">Crear mi primera clase</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      updateTeacherKPIs(0, 0, 0, 0, 0, 0);
+      return;
+    }
+
+    // Llenar selector de clases
+    select.innerHTML = currentTeacherClasses.map(c => `
+      <option value="${c.id}" ${c.id === selectedClassId ? 'selected' : ''}>
+        ${c.nombre} (${c.studentCount} alumnos)
+      </option>
+    `).join('');
+
+    if (!selectedClassId || !currentTeacherClasses.some(c => c.id === selectedClassId)) {
+      selectedClassId = currentTeacherClasses[0].id;
+    }
+
+    switchTeacherClass(selectedClassId);
+  } catch (err) {
+    console.error("Error cargando dashboard de profesor:", err);
+    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--rose);text-align:center;">Error al cargar las clases. Verifica tu conexión a Supabase.</td></tr>`;
+  }
+}
+
+async function switchTeacherClass(classId) {
+  selectedClassId = classId;
+  const found = currentTeacherClasses.find(c => c.id === classId);
+  const codeWrap = document.getElementById('teacher-code-badge-wrap');
+  const codeEl = document.getElementById('teacher-current-code');
+  const tbody = document.getElementById('teacher-students-tbody');
+
+  if (found && codeWrap && codeEl) {
+    codeEl.textContent = found.codigo;
+    codeWrap.style.display = 'inline-block';
+  }
+
+  tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">Consultando progreso de los estudiantes...</td></tr>`;
+
+  try {
+    currentClassStudents = await window.ClassService.getClassStudentsProgress(classId);
+
+    if (!currentClassStudents || currentClassStudents.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8">
+            <div class="lms-empty-state">
+              <div class="lms-empty-icon">👥</div>
+              <div class="lms-empty-title">Aún no hay alumnos inscritos en esta clase</div>
+              <div class="lms-empty-desc">
+                Comparte el código <strong style="font-family:var(--font-mono);color:var(--primary);">${found?.codigo || ''}</strong> con tus estudiantes para que se unan desde su panel.
+              </div>
+              <button class="btn btn-secondary" onclick="copyClassCode()">📋 Copiar Código de Clase</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      updateTeacherKPIs(0, 0, 0, 0, 0, 0);
+      return;
+    }
+
+    // Calcular KPIs diagnósticos
+    const totalStudents = currentClassStudents.length;
+    const alDiaCount = currentClassStudents.filter(s => s.status === 'al_dia').length;
+    const faltaAvanzarCount = currentClassStudents.filter(s => s.status === 'falta_avanzar').length;
+    const sinIniciarCount = currentClassStudents.filter(s => s.status === 'sin_iniciar').length;
+    const avgProgress = Math.round(currentClassStudents.reduce((acc, s) => acc + s.percent, 0) / totalStudents);
+    const totalXP = currentClassStudents.reduce((acc, s) => acc + (s.totalXP || 0), 0);
+
+    updateTeacherKPIs(totalStudents, alDiaCount, faltaAvanzarCount, sinIniciarCount, avgProgress, totalXP);
+    applyStudentFiltersAndRender();
+
+  } catch (e) {
+    console.error("Error al obtener alumnos:", e);
+    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--rose);text-align:center;">Error cargando alumnos de la clase.</td></tr>`;
+  }
+}
+
+function updateTeacherKPIs(total, alDia, faltaAvanzar, sinIniciar, avgProg, totalXP) {
+  const alDiaPct = total > 0 ? Math.round((alDia / total) * 100) : 0;
+  const faltaPct = total > 0 ? Math.round((faltaAvanzar / total) * 100) : 0;
+  const sinIniPct = total > 0 ? Math.round((sinIniciar / total) * 100) : 0;
+
+  document.getElementById('kpi-students-count').textContent = total;
+  document.getElementById('kpi-al-dia-count').textContent = `${alDia} (${alDiaPct}%)`;
+  document.getElementById('kpi-falta-avanzar-count').textContent = `${faltaAvanzar} (${faltaPct}%)`;
+  document.getElementById('kpi-sin-iniciar-count').textContent = `${sinIniciar} (${sinIniPct}%)`;
+  document.getElementById('kpi-avg-progress').textContent = `${avgProg}%`;
+  document.getElementById('kpi-avg-xp').textContent = `${totalXP.toLocaleString()} XP`;
+
+  // Actualizar badges de botones de filtro
+  document.getElementById('badge-count-all').textContent = total;
+  document.getElementById('badge-count-al_dia').textContent = alDia;
+  document.getElementById('badge-count-falta_avanzar').textContent = faltaAvanzar;
+  document.getElementById('badge-count-sin_iniciar').textContent = sinIniciar;
+}
+
+// Cambiar filtro activo (todos, al_dia, falta_avanzar, sin_iniciar)
+function filterTeacherStudents(type) {
+  activeStudentFilter = type;
+  document.querySelectorAll('.teacher-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === `btn-filter-${type}`);
+  });
+  applyStudentFiltersAndRender();
+}
+
+// Búsqueda por texto en tiempo real
+function searchTeacherStudents(query) {
+  studentSearchQuery = (query || '').toLowerCase().trim();
+  applyStudentFiltersAndRender();
+}
+
+// Filtrar lista y renderizar en tabla
+function applyStudentFiltersAndRender() {
+  const tbody = document.getElementById('teacher-students-tbody');
+  if (!tbody) return;
+
+  let filtered = currentClassStudents.slice();
+
+  // Filtro por estado
+  if (activeStudentFilter !== 'all') {
+    filtered = filtered.filter(s => s.status === activeStudentFilter);
+  }
+
+  // Filtro por búsqueda
+  if (studentSearchQuery) {
+    filtered = filtered.filter(s =>
+      (s.nombre && s.nombre.toLowerCase().includes(studentSearchQuery)) ||
+      (s.email && s.email.toLowerCase().includes(studentSearchQuery))
+    );
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
+          No se encontraron estudiantes bajo el filtro seleccionado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(s => {
+    // Iniciales para avatar
+    const parts = (s.nombre || 'E').trim().split(/\s+/);
+    const initials = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0].slice(0, 2).toUpperCase();
+
+    // Etiqueta semáforo de diagnóstico
+    let statusBadge = '';
+    let barColor = 'linear-gradient(90deg, #10b981, #059669)';
+    if (s.status === 'al_dia') {
+      statusBadge = '<span class="status-tag al_dia">🟢 Al día</span>';
+      barColor = 'linear-gradient(90deg, #10b981, #059669)';
+    } else if (s.status === 'falta_avanzar') {
+      statusBadge = '<span class="status-tag falta_avanzar">🟡 Falta avanzar</span>';
+      barColor = 'linear-gradient(90deg, #f59e0b, #d97706)';
+    } else {
+      statusBadge = '<span class="status-tag sin_iniciar">🔴 Sin iniciar</span>';
+      barColor = '#cbd5e1';
+    }
+
+    const lastLessonText = s.maxLesson > 0 ? `Lección ${s.maxLesson} / 27` : '<span style="color:var(--text-dim);">Sin iniciar</span>';
+    const activityDate = s.lastActivity ? new Date(s.lastActivity).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : 'Reciente';
+
+    return `
+      <tr>
+        <td>
+          <div class="student-row-info">
+            <div class="student-avatar">${initials}</div>
+            <div class="student-info-col">
+              <span class="student-info-name">${s.nombre || 'Estudiante'}</span>
+              <span class="student-info-email">${s.email}</span>
+            </div>
+          </div>
+        </td>
+        <td>${statusBadge}</td>
+        <td style="font-weight:700;font-size:12.5px;">${lastLessonText}</td>
+        <td>
+          <span class="student-metric-tag quizzes">${s.quizzesPassed} / 27</span>
+        </td>
+        <td>
+          <span class="student-metric-tag labs">${s.exercisesPassed} / 27</span>
+        </td>
+        <td>
+          <span class="student-metric-tag xp">⚡ ${(s.totalXP || 0).toLocaleString()} XP</span>
+        </td>
+        <td>
+          <div class="student-progress-bar-wrap">
+            <div class="student-bar-track">
+              <div class="student-bar-fill" style="width: ${Math.min(100, s.percent)}%; background: ${barColor};"></div>
+            </div>
+            <span class="student-percent-label">${s.percent}%</span>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--text-secondary);">${activityDate}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Exportar listado de calificaciones a CSV
+function exportClassToCSV() {
+  if (!currentClassStudents || currentClassStudents.length === 0) {
+    alert("No hay alumnos inscritos en esta clase para exportar.");
+    return;
+  }
+
+  const found = currentTeacherClasses.find(c => c.id === selectedClassId);
+  const className = found ? found.nombre : 'clase';
+
+  let csv = '\uFEFF'; // BOM para compatibilidad con tildes en Excel
+  csv += 'Estudiante,Email,Diagnostico,Porcentaje_Avance,Lecciones_Completadas,Quizzes_Aprobados,Laboratorios_Aprobados,XP_Total,Ultima_Leccion,Fecha_Ingreso\n';
+
+  currentClassStudents.forEach(s => {
+    const diag = s.status === 'al_dia' ? 'Al dia' : (s.status === 'falta_avanzar' ? 'Falta avanzar' : 'Sin iniciar');
+    const row = [
+      `"${(s.nombre || '').replace(/"/g, '""')}"`,
+      `"${(s.email || '').replace(/"/g, '""')}"`,
+      `"${diag}"`,
+      `"${s.percent}%"`,
+      s.lessonsDone,
+      s.quizzesPassed,
+      s.exercisesPassed,
+      s.totalXP,
+      s.maxLesson,
+      `"${s.fechaIngreso ? new Date(s.fechaIngreso).toLocaleDateString('es-ES') : ''}"`
+    ];
+    csv += row.join(',') + '\n';
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `calificaciones_${className.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function copyClassCode() {
+  const codeEl = document.getElementById('teacher-current-code');
+  if (!codeEl) return;
+  const code = codeEl.textContent.trim();
+  if (!code || code === '---') return;
+
+  navigator.clipboard.writeText(code).then(() => {
+    alert(`Código de clase ${code} copiado al portapapeles.`);
+  }).catch(() => {
+    prompt("Copia este código de clase manualmente:", code);
+  });
+}
+
+async function loadStudentDashboard() {
+  if (!window.ClassService) return;
+  const container = document.getElementById('student-classes-container');
+  if (!container) return;
+
+  container.innerHTML = '<div style="color:var(--text-muted);font-size:13.5px;">Cargando tus clases...</div>';
+
+  try {
+    const classes = await window.ClassService.getStudentClasses();
+    if (!classes || classes.length === 0) {
+      container.innerHTML = `
+        <div class="lms-empty-state" style="grid-column: 1 / -1;">
+          <div class="lms-empty-icon">🎒</div>
+          <div class="lms-empty-title">Aún no te has unido a ninguna clase</div>
+          <div class="lms-empty-desc">
+            Pide a tu profesor el código de su grupo (ej. ING-8X2F) para sincronizar tu progreso y resolver tareas juntos.
+          </div>
+          <button class="btn btn-primary" onclick="AuthUI.openJoinClassModal()">Unirme a una clase</button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = classes.map(c => {
+      const dateStr = c.fechaIngreso ? new Date(c.fechaIngreso).toLocaleDateString('es-ES') : '';
+      return `
+        <div class="student-class-card">
+          <div class="student-class-name">📘 ${c.nombre}</div>
+          <div class="student-class-teacher">
+            <span>👨‍🏫 Profesor:</span> <strong>${c.profesor}</strong>
+          </div>
+          <div class="student-class-date">
+            Código: <strong style="font-family:var(--font-mono);color:var(--primary);">${c.codigo}</strong> · Inscrito el ${dateStr}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error cargando clases del estudiante:", err);
+    container.innerHTML = '<div style="color:var(--rose);font-size:13.5px;">Error al cargar tus clases inscritas.</div>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   StorageManager.init();
   renderDashboard();
+  if (typeof window.onLMSAuthChanged === 'function') {
+    window.onLMSAuthChanged();
+  }
 });
 </script>
 </body>
