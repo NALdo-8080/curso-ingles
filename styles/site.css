@@ -1308,6 +1308,20 @@ a {
   border-color: var(--border-strong);
 }
 
+.student-level-notice {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--emerald-border);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  font-size: 13.5px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
 /* ==========================================================================
    TARJETA DE BIENVENIDA PARA VISITANTES (PROGRESO BLOQUEADO HASTA INICIAR SESIÓN)
    ========================================================================== */

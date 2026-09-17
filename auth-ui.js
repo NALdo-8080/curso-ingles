@@ -161,8 +161,17 @@ const AuthUI = {
               <label for="class-name">Nombre de la Clase o Grupo</label>
               <input type="text" id="class-name" class="lms-input" placeholder="Ej. Inglés Básico A1 - Grupo Matutino" required>
             </div>
+            <div class="lms-form-group">
+              <label for="class-level">Nivel y Lecciones Asignadas</label>
+              <select id="class-level" class="lms-input" style="cursor:pointer;">
+                <option value="principiante" selected>🟢 Principiantes (A1) — 9 Lecciones (1 a 9)</option>
+                <option value="intermedio">🔵 Intermedio (A2-B1) — 9 Lecciones (10 a 18)</option>
+                <option value="avanzado">🟣 Avanzado & Negocios (B2) — 9 Lecciones (19 a 27)</option>
+                <option value="completo">🌐 Curso Completo — 27 Lecciones (1 a 27)</option>
+              </select>
+            </div>
             <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
-              💡 El sistema generará automáticamente un código único (ej. <strong>ING-8X2F</strong>) que podrás compartir con tus estudiantes.
+              💡 El sistema generará automáticamente un código único (ej. <strong>ING-8X2F</strong>) que podrás compartir con tus estudiantes. Las lecciones que vean estarán restringidas a este nivel.
             </p>
             <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:22px;">
               <button type="button" class="btn btn-secondary" onclick="AuthUI.closeCreateClassModal()">Cancelar</button>
@@ -660,13 +669,14 @@ const AuthUI = {
   async handleCreateClass(e) {
     e.preventDefault();
     const name = document.getElementById('class-name').value;
+    const level = document.getElementById('class-level')?.value || 'principiante';
     const alert = document.getElementById('lms-create-class-alert');
     const btn = document.getElementById('btn-submit-create-class');
 
     try {
       btn.disabled = true;
       btn.textContent = 'Creando...';
-      const created = await window.ClassService.createClass(name);
+      const created = await window.ClassService.createClass(name, level);
       alert.className = 'lms-alert success';
       alert.innerHTML = `¡Clase <strong>"${created.nombre}"</strong> creada con éxito!<br>Código para tus alumnos: <strong style="font-size:16px;">${created.codigo_unico}</strong>`;
       alert.style.display = 'block';

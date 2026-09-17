@@ -957,6 +957,9 @@
     <div class="badges-carousel-grid" id="badges-grid-list"></div>
   </div>
 
+  <!-- BANNER CLASE ACTIVA (ESTUDIANTE) -->
+  <div id="student-syllabus-banner" class="student-level-notice" style="display:none;margin-bottom:18px;"></div>
+
   <!-- SYLLABUS UNITS LIST -->
   <div class="syllabus-accordion-list" id="units-accordion-container"></div>
 
@@ -994,6 +997,7 @@ function setFilter(filter, updateHistory = true) {
   }
 
   renderSyllabus();
+  renderBadges();
 }
 
 function handleSearch(val) {
@@ -1011,8 +1015,17 @@ function renderBadges() {
   if (!container) return;
   container.innerHTML = '';
 
+  let relevantUnits = UNITS;
+  if (currentFilter === 'basico') {
+    relevantUnits = UNITS.filter(u => u.unitId >= 1 && u.unitId <= 3);
+  } else if (currentFilter === 'intermedio') {
+    relevantUnits = UNITS.filter(u => u.unitId >= 4 && u.unitId <= 6);
+  } else if (currentFilter === 'avanzado') {
+    relevantUnits = UNITS.filter(u => u.unitId >= 7 && u.unitId <= 9);
+  }
+
   let earnedCount = 0;
-  UNITS.forEach(u => {
+  relevantUnits.forEach(u => {
     const isEarned = StorageManager.isBadgeEarned(u.unitId);
     if (isEarned) earnedCount++;
 
@@ -1029,7 +1042,7 @@ function renderBadges() {
   });
 
   const countEl = document.getElementById('badges-earned-count');
-  if (countEl) countEl.textContent = `${earnedCount}/9`;
+  if (countEl) countEl.textContent = `${earnedCount}/${relevantUnits.length}`;
 }
 
 function renderSyllabus() {
@@ -1156,7 +1169,7 @@ function toggleUnitAccordion(cardId) {
   if (card) card.classList.toggle('open');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   StorageManager.init();
   const user = window.AuthService ? window.AuthService.getUser() : null;
   const navXp = document.getElementById('nav-xp-counter');
@@ -1170,12 +1183,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Check URL level filter
+  // Detectar si el estudiante pertenece a una clase con nivel específico
+  let studentLevel = null;
+  let className = '';
+  if (user && user.role === 'estudiante' && window.ClassService) {
+    try {
+      const classes = await window.ClassService.getStudentClasses();
+      if (classes && classes.length > 0) {
+        studentLevel = classes[0].nivel || (window.detectClassLevel ? window.detectClassLevel(classes[0].nombre) : 'principiante');
+        className = classes[0].nombre;
+      }
+    } catch (e) {}
+  } else if (user && user.role === 'estudiante' && window.AuthService && window.AuthService.isDemoUser()) {
+    studentLevel = 'principiante';
+    className = 'Inglés A1 - Principiantes (Grupo Mañana)';
+  }
+
   const initialLevel = getUrlParam('level');
-  if (initialLevel && ['basico', 'intermedio', 'avanzado'].includes(initialLevel)) {
+  if (initialLevel && ['basico', 'intermedio', 'avanzado', 'todos'].includes(initialLevel)) {
     setFilter(initialLevel, false);
+  } else if (studentLevel === 'principiante') {
+    setFilter('basico', false);
+  } else if (studentLevel === 'intermedio') {
+    setFilter('intermedio', false);
+  } else if (studentLevel === 'avanzado') {
+    setFilter('avanzado', false);
   } else {
     setFilter('todos', false);
+  }
+
+  const bannerEl = document.getElementById('student-syllabus-banner');
+  if (studentLevel && bannerEl) {
+    bannerEl.style.display = 'flex';
+    if (studentLevel === 'principiante') {
+      bannerEl.innerHTML = `<span>🎒</span> <div><strong>Clase Activa: ${className || 'Inglés A1 - Principiantes'}</strong>. Presentando únicamente las 9 lecciones correspondientes a tu nivel de Principiantes (Unidades 1 a 3 · Lecciones 1 a 9).</div>`;
+    } else {
+      bannerEl.innerHTML = `<span>🎒</span> <div><strong>Clase Activa: ${className}</strong>. Presentando las lecciones asignadas a tu grupo.</div>`;
+    }
+  } else if (bannerEl) {
+    bannerEl.style.display = 'none';
   }
 
   renderBadges();

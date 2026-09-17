@@ -96,6 +96,7 @@ const DEMO_CLASSES_INITIAL = [
     id: 'demo-class-001',
     nombre: 'Inglés A1 - Principiantes (Grupo Mañana)',
     codigo: 'ING-DEMO',
+    nivel: 'principiante',
     studentCount: 4,
     createdAt: '2026-09-01T10:00:00Z'
   }
@@ -107,12 +108,12 @@ const DEMO_STUDENTS_LIST = [
     nombre: 'Juan Pérez',
     email: 'juan.perez@demo.com',
     fechaIngreso: '2026-09-02T14:30:00Z',
-    lessonsDone: 22,
-    quizzesPassed: 22,
-    exercisesPassed: 21,
-    totalXP: 1480,
-    percent: 81,
-    maxLesson: 22,
+    lessonsDone: 8,
+    quizzesPassed: 8,
+    exercisesPassed: 7,
+    totalXP: 980,
+    percent: 88,
+    maxLesson: 8,
     lastActivity: new Date(Date.now() - 3600 * 1000 * 4).toISOString(),
     status: 'al_dia'
   },
@@ -121,12 +122,12 @@ const DEMO_STUDENTS_LIST = [
     nombre: 'María García',
     email: 'maria.garcia@demo.com',
     fechaIngreso: '2026-09-02T15:10:00Z',
-    lessonsDone: 18,
-    quizzesPassed: 18,
-    exercisesPassed: 16,
-    totalXP: 1150,
+    lessonsDone: 6,
+    quizzesPassed: 6,
+    exercisesPassed: 5,
+    totalXP: 750,
     percent: 66,
-    maxLesson: 18,
+    maxLesson: 6,
     lastActivity: new Date(Date.now() - 3600 * 1000 * 12).toISOString(),
     status: 'al_dia'
   },
@@ -135,13 +136,13 @@ const DEMO_STUDENTS_LIST = [
     nombre: 'Carlos López',
     email: 'carlos.lopez@demo.com',
     fechaIngreso: '2026-09-04T09:00:00Z',
-    lessonsDone: 7,
-    quizzesPassed: 7,
-    exercisesPassed: 6,
-    totalXP: 460,
-    percent: 25,
-    maxLesson: 7,
-    lastActivity: new Date(Date.now() - 3600 * 1000 * 72).toISOString(),
+    lessonsDone: 3,
+    quizzesPassed: 3,
+    exercisesPassed: 2,
+    totalXP: 360,
+    percent: 33,
+    maxLesson: 3,
+    lastActivity: new Date(Date.now() - 3600 * 1000 * 36).toISOString(),
     status: 'falta_avanzar'
   },
   {
@@ -160,19 +161,27 @@ const DEMO_STUDENTS_LIST = [
   }
 ];
 
-// Progreso precargado para el usuario estudiante demo (Ana Morales)
+// Progreso precargado para el usuario estudiante demo (Ana Morales) enfocado en clase de Principiantes (A1)
 const DEMO_STUDENT_PROGRESS = {
-  xp: 820,
-  done: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true, 11: true, 12: true },
-  quizzes: { 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true, 11: true, 12: true },
-  exercises: { 1: { passed: true }, 2: { passed: true }, 3: { passed: true }, 4: { passed: true }, 5: { passed: true }, 6: { passed: true }, 7: { passed: true }, 8: { passed: true }, 9: { passed: true }, 10: { passed: true } },
+  xp: 450,
+  done: { 1: true, 2: true, 3: true, 4: true, 5: true },
+  quizzes: { 1: true, 2: true, 3: true, 4: true, 5: true },
+  exercises: { 1: { passed: true }, 2: { passed: true }, 3: { passed: true }, 4: { passed: true }, 5: { passed: true } },
   badges: {
-    1: { badgeId: 'badge_phonetics', unitId: 1 },
-    2: { badgeId: 'badge_routines', unitId: 2 },
-    3: { badgeId: 'badge_describer', unitId: 3 },
-    4: { badgeId: 'badge_action', unitId: 4 }
+    1: { badgeId: 'badge_phonetics', unitId: 1 }
   }
 };
+
+// Helper global para detectar el nivel de una clase
+function detectClassLevel(str) {
+  if (!str) return 'principiante';
+  const s = str.toLowerCase();
+  if (s.includes('intermedio') || s.includes('a2') || s.includes('b1')) return 'intermedio';
+  if (s.includes('avanzado') || s.includes('b2') || s.includes('c1') || s.includes('negocios')) return 'avanzado';
+  if (s.includes('completo') || s.includes('todos')) return 'completo';
+  return 'principiante';
+}
+if (typeof window !== 'undefined') window.detectClassLevel = detectClassLevel;
 
 // =============================================================================
 // SERVICIO DE AUTENTICACIÓN (AuthService)
@@ -227,7 +236,7 @@ const AuthService = {
       sm.cache.quizzes = { ...DEMO_STUDENT_PROGRESS.quizzes };
       sm.cache.exercises = { ...DEMO_STUDENT_PROGRESS.exercises };
       sm.cache.badges = { ...DEMO_STUDENT_PROGRESS.badges };
-      sm.cache.lastLesson = 13;
+      sm.cache.lastLesson = 6; // Lección 6 de principiantes
       sm.save();
     } catch (e) {
       console.warn("No se pudo inyectar datos de estudiante demo:", e);
@@ -468,19 +477,21 @@ const ClassService = {
   },
 
   // Crear una nueva clase (Solo profesores)
-  async createClass(nombre) {
+  async createClass(nombre, nivel = 'principiante') {
     const user = AuthService.getUser();
     if (!user || user.role !== 'profesor') throw new Error("Solo un usuario con rol 'profesor' puede crear clases.");
 
     const codigo = this.generateClassCode();
     const cleanNombre = (nombre || '').trim();
     if (!cleanNombre) throw new Error("Debes proporcionar un nombre para la clase.");
+    const cleanNivel = nivel || detectClassLevel(cleanNombre);
 
     // Modo demo sin conexión a Supabase
     if (AuthService.isDemoUser()) {
       const newClass = {
         id: 'demo-class-' + Date.now(),
         nombre: cleanNombre,
+        nivel: cleanNivel,
         codigo_unico: codigo,
         codigo: codigo,
         id_profesor: user.id,
@@ -550,6 +561,7 @@ const ClassService = {
       return (clases || []).map(c => ({
         id: c.id,
         nombre: c.nombre,
+        nivel: c.nivel || detectClassLevel(c.nombre),
         codigo: c.codigo_unico,
         createdAt: c.created_at,
         studentCount: c.inscripciones ? c.inscripciones.length : 0
@@ -642,6 +654,7 @@ const ClassService = {
       return [{
         id: DEMO_CLASSES_INITIAL[0].id,
         nombre: DEMO_CLASSES_INITIAL[0].nombre,
+        nivel: DEMO_CLASSES_INITIAL[0].nivel || 'principiante',
         codigo: DEMO_CLASSES_INITIAL[0].codigo,
         fechaIngreso: '2026-09-02T10:00:00Z',
         profesor: DEMO_ACCOUNTS.teacher.nombre,
@@ -677,6 +690,7 @@ const ClassService = {
       return (data || []).map(item => ({
         id: item.clases?.id,
         nombre: item.clases?.nombre,
+        nivel: item.clases?.nivel || detectClassLevel(item.clases?.nombre),
         codigo: item.clases?.codigo_unico,
         fechaIngreso: item.fecha_ingreso,
         profesor: item.clases?.usuarios?.nombre || 'Profesor asignado',

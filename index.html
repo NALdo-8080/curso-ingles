@@ -738,6 +738,7 @@
 
   <!-- LEVEL CARDS GRID -->
   <section id="levels">
+    <div id="student-level-notice" class="student-level-notice" style="display:none;"></div>
     <div class="level-cards-row">
       <!-- Nivel Básico -->
       <div class="level-card basic" onclick="location.href='temario.html?level=basico'" style="cursor:pointer;">
@@ -903,6 +904,9 @@
           <h2 id="teacher-active-class-title" style="font-size:19px;font-weight:800;color:var(--text-main);margin:0;">
             Clase Seleccionada
           </h2>
+          <span class="lms-code-chip" id="teacher-level-badge" style="background:var(--emerald-light);color:var(--emerald);border-color:var(--emerald-border);font-weight:800;">
+            🟢 Principiantes (A1)
+          </span>
           <span class="lms-code-chip" id="teacher-code-badge-wrap">
             Código de inscripción: <strong id="teacher-current-code" style="font-family:var(--font-mono);letter-spacing:1px;">---</strong>
             <button class="lms-copy-btn" onclick="copyClassCode()" title="Copiar código para compartir con alumnos">📋 Copiar Código</button>
@@ -1081,6 +1085,118 @@ const PRONUN_SAMPLE_WORDS = [
   { en: "Time flies when you're learning", ipa: "/taɪm flaɪz wɛn jʊr ˈlɜːrnɪŋ/", es: "El tiempo vuela cuando estás aprendiendo" }
 ];
 
+const CLASS_LEVELS = {
+  principiante: {
+    key: 'principiante',
+    label: 'Principiantes (A1)',
+    filterKey: 'basico',
+    startLesson: 1,
+    endLesson: 9,
+    totalLessons: 9,
+    units: [1, 2, 3],
+    badge: '🟢 Principiantes (A1)',
+    title: 'Nivel Principiante (A1)',
+    desc: 'Fonética básica, sonido Schwa, alfabeto, saludos, pronombres y verbo To Be.'
+  },
+  intermedio: {
+    key: 'intermedio',
+    label: 'Intermedio (A2-B1)',
+    filterKey: 'intermedio',
+    startLesson: 10,
+    endLesson: 18,
+    totalLessons: 9,
+    units: [4, 5, 6],
+    badge: '🔵 Intermedio (A2-B1)',
+    title: 'Nivel Intermedio (A2-B1)',
+    desc: 'Pasado regular e irregular, futuro, condicionales y modales.'
+  },
+  avanzado: {
+    key: 'avanzado',
+    label: 'Avanzado & Negocios (B2)',
+    filterKey: 'avanzado',
+    startLesson: 19,
+    endLesson: 27,
+    totalLessons: 9,
+    units: [7, 8, 9],
+    badge: '🟣 Avanzado (B2)',
+    title: 'Nivel Avanzado & Negocios (B2)',
+    desc: 'Presente Perfecto, Phrasal Verbs de oficina y fluidez.'
+  },
+  completo: {
+    key: 'completo',
+    label: 'Curso Completo (A1-B2)',
+    filterKey: 'todos',
+    startLesson: 1,
+    endLesson: 27,
+    totalLessons: 27,
+    units: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    badge: '🌐 Todos los Niveles',
+    title: 'Curso Completo (27 Lecciones)',
+    desc: '27 lecciones completas organizadas por nivel.'
+  }
+};
+
+function getLevelConfig(nameOrLevel) {
+  const lvl = window.detectClassLevel ? window.detectClassLevel(nameOrLevel) : 'principiante';
+  return CLASS_LEVELS[lvl] || CLASS_LEVELS.principiante;
+}
+
+function updateLevelsDisplay(levelKey = null) {
+  const basicCard = document.querySelector('.level-card.basic');
+  const interCard = document.querySelector('.level-card.intermediate');
+  const advCard = document.querySelector('.level-card.advanced');
+  const noticeEl = document.getElementById('student-level-notice');
+
+  if (!basicCard || !interCard || !advCard) return;
+
+  if (levelKey === 'principiante') {
+    // Si la clase es para principiantes, ÚNICAMENTE presentar las lecciones de principiantes
+    basicCard.style.display = 'flex';
+    interCard.style.display = 'none';
+    advCard.style.display = 'none';
+
+    const titleEl = basicCard.querySelector('.level-card-title');
+    const descEl = basicCard.querySelector('.level-card-desc');
+    const footerEl = basicCard.querySelector('.level-card-footer span');
+    if (titleEl) titleEl.textContent = 'Nivel Principiante (A1) — Tu Clase Asignada';
+    if (descEl) descEl.textContent = 'Las 9 lecciones que debes completar para tu clase: fonética básica, sonido Schwa, alfabeto, saludos, pronombres y verbo To Be.';
+    if (footerEl) footerEl.textContent = 'Ver las 9 Lecciones de Principiantes (1 a 9)';
+
+    if (noticeEl) {
+      noticeEl.style.display = 'flex';
+      noticeEl.innerHTML = `<span>🎒</span> <div><strong>Clase Asignada: Inglés A1 - Principiantes</strong>. Presentando únicamente las 9 lecciones correspondientes a tu nivel (Lecciones 1 a 9).</div>`;
+    }
+  } else if (levelKey === 'intermedio') {
+    basicCard.style.display = 'none';
+    interCard.style.display = 'flex';
+    advCard.style.display = 'none';
+    if (noticeEl) {
+      noticeEl.style.display = 'flex';
+      noticeEl.innerHTML = `<span>🎒</span> <div><strong>Clase Asignada: Intermedio</strong>. Presentando únicamente las lecciones 10 a 18.</div>`;
+    }
+  } else if (levelKey === 'avanzado') {
+    basicCard.style.display = 'none';
+    interCard.style.display = 'none';
+    advCard.style.display = 'flex';
+    if (noticeEl) {
+      noticeEl.style.display = 'flex';
+      noticeEl.innerHTML = `<span>🎒</span> <div><strong>Clase Asignada: Avanzado</strong>. Presentando únicamente las lecciones 19 a 27.</div>`;
+    }
+  } else {
+    // Modo visitante / todos los niveles
+    basicCard.style.display = 'flex';
+    interCard.style.display = 'flex';
+    advCard.style.display = 'flex';
+    const titleEl = basicCard.querySelector('.level-card-title');
+    const descEl = basicCard.querySelector('.level-card-desc');
+    const footerEl = basicCard.querySelector('.level-card-footer span');
+    if (titleEl) titleEl.textContent = 'Nivel Básico (A1)';
+    if (descEl) descEl.textContent = 'Para los que están empezando: fonética básica, sonido Schwa, alfabeto, saludos, pronombres y verbo To Be.';
+    if (footerEl) footerEl.textContent = 'Ver 3 Unidades (Lecciones 1 a 9)';
+    if (noticeEl) noticeEl.style.display = 'none';
+  }
+}
+
 function renderDashboard() {
   const user = window.AuthService ? window.AuthService.getUser() : null;
   const isStudent = !!(user && user.role === 'estudiante');
@@ -1099,40 +1215,81 @@ function renderDashboard() {
   const dashXpEl = document.getElementById('dash-xp-counter');
   if (dashXpEl) dashXpEl.textContent = `${xp.toLocaleString()} XP`;
 
+  // Detectar si el estudiante pertenece a una clase con nivel específico
+  let activeLevel = window.activeStudentClassLevel;
+  if (isStudent && !activeLevel && window.AuthService && window.AuthService.isDemoUser()) {
+    activeLevel = 'principiante';
+  }
+
+  const levelCfg = getLevelConfig(activeLevel || 'completo');
+  const isClassRestricted = isStudent && activeLevel && activeLevel !== 'completo';
+  const startL = isClassRestricted ? levelCfg.startLesson : 1;
+  const endL = isClassRestricted ? levelCfg.endLesson : 27;
+  const totalL = isClassRestricted ? levelCfg.totalLessons : 27;
+
   let quizzesPassed = 0;
   let labsPassed = 0;
   let lessonsDone = 0;
 
   if (isStudent) {
-    for (let i = 1; i <= 27; i++) {
+    for (let i = startL; i <= endL; i++) {
       if (StorageManager.isQuizPassed(i)) quizzesPassed++;
       if (StorageManager.isExercisePassed(i)) labsPassed++;
       if (StorageManager.isDone(i)) lessonsDone++;
     }
   }
 
-  const percent = Math.round((lessonsDone / 27) * 100);
+  const percent = Math.round((lessonsDone / totalL) * 100);
   const progVal = document.getElementById('dash-progress-val');
   if (progVal) progVal.textContent = `${percent}%`;
   const quizzesVal = document.getElementById('dash-quizzes-val');
-  if (quizzesVal) quizzesVal.textContent = `${quizzesPassed} / 27`;
+  if (quizzesVal) quizzesVal.textContent = `${quizzesPassed} / ${totalL}`;
   const labsVal = document.getElementById('dash-labs-val');
-  if (labsVal) labsVal.textContent = `${labsPassed} / 27`;
+  if (labsVal) labsVal.textContent = `${labsPassed} / ${totalL}`;
   const progBar = document.getElementById('dash-progress-bar');
   if (progBar) progBar.style.width = `${percent}%`;
 
-  // Hero continue button
+  const statusSummaryEl = document.getElementById('dash-status-summary');
+  if (statusSummaryEl) {
+    if (isStudent && isClassRestricted) {
+      statusSummaryEl.textContent = `Nivel Activo: ${levelCfg.label} — ${percent}% completado (${lessonsDone} de ${totalL} lecciones)`;
+    } else {
+      statusSummaryEl.textContent = "¡Listo para continuar!";
+    }
+  }
+
+  // Hero continue button y descripciones según nivel asignado
+  const heroDesc = document.querySelector('.hero-desc');
+  if (heroDesc) {
+    if (isStudent && isClassRestricted) {
+      const className = window.activeStudentClassName || 'Inglés A1 - Principiantes';
+      heroDesc.innerHTML = `Estás cursando <strong>${escapeHtml(className)}</strong>. Presentando únicamente las <strong>${totalL} lecciones de ${levelCfg.label}</strong> asignadas por tu profesor.`;
+    } else {
+      heroDesc.textContent = "27 lecciones completas organizadas por nivel: explicaciones sencillas, pronunciación nativa con audio y ejercicios prácticos interactivos con corrección inmediata.";
+    }
+  }
+
   const heroBtn = document.getElementById('btn-hero-continue');
   if (heroBtn) {
-    if (isStudent && lessonsDone > 0) {
-      const lastLesson = StorageManager.getLastActiveLesson();
-      const maxUnlocked = StorageManager.getMaxUnlockedLesson();
-      const activeLesson = Math.max(lastLesson, maxUnlocked);
-      heroBtn.href = `teoria.html?lesson=${activeLesson}`;
-      heroBtn.innerHTML = `🚀 Continuar Lección ${activeLesson} ➔`;
+    if (isStudent) {
+      let lastLesson = StorageManager.getLastActiveLesson();
+      if (lastLesson < startL || lastLesson > endL) lastLesson = startL;
+      heroBtn.href = `teoria.html?lesson=${lastLesson}`;
+      heroBtn.innerHTML = `🚀 Continuar Lección ${lastLesson} (${levelCfg.label}) ➔`;
     } else {
       heroBtn.href = `teoria.html?lesson=1`;
       heroBtn.innerHTML = `🚀 Comenzar Lección 1 ➔`;
+    }
+  }
+
+  const heroExploreBtn = document.querySelector('.hero-ctas a.btn-secondary');
+  if (heroExploreBtn) {
+    if (isStudent && isClassRestricted) {
+      heroExploreBtn.href = `temario.html?level=${levelCfg.filterKey}`;
+      heroExploreBtn.innerHTML = `📚 Ver Lecciones de ${levelCfg.label} (${startL} a ${endL})`;
+    } else {
+      heroExploreBtn.href = `temario.html`;
+      heroExploreBtn.innerHTML = `📚 Explorar Temario (27 Lecciones)`;
     }
   }
 
@@ -1270,6 +1427,9 @@ window.onLMSAuthChanged = function() {
   } else {
     // Modo invitado / no autenticado:
     // EL PROGRESO NO SE TIENE QUE VER HASTA QUE SE INICIE SESIÓN
+    window.activeStudentClassLevel = null;
+    window.activeStudentClassName = null;
+    updateLevelsDisplay(null);
     if (heroSection) heroSection.style.display = 'block';
     if (levelsSection) levelsSection.style.display = 'block';
     if (speakingLabSection) speakingLabSection.style.display = 'block';
@@ -1311,12 +1471,13 @@ function renderTeacherClassCards() {
     const isSelected = (c.id === selectedClassId);
     const sCount = c.studentCount || 0;
     const studentLabel = sCount === 1 ? '1 alumno inscrito' : `${sCount} alumnos inscritos`;
+    const lvlCfg = getLevelConfig(c.nivel || c.nombre);
 
     return `
       <div class="teacher-class-card ${isSelected ? 'active' : ''}" onclick="switchTeacherClass('${c.id}')" role="button" tabindex="0" title="Ver alumnos y métricas de ${escapeHtml(c.nombre)}">
         <div class="teacher-class-card-head">
           <div class="teacher-class-card-title">📘 ${escapeHtml(c.nombre)}</div>
-          ${isSelected ? '<span class="teacher-class-badge-active">✓ Seleccionada</span>' : ''}
+          <span class="lms-code-chip" style="font-size:10.5px;padding:2px 7px;background:var(--emerald-light);color:var(--emerald);border-color:var(--emerald-border);font-weight:700;">${lvlCfg.badge}</span>
         </div>
         <div class="teacher-class-meta">
           <span class="teacher-class-code-pill" onclick="event.stopPropagation();copySpecificCode('${c.codigo}')" title="Hacer clic para copiar código">
@@ -1370,13 +1531,18 @@ async function switchTeacherClass(classId) {
   const activeView = document.getElementById('teacher-active-class-view');
   const classTitleEl = document.getElementById('teacher-active-class-title');
   const codeEl = document.getElementById('teacher-current-code');
+  const levelBadgeEl = document.getElementById('teacher-level-badge');
   const tbody = document.getElementById('teacher-students-tbody');
 
   if (activeView) activeView.style.display = 'block';
 
   if (found) {
+    const lvlCfg = getLevelConfig(found.nivel || found.nombre);
     if (classTitleEl) classTitleEl.textContent = `📘 ${found.nombre}`;
     if (codeEl) codeEl.textContent = found.codigo;
+    if (levelBadgeEl) {
+      levelBadgeEl.textContent = `${lvlCfg.badge} · ${lvlCfg.totalLessons} Lecciones (${lvlCfg.startLesson} a ${lvlCfg.endLesson})`;
+    }
   }
 
   if (tbody) {
@@ -1489,6 +1655,10 @@ function applyStudentFiltersAndRender() {
     return;
   }
 
+  const foundClass = currentTeacherClasses.find(c => c.id === selectedClassId);
+  const lvlCfg = getLevelConfig(foundClass?.nivel || foundClass?.nombre);
+  const maxL = lvlCfg.totalLessons;
+
   tbody.innerHTML = filtered.map(s => {
     // Iniciales para avatar
     const parts = (s.nombre || 'E').trim().split(/\s+/);
@@ -1508,7 +1678,7 @@ function applyStudentFiltersAndRender() {
       barColor = '#cbd5e1';
     }
 
-    const lastLessonText = s.maxLesson > 0 ? `Lección ${s.maxLesson} / 27` : '<span style="color:var(--text-dim);">Sin iniciar</span>';
+    const lastLessonText = s.maxLesson > 0 ? `Lección ${s.maxLesson} / ${maxL}` : '<span style="color:var(--text-dim);">Sin iniciar</span>';
     const activityDate = s.lastActivity ? new Date(s.lastActivity).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : 'Reciente';
 
     return `
@@ -1525,10 +1695,10 @@ function applyStudentFiltersAndRender() {
         <td>${statusBadge}</td>
         <td style="font-weight:700;font-size:12.5px;">${lastLessonText}</td>
         <td>
-          <span class="student-metric-tag quizzes">${s.quizzesPassed} / 27</span>
+          <span class="student-metric-tag quizzes">${s.quizzesPassed} / ${maxL}</span>
         </td>
         <td>
-          <span class="student-metric-tag labs">${s.exercisesPassed} / 27</span>
+          <span class="student-metric-tag labs">${s.exercisesPassed} / ${maxL}</span>
         </td>
         <td>
           <span class="student-metric-tag xp">⚡ ${(s.totalXP || 0).toLocaleString()} XP</span>
@@ -1596,6 +1766,17 @@ async function loadStudentDashboard() {
 
   try {
     const classes = await window.ClassService.getStudentClasses();
+    if (classes && classes.length > 0) {
+      window.activeStudentClassLevel = classes[0].nivel || detectClassLevel(classes[0].nombre);
+      window.activeStudentClassName = classes[0].nombre;
+    } else {
+      window.activeStudentClassLevel = null;
+      window.activeStudentClassName = null;
+    }
+
+    renderDashboard();
+    updateLevelsDisplay(window.activeStudentClassLevel);
+
     if (!classes || classes.length === 0) {
       container.innerHTML = `
         <div class="lms-empty-state" style="grid-column: 1 / -1;">
@@ -1612,14 +1793,25 @@ async function loadStudentDashboard() {
 
     container.innerHTML = classes.map(c => {
       const dateStr = c.fechaIngreso ? new Date(c.fechaIngreso).toLocaleDateString('es-ES') : '';
+      const lvlCfg = getLevelConfig(c.nivel || c.nombre);
       return `
         <div class="student-class-card">
-          <div class="student-class-name">📘 ${c.nombre}</div>
-          <div class="student-class-teacher">
-            <span>👨‍🏫 Profesor:</span> <strong>${c.profesor}</strong>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <div class="student-class-name" style="margin-bottom:0;">📘 ${escapeHtml(c.nombre)}</div>
+            <span class="lms-code-chip" style="font-size:11.5px;padding:3px 8px;background:var(--emerald-light);color:var(--emerald);border-color:var(--emerald-border);font-weight:700;">
+              ${lvlCfg.badge}
+            </span>
           </div>
-          <div class="student-class-date">
-            Código: <strong style="font-family:var(--font-mono);color:var(--primary);">${c.codigo}</strong> · Inscrito el ${dateStr}
+          <div class="student-class-teacher" style="margin-bottom:6px;">
+            <span>👨‍🏫 Profesor:</span> <strong>${escapeHtml(c.profesor)}</strong>
+          </div>
+          <div class="student-class-date" style="margin-bottom:14px;">
+            Código: <strong style="font-family:var(--font-mono);color:var(--primary);">${escapeHtml(c.codigo)}</strong> · Inscrito el ${dateStr} · <strong>${lvlCfg.totalLessons} lecciones (${lvlCfg.startLesson} a ${lvlCfg.endLesson})</strong>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:auto;">
+            <a href="temario.html?level=${lvlCfg.filterKey}" class="btn btn-primary" style="font-size:12.5px;padding:8px 14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+              🚀 Ver Lecciones de la Clase (${lvlCfg.startLesson} a ${lvlCfg.endLesson})
+            </a>
           </div>
         </div>
       `;

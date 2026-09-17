@@ -129,34 +129,34 @@ BEGIN
     -- 5. POBLAR PROGRESO REALISTA PARA CADA ESTUDIANTE
     -- -------------------------------------------------------------------------
 
-    -- Ana Morales (Estudiante Demo que usará el usuario): 12 lecciones, 820 XP (44%)
-    FOR i IN 1..12 LOOP
+    -- Ana Morales (Estudiante Demo que usará el usuario): 5 lecciones de Principiantes, 450 XP (55% de la clase)
+    FOR i IN 1..5 LOOP
         INSERT INTO public.progreso (id_usuario, leccion_n, xp, done, quiz_passed, exercise_passed, timestamp)
-        VALUES (v_est_id, i, 68, true, true, (i <= 10), now() - ((13 - i) || ' days')::INTERVAL)
+        VALUES (v_est_id, i, 90, true, true, true, now() - ((6 - i) || ' days')::INTERVAL)
         ON CONFLICT (id_usuario, leccion_n) DO UPDATE SET
             xp = EXCLUDED.xp, done = EXCLUDED.done, quiz_passed = EXCLUDED.quiz_passed, exercise_passed = EXCLUDED.exercise_passed;
     END LOOP;
 
-    -- Juan Pérez: 22 lecciones, 1480 XP (81% - Al día 🟢)
-    FOR i IN 1..22 LOOP
+    -- Juan Pérez: 8 lecciones de Principiantes, 980 XP (88% - Al día 🟢)
+    FOR i IN 1..8 LOOP
         INSERT INTO public.progreso (id_usuario, leccion_n, xp, done, quiz_passed, exercise_passed, timestamp)
-        VALUES (v_juan_id, i, 67, true, true, (i <= 21), now() - ((23 - i) || ' days')::INTERVAL)
+        VALUES (v_juan_id, i, 80, true, true, (i <= 7), now() - ((9 - i) || ' days')::INTERVAL)
         ON CONFLICT (id_usuario, leccion_n) DO UPDATE SET
             xp = EXCLUDED.xp, done = EXCLUDED.done, quiz_passed = EXCLUDED.quiz_passed, exercise_passed = EXCLUDED.exercise_passed;
     END LOOP;
 
-    -- María García: 18 lecciones, 1150 XP (66% - Al día 🟢)
-    FOR i IN 1..18 LOOP
+    -- María García: 6 lecciones de Principiantes, 750 XP (66% - Al día 🟢)
+    FOR i IN 1..6 LOOP
         INSERT INTO public.progreso (id_usuario, leccion_n, xp, done, quiz_passed, exercise_passed, timestamp)
-        VALUES (v_maria_id, i, 64, true, true, (i <= 16), now() - ((19 - i) || ' days')::INTERVAL)
+        VALUES (v_maria_id, i, 80, true, true, (i <= 5), now() - ((7 - i) || ' days')::INTERVAL)
         ON CONFLICT (id_usuario, leccion_n) DO UPDATE SET
             xp = EXCLUDED.xp, done = EXCLUDED.done, quiz_passed = EXCLUDED.quiz_passed, exercise_passed = EXCLUDED.exercise_passed;
     END LOOP;
 
-    -- Carlos López: 7 lecciones, 460 XP (25% - Falta avanzar 🟡)
-    FOR i IN 1..7 LOOP
+    -- Carlos López: 3 lecciones de Principiantes, 360 XP (33% - Falta avanzar 🟡)
+    FOR i IN 1..3 LOOP
         INSERT INTO public.progreso (id_usuario, leccion_n, xp, done, quiz_passed, exercise_passed, timestamp)
-        VALUES (v_carlos_id, i, 65, true, true, (i <= 6), now() - ((8 - i) || ' days')::INTERVAL)
+        VALUES (v_carlos_id, i, 80, true, true, (i <= 2), now() - ((4 - i) || ' days')::INTERVAL)
         ON CONFLICT (id_usuario, leccion_n) DO UPDATE SET
             xp = EXCLUDED.xp, done = EXCLUDED.done, quiz_passed = EXCLUDED.quiz_passed, exercise_passed = EXCLUDED.exercise_passed;
     END LOOP;
@@ -167,23 +167,15 @@ BEGIN
     -- -------------------------------------------------------------------------
     -- 6. ASIGNAR INSIGNIAS DE UNIDAD DESBLOQUEADAS
     -- -------------------------------------------------------------------------
-    -- Ana Morales: Unidades 1 a 4 (4 insignias)
+    -- Ana Morales: Unidad 1 (1 insignia)
     INSERT INTO public.badges (id_usuario, unit_id, badge_id, awarded_at) VALUES
-        (v_est_id, 1, 'badge_phonetics', now() - INTERVAL '12 days'),
-        (v_est_id, 2, 'badge_routines', now() - INTERVAL '9 days'),
-        (v_est_id, 3, 'badge_describer', now() - INTERVAL '6 days'),
-        (v_est_id, 4, 'badge_action', now() - INTERVAL '2 days')
+        (v_est_id, 1, 'badge_phonetics', now() - INTERVAL '5 days')
     ON CONFLICT (id_usuario, unit_id) DO NOTHING;
 
-    -- Juan Pérez: Unidades 1 a 7 (7 insignias)
+    -- Juan Pérez: Unidades 1 y 2 (2 insignias)
     INSERT INTO public.badges (id_usuario, unit_id, badge_id, awarded_at) VALUES
-        (v_juan_id, 1, 'badge_phonetics', now() - INTERVAL '20 days'),
-        (v_juan_id, 2, 'badge_routines', now() - INTERVAL '17 days'),
-        (v_juan_id, 3, 'badge_describer', now() - INTERVAL '14 days'),
-        (v_juan_id, 4, 'badge_action', now() - INTERVAL '11 days'),
-        (v_juan_id, 5, 'badge_storyteller', now() - INTERVAL '8 days'),
-        (v_juan_id, 6, 'badge_visionary', now() - INTERVAL '5 days'),
-        (v_juan_id, 7, 'badge_nuance', now() - INTERVAL '2 days')
+        (v_juan_id, 1, 'badge_phonetics', now() - INTERVAL '10 days'),
+        (v_juan_id, 2, 'badge_routines', now() - INTERVAL '4 days')
     ON CONFLICT (id_usuario, unit_id) DO NOTHING;
 
     RAISE NOTICE '¡Datos de prueba insertados con éxito!';
