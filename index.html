@@ -821,9 +821,6 @@
 
   <!-- DASHBOARD DE PROGRESO DEL ESTUDIANTE (VISIBLE SOLO TRAS INICIAR SESIÓN) -->
   <section class="dashboard-card" id="dashboard" style="display:none;">
-    <!-- Banner de estado del estudiante (visible si está autenticado como estudiante) -->
-    <div id="student-status-header" class="student-auth-banner" style="display:none;"></div>
-
     <div class="dash-header">
       <div class="dash-title">
         <span>📊</span> Tu Progreso de Aprendizaje
@@ -1237,7 +1234,6 @@ window.onLMSAuthChanged = function() {
   const studentPanel = document.getElementById('student-classes-panel');
   const studentDashboard = document.getElementById('dashboard');
   const guestCard = document.getElementById('guest-welcome-card');
-  const studentHeader = document.getElementById('student-status-header');
   const navXpEl = document.getElementById('nav-xp-counter');
   const heroSection = document.getElementById('hero-section') || document.querySelector('.hero');
   const levelsSection = document.getElementById('levels');
@@ -1257,7 +1253,7 @@ window.onLMSAuthChanged = function() {
     if (teacherPanel) teacherPanel.style.display = 'block';
     loadTeacherDashboard();
   } else if (user && user.role === 'estudiante') {
-    // Para el estudiante: mostrar landing (hero, niveles, lab de voz), dashboard personal con banner y clases
+    // Para el estudiante: mostrar landing (hero, niveles, lab de voz), dashboard personal y clases
     if (heroSection) heroSection.style.display = 'block';
     if (levelsSection) levelsSection.style.display = 'block';
     if (speakingLabSection) speakingLabSection.style.display = 'block';
@@ -1270,19 +1266,6 @@ window.onLMSAuthChanged = function() {
       navXpEl.textContent = `⚡ ${StorageManager.getXP().toLocaleString()} XP`;
     }
 
-    if (studentHeader) {
-      studentHeader.style.display = 'flex';
-      studentHeader.innerHTML = `
-        <div class="student-auth-info">
-          <span class="student-auth-tag">🎓 Cuenta de Estudiante</span>
-          <strong>${escapeHtml(user.nombre)}</strong> <span style="color:var(--text-muted);font-size:12px;">(${escapeHtml(user.email)})</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text-secondary);">
-          <span>☁️ Tu avance se sincroniza en vivo</span>
-          <button class="lms-copy-btn" onclick="AuthUI.openJoinClassModal()">🎒 Unirse a Clase</button>
-        </div>
-      `;
-    }
     loadStudentDashboard();
   } else {
     // Modo invitado / no autenticado:

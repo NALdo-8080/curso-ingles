@@ -1288,37 +1288,6 @@ a {
   flex-shrink: 0;
 }
 
-/* Banner de estado de estudiante en el dashboard */
-.student-auth-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  background: var(--bg-surface-alt);
-  border: 1px solid var(--border);
-  padding: 12px 18px;
-  border-radius: var(--radius-md);
-  margin-bottom: 20px;
-  font-size: 13.5px;
-}
-
-.student-auth-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.student-auth-tag {
-  font-weight: 800;
-  font-size: 11.5px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background: var(--emerald-light);
-  color: var(--emerald);
-  border: 1px solid var(--emerald-border);
-}
-
 .btn-export-csv {
   background: var(--bg-surface);
   border: 1.5px solid var(--border);
