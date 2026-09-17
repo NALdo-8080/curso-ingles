@@ -164,7 +164,7 @@ const AuthUI = {
             <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
               💡 El sistema generará automáticamente un código único (ej. <strong>ING-8X2F</strong>) que podrás compartir con tus estudiantes.
             </p>
-            <div style="display:flex;gap:10px;justify-content:flex-end;">
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:22px;">
               <button type="button" class="btn btn-secondary" onclick="AuthUI.closeCreateClassModal()">Cancelar</button>
               <button type="submit" class="btn btn-primary" id="btn-submit-create-class">Crear Clase</button>
             </div>
@@ -186,7 +186,7 @@ const AuthUI = {
               <label for="join-code">Código de la Clase</label>
               <input type="text" id="join-code" class="lms-input uppercase-code" placeholder="Ej. ING-8X2F" required maxlength="12" style="font-size:18px;font-weight:700;letter-spacing:1.5px;text-align:center;">
             </div>
-            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:22px;">
               <button type="button" class="btn btn-secondary" onclick="AuthUI.closeJoinClassModal()">Cancelar</button>
               <button type="submit" class="btn btn-primary" id="btn-submit-join-class">Unirme a la Clase</button>
             </div>
@@ -618,7 +618,7 @@ const AuthUI = {
       }
       .lms-modal-dialog {
         background: var(--bg-surface, #ffffff);
-        border: 1px solid var(--border, #e2e8f0);
+        border: 1.5px solid var(--border, #e2e8f0);
         border-radius: var(--radius-lg, 16px);
         width: 100%;
         max-width: 480px;
@@ -636,16 +636,124 @@ const AuthUI = {
         position: absolute;
         top: 16px;
         right: 18px;
-        background: none;
-        border: none;
-        font-size: 24px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--bg-surface-alt, #f1f5f9);
+        border: 1px solid var(--border, #e2e8f0);
+        font-size: 20px;
         line-height: 1;
         cursor: pointer;
         color: var(--text-muted, #64748b);
-        transition: color 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
       }
       .lms-modal-close:hover {
-        color: var(--text-main, #0f172a);
+        background: var(--rose-light, #fee2e2);
+        color: var(--rose, #e11d48);
+        border-color: var(--rose, #e11d48);
+        transform: scale(1.05);
+      }
+
+      /* ESTILOS DE BOTONES DENTRO DE MODALES (.btn, .btn-primary, .btn-secondary) */
+      .lms-modal-dialog .btn,
+      .lms-modal-backdrop .btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        font-family: inherit !important;
+        font-size: 13.5px !important;
+        font-weight: 700 !important;
+        padding: 9px 18px !important;
+        border-radius: 9px !important;
+        cursor: pointer !important;
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        text-decoration: none !important;
+        border: 1.5px solid transparent !important;
+        line-height: 1.35 !important;
+        box-sizing: border-box !important;
+        outline: none !important;
+      }
+
+      .lms-modal-dialog .btn-primary,
+      .lms-modal-backdrop .btn-primary {
+        background: var(--primary, #2563eb) !important;
+        color: #ffffff !important;
+        border-color: transparent !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+      }
+
+      .lms-modal-dialog .btn-primary:hover,
+      .lms-modal-backdrop .btn-primary:hover {
+        background: var(--primary-hover, #1d4ed8) !important;
+        transform: translateY(-1.5px) !important;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45) !important;
+      }
+
+      .lms-modal-dialog .btn-primary:active,
+      .lms-modal-backdrop .btn-primary:active {
+        transform: translateY(0) !important;
+      }
+
+      .lms-modal-dialog .btn-secondary,
+      .lms-modal-backdrop .btn-secondary {
+        background: var(--bg-surface-alt, #f1f5f9) !important;
+        border-color: var(--border-strong, #cbd5e1) !important;
+        color: var(--text-main, #0f172a) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+      }
+
+      .lms-modal-dialog .btn-secondary:hover,
+      .lms-modal-backdrop .btn-secondary:hover {
+        background: var(--bg-surface-hover, #e2e8f0) !important;
+        border-color: var(--primary, #2563eb) !important;
+        color: var(--primary, #2563eb) !important;
+        transform: translateY(-1px) !important;
+      }
+
+      .lms-modal-dialog .btn-secondary:active,
+      .lms-modal-backdrop .btn-secondary:active {
+        transform: translateY(0) !important;
+      }
+
+      .lms-modal-dialog .btn:disabled,
+      .lms-modal-backdrop .btn:disabled {
+        opacity: 0.6 !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Modo Oscuro para Modales y Botones */
+      [data-theme="dark"] .lms-modal-dialog {
+        background: var(--bg-surface, #0f172a);
+        border-color: var(--border, #1e293b);
+        color: var(--text-main, #f8fafc);
+      }
+      [data-theme="dark"] .lms-modal-close {
+        background: #1e293b;
+        border-color: #334155;
+        color: #94a3b8;
+      }
+      [data-theme="dark"] .lms-modal-close:hover {
+        background: rgba(225, 29, 72, 0.2);
+        color: #fb7185;
+        border-color: #fb7185;
+      }
+      [data-theme="dark"] .lms-modal-dialog .btn-secondary,
+      [data-theme="dark"] .lms-modal-backdrop .btn-secondary {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        color: #f1f5f9 !important;
+      }
+      [data-theme="dark"] .lms-modal-dialog .btn-secondary:hover,
+      [data-theme="dark"] .lms-modal-backdrop .btn-secondary:hover {
+        background: #334155 !important;
+        border-color: #60a5fa !important;
+        color: #60a5fa !important;
       }
       .lms-auth-header {
         text-align: center;
