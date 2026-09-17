@@ -711,7 +711,7 @@
 
 <div class="container">
   <!-- HERO SECTION -->
-  <header class="hero">
+  <header class="hero" id="hero-section">
     <div class="hero-tag">
       <span>✨</span> Tu sitio para aprender inglés a tu propio ritmo
     </div>
@@ -858,110 +858,134 @@
     </div>
   </section>
 
-  <!-- SECCIÓN PROFESOR: SUPERVISIÓN Y RESUMEN DE ALUMNOS (Visible solo para rol 'profesor') -->
+  <!-- SECCIÓN PROFESOR: SUPERVISIÓN Y GESTIÓN DE CLASES (Visible solo para rol 'profesor') -->
   <section class="lms-section-card" id="teacher-dashboard-panel" style="display:none;">
-    <div class="lms-panel-header">
+    <div class="lms-panel-header" style="align-items:flex-start;flex-wrap:wrap;gap:16px;">
       <div class="lms-panel-title">
         <span class="icon-badge">👨‍🏫</span>
         <div>
-          <div>Panel del Maestro — Resumen y Progreso de Alumnos</div>
+          <div id="teacher-panel-greeting" style="font-size:18px;font-weight:800;">Panel del Maestro</div>
           <div style="font-size:12.5px;font-weight:500;color:var(--text-secondary);margin-top:2px;">
-            Monitorea con precisión quién avanza al día, quién está en progreso y a quién le falta por avanzar.
+            Gestiona tus grupos de alumnos, comparte códigos de acceso y supervisa el avance de cada estudiante.
           </div>
         </div>
       </div>
-      <div class="lms-class-selector-wrap">
-        <select id="teacher-class-select" class="lms-select" onchange="switchTeacherClass(this.value)">
-          <option value="">Cargando clases...</option>
-        </select>
-        <div id="teacher-code-badge-wrap" style="display:none;">
-          <span class="lms-code-chip">
-            Código: <strong id="teacher-current-code">---</strong>
-            <button class="lms-copy-btn" onclick="copyClassCode()" title="Copiar código para compartir con alumnos">📋 Copiar</button>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()" style="font-size:13px;padding:9px 16px;">
+          ➕ Crear Nueva Clase
+        </button>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE CLASES CREADAS POR EL MAESTRO -->
+    <div style="margin-top:20px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div style="font-weight:800;font-size:15px;color:var(--text-main);display:flex;align-items:center;gap:8px;">
+          <span>🏫</span> Tus Clases (<span id="teacher-classes-count-badge">0</span>)
+        </div>
+        <span style="font-size:12px;color:var(--text-muted);">
+          Haz clic en una clase para ver sus estudiantes y estadísticas
+        </span>
+      </div>
+
+      <div id="teacher-classes-cards-container" class="teacher-classes-grid">
+        <!-- Tarjetas dinámicas de clases generadas por renderTeacherClassCards() -->
+      </div>
+    </div>
+
+    <!-- VISTA DE DETALLES DE LA CLASE SELECCIONADA -->
+    <div id="teacher-active-class-view" style="display:none;border-top:1.5px solid var(--border);padding-top:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h2 id="teacher-active-class-title" style="font-size:19px;font-weight:800;color:var(--text-main);margin:0;">
+            Clase Seleccionada
+          </h2>
+          <span class="lms-code-chip" id="teacher-code-badge-wrap">
+            Código de inscripción: <strong id="teacher-current-code" style="font-family:var(--font-mono);letter-spacing:1px;">---</strong>
+            <button class="lms-copy-btn" onclick="copyClassCode()" title="Copiar código para compartir con alumnos">📋 Copiar Código</button>
           </span>
         </div>
-        <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()" style="font-size:13px;padding:8px 14px;">
-          ➕ Nueva Clase
-        </button>
-        <button class="btn-export-csv" onclick="exportClassToCSV()" title="Descargar calificaciones y avance en Excel/CSV">
-          📥 Exportar Calificaciones
-        </button>
+        <div>
+          <button class="btn btn-secondary btn-export-csv" onclick="exportClassToCSV()" title="Descargar calificaciones y avance en Excel/CSV" style="font-size:12.5px;padding:8px 16px;">
+            📥 Exportar Calificaciones (Excel/CSV)
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- KPIs Diagnósticos Semáforo del Grupo -->
-    <div class="teacher-kpi-grid">
-      <div class="teacher-kpi-box">
-        <span class="teacher-kpi-label">👥 Total Alumnos</span>
-        <span class="teacher-kpi-val" id="kpi-students-count">0</span>
+      <!-- KPIs Diagnósticos Semáforo del Grupo -->
+      <div class="teacher-kpi-grid">
+        <div class="teacher-kpi-box">
+          <span class="teacher-kpi-label">👥 Total Alumnos</span>
+          <span class="teacher-kpi-val" id="kpi-students-count">0</span>
+        </div>
+        <div class="teacher-kpi-box" style="border-left: 4px solid var(--emerald);">
+          <span class="teacher-kpi-label" style="color:var(--emerald);">🟢 Avanzando al Día</span>
+          <span class="teacher-kpi-val" id="kpi-al-dia-count" style="color:var(--emerald);">0</span>
+        </div>
+        <div class="teacher-kpi-box" style="border-left: 4px solid var(--amber);">
+          <span class="teacher-kpi-label" style="color:var(--amber);">🟡 Falta Avanzar</span>
+          <span class="teacher-kpi-val" id="kpi-falta-avanzar-count" style="color:var(--amber);">0</span>
+        </div>
+        <div class="teacher-kpi-box" style="border-left: 4px solid var(--rose);">
+          <span class="teacher-kpi-label" style="color:var(--rose);">🔴 Sin Iniciar</span>
+          <span class="teacher-kpi-val" id="kpi-sin-iniciar-count" style="color:var(--rose);">0</span>
+        </div>
+        <div class="teacher-kpi-box">
+          <span class="teacher-kpi-label">📈 Avance Promedio</span>
+          <span class="teacher-kpi-val" id="kpi-avg-progress" style="color:var(--primary);">0%</span>
+        </div>
+        <div class="teacher-kpi-box">
+          <span class="teacher-kpi-label">⚡ XP del Grupo</span>
+          <span class="teacher-kpi-val" id="kpi-avg-xp" style="color:var(--amber);">0 XP</span>
+        </div>
       </div>
-      <div class="teacher-kpi-box" style="border-left: 4px solid var(--emerald);">
-        <span class="teacher-kpi-label" style="color:var(--emerald);">🟢 Avanzando al Día</span>
-        <span class="teacher-kpi-val" id="kpi-al-dia-count" style="color:var(--emerald);">0</span>
-      </div>
-      <div class="teacher-kpi-box" style="border-left: 4px solid var(--amber);">
-        <span class="teacher-kpi-label" style="color:var(--amber);">🟡 Falta Avanzar</span>
-        <span class="teacher-kpi-val" id="kpi-falta-avanzar-count" style="color:var(--amber);">0</span>
-      </div>
-      <div class="teacher-kpi-box" style="border-left: 4px solid var(--rose);">
-        <span class="teacher-kpi-label" style="color:var(--rose);">🔴 Sin Iniciar</span>
-        <span class="teacher-kpi-val" id="kpi-sin-iniciar-count" style="color:var(--rose);">0</span>
-      </div>
-      <div class="teacher-kpi-box">
-        <span class="teacher-kpi-label">📈 Avance Promedio</span>
-        <span class="teacher-kpi-val" id="kpi-avg-progress" style="color:var(--primary);">0%</span>
-      </div>
-      <div class="teacher-kpi-box">
-        <span class="teacher-kpi-label">⚡ XP del Grupo</span>
-        <span class="teacher-kpi-val" id="kpi-avg-xp" style="color:var(--amber);">0 XP</span>
-      </div>
-    </div>
 
-    <!-- Barra de Filtros Rápidos por Estado y Buscador -->
-    <div class="teacher-control-toolbar">
-      <div class="teacher-filter-pills">
-        <button class="teacher-filter-btn active" id="btn-filter-all" onclick="filterTeacherStudents('all')">
-          👥 Todos <span class="filter-count-badge" id="badge-count-all">0</span>
-        </button>
-        <button class="teacher-filter-btn" id="btn-filter-al_dia" onclick="filterTeacherStudents('al_dia')">
-          🟢 Avanzando <span class="filter-count-badge" id="badge-count-al_dia">0</span>
-        </button>
-        <button class="teacher-filter-btn" id="btn-filter-falta_avanzar" onclick="filterTeacherStudents('falta_avanzar')">
-          🟡 Falta avanzar <span class="filter-count-badge" id="badge-count-falta_avanzar">0</span>
-        </button>
-        <button class="teacher-filter-btn" id="btn-filter-sin_iniciar" onclick="filterTeacherStudents('sin_iniciar')">
-          🔴 Sin iniciar <span class="filter-count-badge" id="badge-count-sin_iniciar">0</span>
-        </button>
+      <!-- Barra de Filtros Rápidos por Estado y Buscador -->
+      <div class="teacher-control-toolbar">
+        <div class="teacher-filter-pills">
+          <button class="teacher-filter-btn active" id="btn-filter-all" onclick="filterTeacherStudents('all')">
+            👥 Todos <span class="filter-count-badge" id="badge-count-all">0</span>
+          </button>
+          <button class="teacher-filter-btn" id="btn-filter-al_dia" onclick="filterTeacherStudents('al_dia')">
+            🟢 Avanzando <span class="filter-count-badge" id="badge-count-al_dia">0</span>
+          </button>
+          <button class="teacher-filter-btn" id="btn-filter-falta_avanzar" onclick="filterTeacherStudents('falta_avanzar')">
+            🟡 Falta avanzar <span class="filter-count-badge" id="badge-count-falta_avanzar">0</span>
+          </button>
+          <button class="teacher-filter-btn" id="btn-filter-sin_iniciar" onclick="filterTeacherStudents('sin_iniciar')">
+            🔴 Sin iniciar <span class="filter-count-badge" id="badge-count-sin_iniciar">0</span>
+          </button>
+        </div>
+        <div class="teacher-search-box">
+          <span>🔍</span>
+          <input type="text" id="teacher-student-search" placeholder="Buscar alumno por nombre o correo..." oninput="searchTeacherStudents(this.value)">
+        </div>
       </div>
-      <div class="teacher-search-box">
-        <span>🔍</span>
-        <input type="text" id="teacher-student-search" placeholder="Buscar alumno por nombre o correo..." oninput="searchTeacherStudents(this.value)">
-      </div>
-    </div>
 
-    <!-- Tabla de Estudiantes -->
-    <div class="teacher-table-wrap">
-      <table class="teacher-table">
-        <thead>
-          <tr>
-            <th>Estudiante</th>
-            <th>Diagnóstico</th>
-            <th>Última Lección</th>
-            <th>Quizzes</th>
-            <th>Laboratorios</th>
-            <th>XP Acumulado</th>
-            <th>Avance Global</th>
-            <th>Última Actividad</th>
-          </tr>
-        </thead>
-        <tbody id="teacher-students-tbody">
-          <tr>
-            <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
-              Cargando datos de la clase...
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Tabla de Estudiantes -->
+      <div class="teacher-table-wrap">
+        <table class="teacher-table">
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Diagnóstico</th>
+              <th>Última Lección</th>
+              <th>Quizzes</th>
+              <th>Laboratorios</th>
+              <th>XP Acumulado</th>
+              <th>Avance Global</th>
+              <th>Última Actividad</th>
+            </tr>
+          </thead>
+          <tbody id="teacher-students-tbody">
+            <tr>
+              <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
+                Cargando datos de la clase...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -1167,6 +1191,37 @@ let currentClassStudents = [];
 let activeStudentFilter = 'all'; // 'all' | 'al_dia' | 'falta_avanzar' | 'sin_iniciar'
 let studentSearchQuery = '';
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function copySpecificCode(code) {
+  const cleanCode = (code || '').trim();
+  if (!cleanCode || cleanCode === '---') return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(cleanCode).then(() => {
+      alert(`Código de clase "${cleanCode}" copiado al portapapeles. ¡Compártelo con tus estudiantes!`);
+    }).catch(() => {
+      prompt("Copia este código de clase manualmente:", cleanCode);
+    });
+  } else {
+    prompt("Copia este código de clase manualmente:", cleanCode);
+  }
+}
+
+function copyClassCode() {
+  const codeEl = document.getElementById('teacher-current-code');
+  if (codeEl) {
+    copySpecificCode(codeEl.textContent);
+  }
+}
+
 // Callback disparado automáticamente por AuthUI ante cualquier cambio de sesión
 window.onLMSAuthChanged = function() {
   const user = window.AuthService ? window.AuthService.getUser() : null;
@@ -1178,17 +1233,28 @@ window.onLMSAuthChanged = function() {
   const guestCard = document.getElementById('guest-welcome-card');
   const studentHeader = document.getElementById('student-status-header');
   const navXpEl = document.getElementById('nav-xp-counter');
+  const heroSection = document.getElementById('hero-section') || document.querySelector('.hero');
+  const levelsSection = document.getElementById('levels');
+  const speakingLabSection = document.getElementById('speaking-lab');
 
   if (user && user.role === 'profesor') {
-    // Para el profesor: ocultar dashboard individual de estudiante y tarjeta de invitado, mostrar panel de supervisión
+    // Para el profesor: ocultar landing para estudiantes (hero, niveles, lab de voz, dashboard y clases de estudiante)
+    if (heroSection) heroSection.style.display = 'none';
+    if (levelsSection) levelsSection.style.display = 'none';
+    if (speakingLabSection) speakingLabSection.style.display = 'none';
     if (guestCard) guestCard.style.display = 'none';
     if (studentDashboard) studentDashboard.style.display = 'none';
     if (studentPanel) studentPanel.style.display = 'none';
-    if (teacherPanel) teacherPanel.style.display = 'block';
     if (navXpEl) navXpEl.style.display = 'none';
+
+    // Mostrar panel de maestro y cargar datos
+    if (teacherPanel) teacherPanel.style.display = 'block';
     loadTeacherDashboard();
   } else if (user && user.role === 'estudiante') {
-    // Para el estudiante: mostrar dashboard personal con banner de bienvenida y clases
+    // Para el estudiante: mostrar landing (hero, niveles, lab de voz), dashboard personal con banner y clases
+    if (heroSection) heroSection.style.display = 'block';
+    if (levelsSection) levelsSection.style.display = 'block';
+    if (speakingLabSection) speakingLabSection.style.display = 'block';
     if (guestCard) guestCard.style.display = 'none';
     if (teacherPanel) teacherPanel.style.display = 'none';
     if (studentDashboard) studentDashboard.style.display = 'block';
@@ -1203,7 +1269,7 @@ window.onLMSAuthChanged = function() {
       studentHeader.innerHTML = `
         <div class="student-auth-info">
           <span class="student-auth-tag">🎓 Cuenta de Estudiante</span>
-          <strong>${user.nombre}</strong> <span style="color:var(--text-muted);font-size:12px;">(${user.email})</span>
+          <strong>${escapeHtml(user.nombre)}</strong> <span style="color:var(--text-muted);font-size:12px;">(${escapeHtml(user.email)})</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text-secondary);">
           <span>☁️ Tu avance se sincroniza en vivo</span>
@@ -1215,6 +1281,9 @@ window.onLMSAuthChanged = function() {
   } else {
     // Modo invitado / no autenticado:
     // EL PROGRESO NO SE TIENE QUE VER HASTA QUE SE INICIE SESIÓN
+    if (heroSection) heroSection.style.display = 'block';
+    if (levelsSection) levelsSection.style.display = 'block';
+    if (speakingLabSection) speakingLabSection.style.display = 'block';
     if (guestCard) guestCard.style.display = 'block';
     if (studentDashboard) studentDashboard.style.display = 'none';
     if (teacherPanel) teacherPanel.style.display = 'none';
@@ -1223,86 +1292,128 @@ window.onLMSAuthChanged = function() {
   }
 };
 
+function renderTeacherClassCards() {
+  const container = document.getElementById('teacher-classes-cards-container');
+  const countBadge = document.getElementById('teacher-classes-count-badge');
+  const activeView = document.getElementById('teacher-active-class-view');
+  if (!container) return;
+
+  const count = currentTeacherClasses ? currentTeacherClasses.length : 0;
+  if (countBadge) countBadge.textContent = count;
+
+  if (count === 0) {
+    container.innerHTML = `
+      <div class="lms-empty-state" style="grid-column: 1 / -1;background:var(--bg-surface-alt);border:2px dashed var(--border);border-radius:12px;padding:36px 20px;">
+        <div class="lms-empty-icon" style="font-size:44px;">🏫</div>
+        <div class="lms-empty-title" style="font-size:17px;">Aún no has creado ninguna clase</div>
+        <div class="lms-empty-desc" style="max-width:460px;">
+          Crea tu primera clase con el botón "➕ Crear Nueva Clase" para generar un código único que compartirás con tus alumnos para supervisar su avance.
+        </div>
+        <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()" style="padding:10px 22px;font-size:14px;">
+          ➕ Crear mi primera clase
+        </button>
+      </div>
+    `;
+    if (activeView) activeView.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = currentTeacherClasses.map(c => {
+    const isSelected = (c.id === selectedClassId);
+    const sCount = c.studentCount || 0;
+    const studentLabel = sCount === 1 ? '1 alumno inscrito' : `${sCount} alumnos inscritos`;
+
+    return `
+      <div class="teacher-class-card ${isSelected ? 'active' : ''}" onclick="switchTeacherClass('${c.id}')" role="button" tabindex="0" title="Ver alumnos y métricas de ${escapeHtml(c.nombre)}">
+        <div class="teacher-class-card-head">
+          <div class="teacher-class-card-title">📘 ${escapeHtml(c.nombre)}</div>
+          ${isSelected ? '<span class="teacher-class-badge-active">✓ Seleccionada</span>' : ''}
+        </div>
+        <div class="teacher-class-meta">
+          <span class="teacher-class-code-pill" onclick="event.stopPropagation();copySpecificCode('${c.codigo}')" title="Hacer clic para copiar código">
+            <span>Código: <strong>${escapeHtml(c.codigo)}</strong></span>
+            <span class="lms-copy-btn" style="padding:2px 6px;font-size:10px;">📋 Copiar</span>
+          </span>
+          <span class="teacher-class-students-count">👥 ${studentLabel}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 async function loadTeacherDashboard() {
   if (!window.ClassService) return;
-  const select = document.getElementById('teacher-class-select');
-  const codeWrap = document.getElementById('teacher-code-badge-wrap');
-  const tbody = document.getElementById('teacher-students-tbody');
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  const greetingEl = document.getElementById('teacher-panel-greeting');
+  if (greetingEl && user) {
+    greetingEl.textContent = `Panel de ${user.nombre || 'Profesor'} — Clases`;
+  }
 
   try {
     currentTeacherClasses = await window.ClassService.getTeacherClasses();
 
     if (!currentTeacherClasses || currentTeacherClasses.length === 0) {
-      select.innerHTML = '<option value="">(Sin clases creadas aún)</option>';
-      if (codeWrap) codeWrap.style.display = 'none';
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="lms-empty-state">
-              <div class="lms-empty-icon">📚</div>
-              <div class="lms-empty-title">Aún no has creado ninguna clase</div>
-              <div class="lms-empty-desc">
-                Crea tu primera clase con el botón "➕ Nueva Clase" para generar un código único que tus estudiantes usarán para registrarse en tu grupo.
-              </div>
-              <button class="btn btn-primary" onclick="AuthUI.openCreateClassModal()">Crear mi primera clase</button>
-            </div>
-          </td>
-        </tr>
-      `;
-      updateTeacherKPIs(0, 0, 0, 0, 0, 0);
+      selectedClassId = null;
+      renderTeacherClassCards();
       return;
     }
-
-    // Llenar selector de clases
-    select.innerHTML = currentTeacherClasses.map(c => `
-      <option value="${c.id}" ${c.id === selectedClassId ? 'selected' : ''}>
-        ${c.nombre} (${c.studentCount} alumnos)
-      </option>
-    `).join('');
 
     if (!selectedClassId || !currentTeacherClasses.some(c => c.id === selectedClassId)) {
       selectedClassId = currentTeacherClasses[0].id;
     }
 
+    renderTeacherClassCards();
     switchTeacherClass(selectedClassId);
   } catch (err) {
     console.error("Error cargando dashboard de profesor:", err);
-    tbody.innerHTML = `<tr><td colspan="8" style="color:var(--rose);text-align:center;">Error al cargar las clases. Verifica tu conexión a Supabase.</td></tr>`;
+    const container = document.getElementById('teacher-classes-cards-container');
+    if (container) {
+      container.innerHTML = `<div style="color:var(--rose);padding:16px;">Error al cargar las clases. Verifica tu conexión.</div>`;
+    }
   }
 }
 
 async function switchTeacherClass(classId) {
   selectedClassId = classId;
+  renderTeacherClassCards();
+
   const found = currentTeacherClasses.find(c => c.id === classId);
-  const codeWrap = document.getElementById('teacher-code-badge-wrap');
+  const activeView = document.getElementById('teacher-active-class-view');
+  const classTitleEl = document.getElementById('teacher-active-class-title');
   const codeEl = document.getElementById('teacher-current-code');
   const tbody = document.getElementById('teacher-students-tbody');
 
-  if (found && codeWrap && codeEl) {
-    codeEl.textContent = found.codigo;
-    codeWrap.style.display = 'inline-block';
+  if (activeView) activeView.style.display = 'block';
+
+  if (found) {
+    if (classTitleEl) classTitleEl.textContent = `📘 ${found.nombre}`;
+    if (codeEl) codeEl.textContent = found.codigo;
   }
 
-  tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">Consultando progreso de los estudiantes...</td></tr>`;
+  if (tbody) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">Consultando progreso de los estudiantes...</td></tr>`;
+  }
 
   try {
     currentClassStudents = await window.ClassService.getClassStudentsProgress(classId);
 
     if (!currentClassStudents || currentClassStudents.length === 0) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="lms-empty-state">
-              <div class="lms-empty-icon">👥</div>
-              <div class="lms-empty-title">Aún no hay alumnos inscritos en esta clase</div>
-              <div class="lms-empty-desc">
-                Comparte el código <strong style="font-family:var(--font-mono);color:var(--primary);">${found?.codigo || ''}</strong> con tus estudiantes para que se unan desde su panel.
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="lms-empty-state">
+                <div class="lms-empty-icon">👥</div>
+                <div class="lms-empty-title">Aún no hay alumnos inscritos en esta clase</div>
+                <div class="lms-empty-desc">
+                  Comparte el código <strong style="font-family:var(--font-mono);color:var(--primary);">${found?.codigo || ''}</strong> con tus estudiantes para que se unan desde su panel.
+                </div>
+                <button class="btn btn-secondary" onclick="copySpecificCode('${found?.codigo || ''}')">📋 Copiar Código de Clase</button>
               </div>
-              <button class="btn btn-secondary" onclick="copyClassCode()">📋 Copiar Código de Clase</button>
-            </div>
-          </td>
-        </tr>
-      `;
+            </td>
+          </tr>
+        `;
+      }
       updateTeacherKPIs(0, 0, 0, 0, 0, 0);
       return;
     }
@@ -1485,19 +1596,6 @@ function exportClassToCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
-
-function copyClassCode() {
-  const codeEl = document.getElementById('teacher-current-code');
-  if (!codeEl) return;
-  const code = codeEl.textContent.trim();
-  if (!code || code === '---') return;
-
-  navigator.clipboard.writeText(code).then(() => {
-    alert(`Código de clase ${code} copiado al portapapeles.`);
-  }).catch(() => {
-    prompt("Copia este código de clase manualmente:", code);
-  });
 }
 
 async function loadStudentDashboard() {
