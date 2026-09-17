@@ -21,6 +21,8 @@ DECLARE
     v_carlos_id UUID := '00000000-0000-0000-0000-000000000005';
     v_laura_id UUID := '00000000-0000-0000-0000-000000000006';
     v_clase_id UUID := '00000000-0000-0000-0000-000000000010';
+    v_asg1_id UUID := '00000000-0000-0000-0000-000000000020';
+    v_asg2_id UUID := '00000000-0000-0000-0000-000000000021';
     v_hash TEXT := crypt('Demo1234!', gen_salt('bf'));
     i INTEGER;
 BEGIN
@@ -178,9 +180,55 @@ BEGIN
         (v_juan_id, 2, 'badge_routines', now() - INTERVAL '4 days')
     ON CONFLICT (id_usuario, unit_id) DO NOTHING;
 
+    -- -------------------------------------------------------------------------
+    -- 7. ASIGNACIONES DE MUESTRA PARA LA CLASE DEMO
+    -- -------------------------------------------------------------------------
+    INSERT INTO public.asignaciones (id, id_clase, id_profesor, titulo, descripcion, puntos_max, fecha_limite, created_at)
+    VALUES
+        (
+            v_asg1_id, v_clase_id, v_prof_id,
+            'Tarea 1: Presentación Personal en Inglés (Self Introduction)',
+            'Escribe un párrafo de 5 oraciones en inglés presentándote: tu nombre, edad, país de origen, ocupación o estudios y tu pasatiempo favorito. Utiliza el verbo To Be y vocabulario de la Unidad 1.',
+            100, now() + INTERVAL '7 days', now() - INTERVAL '10 days'
+        ),
+        (
+            v_asg2_id, v_clase_id, v_prof_id,
+            'Tarea 2: Mi Rutina Diaria (My Daily Routine)',
+            'Describe tu rutina de la mañana en inglés usando al menos 5 verbos en Present Simple (ej. wake up, brush teeth, have breakfast, study, work).',
+            100, now() + INTERVAL '12 days', now() - INTERVAL '3 days'
+        )
+    ON CONFLICT (id) DO NOTHING;
+
+    -- -------------------------------------------------------------------------
+    -- 8. ENTREGAS Y CALIFICACIONES DE ESTUDIANTES
+    -- -------------------------------------------------------------------------
+    -- Juan Pérez: Tarea 1 calificada con 95/100
+    INSERT INTO public.entregas_asignaciones (id_asignacion, id_estudiante, id_clase, contenido_entrega, fecha_entrega, calificacion, retroalimentacion, calificado_en)
+    VALUES (
+        v_asg1_id, v_juan_id, v_clase_id,
+        'Hello teacher! My name is Juan. I am 24 years old and I am from Colombia. I am a graphic designer. In my free time, I like to play soccer and listen to music. I want to learn English to work with international clients.',
+        now() - INTERVAL '6 days', 95, '¡Excelente trabajo Juan! Gran dominio del verbo To Be y redacción fluida y clara.', now() - INTERVAL '5 days'
+    ) ON CONFLICT (id_asignacion, id_estudiante) DO NOTHING;
+
+    -- María García: Tarea 1 calificada con 90/100
+    INSERT INTO public.entregas_asignaciones (id_asignacion, id_estudiante, id_clase, contenido_entrega, fecha_entrega, calificacion, retroalimentacion, calificado_en)
+    VALUES (
+        v_asg1_id, v_maria_id, v_clase_id,
+        'Hello! I am Maria Garcia. I am from Mexico and I live in Monterrey. I am an accountant. I enjoy reading books and cooking on weekends. I study English because it is very important for my career.',
+        now() - INTERVAL '5 days', 90, 'Muy buena presentación María. Cuida el uso de comas entre oraciones, la estructura gramatical está impecable.', now() - INTERVAL '4 days'
+    ) ON CONFLICT (id_asignacion, id_estudiante) DO NOTHING;
+
+    -- Ana Morales: Tarea 1 calificada con 92/100
+    INSERT INTO public.entregas_asignaciones (id_asignacion, id_estudiante, id_clase, contenido_entrega, fecha_entrega, calificacion, retroalimentacion, calificado_en)
+    VALUES (
+        v_asg1_id, v_est_id, v_clase_id,
+        'Hi everyone! My name is Ana Morales. I am 21 years old and I am a software engineering student. In my free time, I love watching movies in English and practicing pronunciation. Learning English is my dream!',
+        now() - INTERVAL '7 days', 92, '¡Felicidades Ana! Tu presentación está muy bien estructurada y las oraciones son precisas.', now() - INTERVAL '6 days'
+    ) ON CONFLICT (id_asignacion, id_estudiante) DO NOTHING;
+
     RAISE NOTICE '¡Datos de prueba insertados con éxito!';
     RAISE NOTICE 'Maestro: profesor@demo.com (clave: Demo1234!)';
     RAISE NOTICE 'Estudiante: estudiante@demo.com (clave: Demo1234!)';
-    RAISE NOTICE 'Clase creada: ING-DEMO con 5 alumnos y diagnósticos activos.';
+    RAISE NOTICE 'Clase creada: ING-DEMO con 5 alumnos, asignaciones y calificaciones activas.';
 END $$;
 

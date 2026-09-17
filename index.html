@@ -899,7 +899,7 @@
 
     <!-- VISTA DE DETALLES DE LA CLASE SELECCIONADA -->
     <div id="teacher-active-class-view" style="display:none;border-top:1.5px solid var(--border);padding-top:24px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px;">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
           <h2 id="teacher-active-class-title" style="font-size:19px;font-weight:800;color:var(--text-main);margin:0;">
             Clase Seleccionada
@@ -919,79 +919,134 @@
         </div>
       </div>
 
-      <!-- KPIs Diagnósticos Semáforo del Grupo -->
-      <div class="teacher-kpi-grid">
-        <div class="teacher-kpi-box">
-          <span class="teacher-kpi-label">👥 Total Alumnos</span>
-          <span class="teacher-kpi-val" id="kpi-students-count">0</span>
+      <!-- PESTAÑAS DE NAVEGACIÓN DENTRO DE LA CLASE -->
+      <div class="teacher-nav-tabs">
+        <button class="teacher-nav-tab active" id="tab-btn-students" onclick="switchTeacherClassTab('students')">
+          👥 Alumnos y Progreso <span class="teacher-tab-badge" id="tab-badge-students">0</span>
+        </button>
+        <button class="teacher-nav-tab" id="tab-btn-assignments" onclick="switchTeacherClassTab('assignments')">
+          📝 Asignaciones y Tareas <span class="teacher-tab-badge" id="tab-badge-assignments">0</span>
+        </button>
+        <button class="teacher-nav-tab" id="tab-btn-gradebook" onclick="switchTeacherClassTab('gradebook')">
+          📊 Libro de Calificaciones
+        </button>
+      </div>
+
+      <!-- PESTAÑA 1: ALUMNOS Y PROGRESO -->
+      <div id="teacher-tab-content-students">
+        <!-- KPIs Diagnósticos Semáforo del Grupo -->
+        <div class="teacher-kpi-grid">
+          <div class="teacher-kpi-box">
+            <span class="teacher-kpi-label">👥 Total Alumnos</span>
+            <span class="teacher-kpi-val" id="kpi-students-count">0</span>
+          </div>
+          <div class="teacher-kpi-box" style="border-left: 4px solid var(--emerald);">
+            <span class="teacher-kpi-label" style="color:var(--emerald);">🟢 Avanzando al Día</span>
+            <span class="teacher-kpi-val" id="kpi-al-dia-count" style="color:var(--emerald);">0</span>
+          </div>
+          <div class="teacher-kpi-box" style="border-left: 4px solid var(--amber);">
+            <span class="teacher-kpi-label" style="color:var(--amber);">🟡 Falta Avanzar</span>
+            <span class="teacher-kpi-val" id="kpi-falta-avanzar-count" style="color:var(--amber);">0</span>
+          </div>
+          <div class="teacher-kpi-box" style="border-left: 4px solid var(--rose);">
+            <span class="teacher-kpi-label" style="color:var(--rose);">🔴 Sin Iniciar</span>
+            <span class="teacher-kpi-val" id="kpi-sin-iniciar-count" style="color:var(--rose);">0</span>
+          </div>
+          <div class="teacher-kpi-box">
+            <span class="teacher-kpi-label">📈 Avance Promedio</span>
+            <span class="teacher-kpi-val" id="kpi-avg-progress" style="color:var(--primary);">0%</span>
+          </div>
+          <div class="teacher-kpi-box">
+            <span class="teacher-kpi-label">⚡ XP del Grupo</span>
+            <span class="teacher-kpi-val" id="kpi-avg-xp" style="color:var(--amber);">0 XP</span>
+          </div>
         </div>
-        <div class="teacher-kpi-box" style="border-left: 4px solid var(--emerald);">
-          <span class="teacher-kpi-label" style="color:var(--emerald);">🟢 Avanzando al Día</span>
-          <span class="teacher-kpi-val" id="kpi-al-dia-count" style="color:var(--emerald);">0</span>
+
+        <!-- Barra de Filtros Rápidos por Estado y Buscador -->
+        <div class="teacher-control-toolbar">
+          <div class="teacher-filter-pills">
+            <button class="teacher-filter-btn active" id="btn-filter-all" onclick="filterTeacherStudents('all')">
+              👥 Todos <span class="filter-count-badge" id="badge-count-all">0</span>
+            </button>
+            <button class="teacher-filter-btn" id="btn-filter-al_dia" onclick="filterTeacherStudents('al_dia')">
+              🟢 Avanzando <span class="filter-count-badge" id="badge-count-al_dia">0</span>
+            </button>
+            <button class="teacher-filter-btn" id="btn-filter-falta_avanzar" onclick="filterTeacherStudents('falta_avanzar')">
+              🟡 Falta avanzar <span class="filter-count-badge" id="badge-count-falta_avanzar">0</span>
+            </button>
+            <button class="teacher-filter-btn" id="btn-filter-sin_iniciar" onclick="filterTeacherStudents('sin_iniciar')">
+              🔴 Sin iniciar <span class="filter-count-badge" id="badge-count-sin_iniciar">0</span>
+            </button>
+          </div>
+          <div class="teacher-search-box">
+            <span>🔍</span>
+            <input type="text" id="teacher-student-search" placeholder="Buscar alumno por nombre o correo..." oninput="searchTeacherStudents(this.value)">
+          </div>
         </div>
-        <div class="teacher-kpi-box" style="border-left: 4px solid var(--amber);">
-          <span class="teacher-kpi-label" style="color:var(--amber);">🟡 Falta Avanzar</span>
-          <span class="teacher-kpi-val" id="kpi-falta-avanzar-count" style="color:var(--amber);">0</span>
-        </div>
-        <div class="teacher-kpi-box" style="border-left: 4px solid var(--rose);">
-          <span class="teacher-kpi-label" style="color:var(--rose);">🔴 Sin Iniciar</span>
-          <span class="teacher-kpi-val" id="kpi-sin-iniciar-count" style="color:var(--rose);">0</span>
-        </div>
-        <div class="teacher-kpi-box">
-          <span class="teacher-kpi-label">📈 Avance Promedio</span>
-          <span class="teacher-kpi-val" id="kpi-avg-progress" style="color:var(--primary);">0%</span>
-        </div>
-        <div class="teacher-kpi-box">
-          <span class="teacher-kpi-label">⚡ XP del Grupo</span>
-          <span class="teacher-kpi-val" id="kpi-avg-xp" style="color:var(--amber);">0 XP</span>
+
+        <!-- Tabla de Estudiantes -->
+        <div class="teacher-table-wrap">
+          <table class="teacher-table">
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Diagnóstico</th>
+                <th>Última Lección</th>
+                <th>Quizzes</th>
+                <th>Laboratorios</th>
+                <th>XP Acumulado</th>
+                <th>Avance Global</th>
+                <th>Última Actividad</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-students-tbody">
+              <tr>
+                <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
+                  Cargando datos de la clase...
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Barra de Filtros Rápidos por Estado y Buscador -->
-      <div class="teacher-control-toolbar">
-        <div class="teacher-filter-pills">
-          <button class="teacher-filter-btn active" id="btn-filter-all" onclick="filterTeacherStudents('all')">
-            👥 Todos <span class="filter-count-badge" id="badge-count-all">0</span>
-          </button>
-          <button class="teacher-filter-btn" id="btn-filter-al_dia" onclick="filterTeacherStudents('al_dia')">
-            🟢 Avanzando <span class="filter-count-badge" id="badge-count-al_dia">0</span>
-          </button>
-          <button class="teacher-filter-btn" id="btn-filter-falta_avanzar" onclick="filterTeacherStudents('falta_avanzar')">
-            🟡 Falta avanzar <span class="filter-count-badge" id="badge-count-falta_avanzar">0</span>
-          </button>
-          <button class="teacher-filter-btn" id="btn-filter-sin_iniciar" onclick="filterTeacherStudents('sin_iniciar')">
-            🔴 Sin iniciar <span class="filter-count-badge" id="badge-count-sin_iniciar">0</span>
+      <!-- PESTAÑA 2: ASIGNACIONES Y TAREAS -->
+      <div id="teacher-tab-content-assignments" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:16px;font-weight:800;color:var(--text-main);margin:0;">Tareas y Trabajos Prácticos</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">Crea asignaciones escritas, revisa entregas de los estudiantes y califica con retroalimentación.</p>
+          </div>
+          <button class="btn btn-primary" onclick="AuthUI.openCreateAssignmentModal(selectedClassId)" style="font-size:13px;padding:8px 16px;">
+            ➕ Nueva Asignación
           </button>
         </div>
-        <div class="teacher-search-box">
-          <span>🔍</span>
-          <input type="text" id="teacher-student-search" placeholder="Buscar alumno por nombre o correo..." oninput="searchTeacherStudents(this.value)">
+        <div id="teacher-assignments-container" class="assignments-grid">
+          <!-- Tarjetas dinámicas de asignaciones generadas por renderTeacherAssignments() -->
         </div>
       </div>
 
-      <!-- Tabla de Estudiantes -->
-      <div class="teacher-table-wrap">
-        <table class="teacher-table">
-          <thead>
-            <tr>
-              <th>Estudiante</th>
-              <th>Diagnóstico</th>
-              <th>Última Lección</th>
-              <th>Quizzes</th>
-              <th>Laboratorios</th>
-              <th>XP Acumulado</th>
-              <th>Avance Global</th>
-              <th>Última Actividad</th>
-            </tr>
-          </thead>
-          <tbody id="teacher-students-tbody">
-            <tr>
-              <td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">
-                Cargando datos de la clase...
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- PESTAÑA 3: LIBRO DE CALIFICACIONES (GRADEBOOK) -->
+      <div id="teacher-tab-content-gradebook" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+          <div>
+            <h3 style="font-size:16px;font-weight:800;color:var(--text-main);margin:0;">Libro General de Calificaciones</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">Matriz consolidada de notas y promedio de cada estudiante en las tareas de la clase.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="exportClassToCSV()" style="font-size:12.5px;padding:8px 14px;">
+            📥 Descargar Reporte Completo (CSV)
+          </button>
+        </div>
+        <div class="gradebook-table-wrap">
+          <table class="gradebook-table">
+            <thead id="teacher-gradebook-thead">
+              <!-- Encabezados generados dinámicamente -->
+            </thead>
+            <tbody id="teacher-gradebook-tbody">
+              <!-- Filas de notas de alumnos -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -1014,6 +1069,74 @@
     </div>
     <div id="student-classes-container" class="student-classes-list">
       <!-- Tarjetas dinámicas -->
+    </div>
+  </section>
+
+  <!-- SECCIÓN ESTUDIANTE: MIS ASIGNACIONES (Visible para rol 'estudiante') -->
+  <section class="lms-section-card" id="student-assignments-panel" style="display:none;margin-top:28px;">
+    <div class="lms-panel-header">
+      <div class="lms-panel-title">
+        <span class="icon-badge">📝</span>
+        <div>
+          <div style="font-size:18px;font-weight:800;">Mis Asignaciones y Tareas</div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-secondary);margin-top:2px;">
+            Tareas asignadas por tus profesores. Complétalas y envíalas para recibir calificación y retroalimentación pedagógica.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="student-assignments-container" class="assignments-grid">
+      <!-- Tarjetas de asignaciones del estudiante -->
+    </div>
+  </section>
+
+  <!-- SECCIÓN ESTUDIANTE: MIS CALIFICACIONES (Visible para rol 'estudiante') -->
+  <section class="lms-section-card" id="student-grades-panel" style="display:none;margin-top:28px;">
+    <div class="lms-panel-header">
+      <div class="lms-panel-title">
+        <span class="icon-badge">📊</span>
+        <div>
+          <div style="font-size:18px;font-weight:800;">Mis Calificaciones</div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-secondary);margin-top:2px;">
+            Consulta tus notas obtenidas, promedios y la retroalimentación de cada tarea calificada por tu profesor.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- KPIs de Calificaciones del Alumno -->
+    <div class="student-grades-kpi-banner">
+      <div class="student-grades-kpi-card">
+        <span class="student-grades-kpi-title">Promedio de Tareas</span>
+        <span class="student-grades-kpi-val" id="student-grades-avg" style="color:var(--emerald);">--%</span>
+      </div>
+      <div class="student-grades-kpi-card">
+        <span class="student-grades-kpi-title">Tareas Calificadas</span>
+        <span class="student-grades-kpi-val" id="student-grades-graded-count" style="color:var(--primary);">0</span>
+      </div>
+      <div class="student-grades-kpi-card">
+        <span class="student-grades-kpi-title">En Revisión / Pendientes</span>
+        <span class="student-grades-kpi-val" id="student-grades-pending-count" style="color:var(--amber);">0</span>
+      </div>
+    </div>
+
+    <!-- Tabla de Calificaciones del Alumno -->
+    <div class="gradebook-table-wrap">
+      <table class="gradebook-table">
+        <thead>
+          <tr>
+            <th>Asignación</th>
+            <th>Estado</th>
+            <th>Nota</th>
+            <th>Retroalimentación del Profesor</th>
+            <th>Fecha Calificación</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="student-grades-tbody">
+          <!-- Filas de calificaciones -->
+        </tbody>
+      </table>
     </div>
   </section>
 </div>
@@ -1396,6 +1519,9 @@ window.onLMSAuthChanged = function() {
   const levelsSection = document.getElementById('levels');
   const speakingLabSection = document.getElementById('speaking-lab');
 
+  const studentAssignmentsPanel = document.getElementById('student-assignments-panel');
+  const studentGradesPanel = document.getElementById('student-grades-panel');
+
   if (user && user.role === 'profesor') {
     // Para el profesor: ocultar landing para estudiantes (hero, niveles, lab de voz, dashboard y clases de estudiante)
     if (heroSection) heroSection.style.display = 'none';
@@ -1404,13 +1530,15 @@ window.onLMSAuthChanged = function() {
     if (guestCard) guestCard.style.display = 'none';
     if (studentDashboard) studentDashboard.style.display = 'none';
     if (studentPanel) studentPanel.style.display = 'none';
+    if (studentAssignmentsPanel) studentAssignmentsPanel.style.display = 'none';
+    if (studentGradesPanel) studentGradesPanel.style.display = 'none';
     if (navXpEl) navXpEl.style.display = 'none';
 
     // Mostrar panel de maestro y cargar datos
     if (teacherPanel) teacherPanel.style.display = 'block';
     loadTeacherDashboard();
   } else if (user && user.role === 'estudiante') {
-    // Para el estudiante: mostrar landing (hero, niveles, lab de voz), dashboard personal y clases
+    // Para el estudiante: mostrar landing (hero, niveles, lab de voz), dashboard personal, clases, asignaciones y notas
     if (heroSection) heroSection.style.display = 'block';
     if (levelsSection) levelsSection.style.display = 'block';
     if (speakingLabSection) speakingLabSection.style.display = 'block';
@@ -1418,12 +1546,16 @@ window.onLMSAuthChanged = function() {
     if (teacherPanel) teacherPanel.style.display = 'none';
     if (studentDashboard) studentDashboard.style.display = 'block';
     if (studentPanel) studentPanel.style.display = 'block';
+    if (studentAssignmentsPanel) studentAssignmentsPanel.style.display = 'block';
+    if (studentGradesPanel) studentGradesPanel.style.display = 'block';
     if (navXpEl) {
       navXpEl.style.display = 'inline-flex';
       navXpEl.textContent = `⚡ ${StorageManager.getXP().toLocaleString()} XP`;
     }
 
     loadStudentDashboard();
+    loadStudentAssignments();
+    loadStudentGrades();
   } else {
     // Modo invitado / no autenticado:
     // EL PROGRESO NO SE TIENE QUE VER HASTA QUE SE INICIE SESIÓN
@@ -1437,6 +1569,8 @@ window.onLMSAuthChanged = function() {
     if (studentDashboard) studentDashboard.style.display = 'none';
     if (teacherPanel) teacherPanel.style.display = 'none';
     if (studentPanel) studentPanel.style.display = 'none';
+    if (studentAssignmentsPanel) studentAssignmentsPanel.style.display = 'none';
+    if (studentGradesPanel) studentGradesPanel.style.display = 'none';
     if (navXpEl) navXpEl.style.display = 'none';
   }
 };
@@ -1581,8 +1715,15 @@ async function switchTeacherClass(classId) {
     const avgProgress = Math.round(currentClassStudents.reduce((acc, s) => acc + s.percent, 0) / totalStudents);
     const totalXP = currentClassStudents.reduce((acc, s) => acc + (s.totalXP || 0), 0);
 
+    const badgeStudents = document.getElementById('tab-badge-students');
+    if (badgeStudents) badgeStudents.textContent = totalStudents;
+
     updateTeacherKPIs(totalStudents, alDiaCount, faltaAvanzarCount, sinIniciarCount, avgProgress, totalXP);
     applyStudentFiltersAndRender();
+
+    // Cargar también las asignaciones y libro de notas para la clase seleccionada
+    loadClassAssignments(classId);
+    loadClassGradebook(classId);
 
   } catch (e) {
     console.error("Error al obtener alumnos:", e);
@@ -1755,6 +1896,451 @@ function exportClassToCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+// =============================================================================
+// GESTIÓN DE PESTAÑAS Y ASIGNACIONES DEL MAESTRO
+// =============================================================================
+let currentTeacherClassTab = 'students'; // 'students' | 'assignments' | 'gradebook'
+let currentClassAssignments = [];
+
+function switchTeacherClassTab(tabName) {
+  currentTeacherClassTab = tabName;
+  document.getElementById('tab-btn-students')?.classList.toggle('active', tabName === 'students');
+  document.getElementById('tab-btn-assignments')?.classList.toggle('active', tabName === 'assignments');
+  document.getElementById('tab-btn-gradebook')?.classList.toggle('active', tabName === 'gradebook');
+
+  const contentStudents = document.getElementById('teacher-tab-content-students');
+  const contentAsg = document.getElementById('teacher-tab-content-assignments');
+  const contentGradebook = document.getElementById('teacher-tab-content-gradebook');
+
+  if (contentStudents) contentStudents.style.display = (tabName === 'students') ? 'block' : 'none';
+  if (contentAsg) contentAsg.style.display = (tabName === 'assignments') ? 'block' : 'none';
+  if (contentGradebook) contentGradebook.style.display = (tabName === 'gradebook') ? 'block' : 'none';
+
+  if (tabName === 'assignments' && selectedClassId) {
+    loadClassAssignments(selectedClassId);
+  } else if (tabName === 'gradebook' && selectedClassId) {
+    loadClassGradebook(selectedClassId);
+  }
+}
+
+// Cargar asignaciones en la pestaña del maestro
+async function loadClassAssignments(claseId) {
+  if (!window.AssignmentService || !claseId) return;
+  const container = document.getElementById('teacher-assignments-container');
+  const badge = document.getElementById('tab-badge-assignments');
+  if (!container) return;
+
+  container.innerHTML = '<div style="color:var(--text-muted);padding:16px;">Cargando asignaciones...</div>';
+
+  try {
+    currentClassAssignments = await window.AssignmentService.getAssignmentsByClass(claseId);
+    if (badge) badge.textContent = currentClassAssignments.length;
+
+    if (!currentClassAssignments || currentClassAssignments.length === 0) {
+      container.innerHTML = `
+        <div class="lms-empty-state" style="grid-column: 1 / -1;background:var(--bg-surface-alt);border:2px dashed var(--border);border-radius:12px;padding:32px 20px;">
+          <div class="lms-empty-icon" style="font-size:38px;">📝</div>
+          <div class="lms-empty-title" style="font-size:16px;">No hay asignaciones creadas para esta clase</div>
+          <div class="lms-empty-desc" style="max-width:440px;">
+            Crea la primera tarea con el botón "➕ Nueva Asignación" para que tus estudiantes la completen y puedas calificarlos.
+          </div>
+          <button class="btn btn-primary" onclick="AuthUI.openCreateAssignmentModal('${claseId}')" style="padding:9px 18px;font-size:13.5px;">
+            ➕ Crear mi primera asignación
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = currentClassAssignments.map(asg => {
+      const dateStr = asg.fechaLimite ? new Date(asg.fechaLimite).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : 'Sin fecha límite';
+      const createdStr = asg.createdAt ? new Date(asg.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : '';
+
+      return `
+        <div class="assignment-card" id="asg-card-${asg.id}">
+          <div class="assignment-card-header">
+            <div class="assignment-card-title">${escapeHtml(asg.titulo)}</div>
+            <span class="assignment-points-badge">${asg.puntosMax} pts</span>
+          </div>
+          <div class="assignment-card-desc">${escapeHtml(asg.descripcion)}</div>
+          <div class="assignment-card-meta">
+            <span>📅 Entrega: <strong>${dateStr}</strong></span>
+            <span>Publicado: ${createdStr}</span>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <button class="btn btn-secondary" onclick="toggleTeacherSubmissions('${asg.id}')" style="flex:1;font-size:12.5px;padding:7px 12px;" id="btn-view-subs-${asg.id}">
+              👥 Ver Entregas de Alumnos
+            </button>
+          </div>
+          <div id="drawer-subs-${asg.id}" class="submissions-drawer" style="display:none;">
+            <div style="font-size:12.5px;color:var(--text-muted);padding:8px;">Cargando entregas...</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error cargando asignaciones del maestro:", err);
+    container.innerHTML = '<div style="color:var(--rose);padding:16px;">Error al cargar las asignaciones de la clase.</div>';
+  }
+}
+
+// Desplegar u ocultar entregas de alumnos para calificar
+async function toggleTeacherSubmissions(asgId) {
+  const drawer = document.getElementById(`drawer-subs-${asgId}`);
+  const btn = document.getElementById(`btn-view-subs-${asgId}`);
+  if (!drawer) return;
+
+  const isVisible = drawer.style.display !== 'none';
+  if (isVisible) {
+    drawer.style.display = 'none';
+    if (btn) btn.textContent = '👥 Ver Entregas de Alumnos';
+    return;
+  }
+
+  drawer.style.display = 'block';
+  if (btn) btn.textContent = '🔼 Ocultar Entregas';
+  drawer.innerHTML = '<div style="font-size:12.5px;color:var(--text-muted);padding:8px;">Consultando entregas recibidas...</div>';
+
+  try {
+    const asg = currentClassAssignments.find(a => a.id === asgId);
+    const maxPts = asg?.puntosMax || 100;
+    const subs = await window.AssignmentService.getSubmissionsByAssignment(asgId);
+
+    if (!subs || subs.length === 0) {
+      drawer.innerHTML = `
+        <div style="text-align:center;padding:16px 10px;color:var(--text-muted);font-size:13px;">
+          <span>⏳</span> Aún ningún estudiante ha entregado esta asignación.
+        </div>
+      `;
+      return;
+    }
+
+    drawer.innerHTML = `
+      <div style="font-size:12px;font-weight:800;color:var(--text-main);margin-bottom:10px;text-transform:uppercase;">
+        Entregas recibidas (${subs.length}):
+      </div>
+      ${subs.map(sub => {
+        const isGraded = (sub.calificacion !== null && sub.calificacion !== undefined);
+        const subDate = sub.fechaEntrega ? new Date(sub.fechaEntrega).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Reciente';
+        const parts = (sub.estudianteNombre || 'E').trim().split(/\s+/);
+        const initials = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0].slice(0, 2).toUpperCase();
+
+        const gradePill = isGraded
+          ? `<span class="assignment-status-tag graded">🟢 Nota: <strong>${sub.calificacion} / ${maxPts}</strong></span>`
+          : `<span class="assignment-status-tag pending">🟡 Pendiente de calificar</span>`;
+
+        const safeContent = escapeHtml(sub.contenido).replace(/'/g, "\\'").replace(/\n/g, '\\n');
+        const safeFeedback = escapeHtml(sub.retroalimentacion || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+        const safeStudent = escapeHtml(sub.estudianteNombre).replace(/'/g, "\\'");
+
+        return `
+          <div class="submission-item-row">
+            <div class="submission-student-info">
+              <div class="student-avatar" style="width:36px;height:36px;font-size:13px;">${initials}</div>
+              <div>
+                <div style="font-weight:700;font-size:13.5px;color:var(--text-main);">${escapeHtml(sub.estudianteNombre)}</div>
+                <div style="font-size:11.5px;color:var(--text-muted);">Entregado el ${subDate}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              ${gradePill}
+              <button class="btn btn-primary" style="font-size:12px;padding:6px 12px;" onclick="AuthUI.openGradeSubmissionModal({ submissionId: '${sub.id}', studentName: '${safeStudent}', content: '${safeContent}', maxPoints: ${maxPts}, currentGrade: ${isGraded ? sub.calificacion : 'null'}, currentFeedback: '${safeFeedback}' })">
+                ${isGraded ? '✏️ Editar Nota' : '✍️ Calificar'}
+              </button>
+            </div>
+            <div style="width:100%;background:var(--bg-surface-alt);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--text-secondary);margin-top:6px;line-height:1.5;">
+              <strong style="color:var(--text-main);">Respuesta:</strong> "${escapeHtml(sub.contenido)}"
+              ${isGraded && sub.retroalimentacion ? `<div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);color:var(--emerald);"><strong style="color:var(--emerald);">Tu Feedback:</strong> <em>"${escapeHtml(sub.retroalimentacion)}"</em></div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    `;
+  } catch (err) {
+    console.error("Error al cargar entregas:", err);
+    drawer.innerHTML = '<div style="color:var(--rose);font-size:12px;padding:8px;">Error al cargar las entregas.</div>';
+  }
+}
+
+// Cargar Libro de Calificaciones consolidado para el Maestro
+async function loadClassGradebook(claseId) {
+  if (!window.AssignmentService || !claseId) return;
+  const thead = document.getElementById('teacher-gradebook-thead');
+  const tbody = document.getElementById('teacher-gradebook-tbody');
+  if (!thead || !tbody) return;
+
+  thead.innerHTML = '<tr><th>Cargando libro de notas...</th></tr>';
+  tbody.innerHTML = '';
+
+  try {
+    const data = await window.AssignmentService.getClassGradebook(claseId);
+    const assignments = data.assignments || [];
+    const rows = data.rows || [];
+
+    if (assignments.length === 0) {
+      thead.innerHTML = '<tr><th>Estudiante</th><th>Sin asignaciones creadas</th></tr>';
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="2" style="text-align:center;padding:24px;color:var(--text-muted);">
+            Aún no has creado asignaciones para esta clase. Crea una tarea en la pestaña "📝 Asignaciones" para ver las notas aquí.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    // Encabezados dinámicos con los nombres de las asignaciones
+    let thHtml = '<tr><th>Estudiante</th>';
+    assignments.forEach(asg => {
+      thHtml += `<th>${escapeHtml(asg.titulo)} <span style="font-size:11px;font-weight:normal;color:var(--text-muted);">(${asg.puntosMax} pts)</span></th>`;
+    });
+    thHtml += '<th style="text-align:center;">Promedio General</th></tr>';
+    thead.innerHTML = thHtml;
+
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="${assignments.length + 2}" style="text-align:center;padding:24px;color:var(--text-muted);">Aún no hay alumnos inscritos en esta clase.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(r => {
+      const student = r.student;
+      const parts = (student.nombre || 'E').trim().split(/\s+/);
+      const initials = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0].slice(0, 2).toUpperCase();
+
+      let rowHtml = `
+        <tr>
+          <td>
+            <div class="student-row-info">
+              <div class="student-avatar">${initials}</div>
+              <div class="student-info-col">
+                <span class="student-info-name">${escapeHtml(student.nombre)}</span>
+                <span class="student-info-email">${escapeHtml(student.email)}</span>
+              </div>
+            </div>
+          </td>
+      `;
+
+      r.grades.forEach(g => {
+        if (g.hasScore) {
+          const badgeClass = g.score >= 80 ? 'high' : (g.score >= 60 ? 'mid' : 'low');
+          rowHtml += `
+            <td>
+              <span class="grade-badge ${badgeClass}" title="${g.feedback ? 'Feedback: ' + escapeHtml(g.feedback) : 'Sin feedback'}">
+                ${g.score} / ${g.maxScore}
+              </span>
+            </td>
+          `;
+        } else if (g.isSubmitted) {
+          rowHtml += `
+            <td>
+              <span class="assignment-status-tag submitted" style="font-size:11px;padding:2px 7px;">
+                🔵 Entregado
+              </span>
+            </td>
+          `;
+        } else {
+          rowHtml += `
+            <td>
+              <span class="grade-badge none">Sin entregar</span>
+            </td>
+          `;
+        }
+      });
+
+      const avgText = r.averagePercent !== null ? `<strong style="color:var(--emerald);font-size:15px;">${r.averagePercent}%</strong>` : '<span style="color:var(--text-dim);">--</span>';
+      rowHtml += `<td style="text-align:center;">${avgText}</td></tr>`;
+
+      return rowHtml;
+    }).join('');
+
+  } catch (err) {
+    console.error("Error al cargar libro de calificaciones:", err);
+    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--rose);padding:16px;">Error al cargar el libro de calificaciones.</td></tr>`;
+  }
+}
+
+// =============================================================================
+// SECCIONES DEL ESTUDIANTE: ASIGNACIONES Y CALIFICACIONES
+// =============================================================================
+async function loadStudentAssignments() {
+  if (!window.AssignmentService) return;
+  const container = document.getElementById('student-assignments-container');
+  if (!container) return;
+
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  if (!user || user.role !== 'estudiante') return;
+
+  container.innerHTML = '<div style="color:var(--text-muted);font-size:13.5px;padding:12px;">Cargando tus asignaciones...</div>';
+
+  try {
+    const assignments = await window.AssignmentService.getStudentAssignments(null, user.id);
+
+    if (!assignments || assignments.length === 0) {
+      container.innerHTML = `
+        <div class="lms-empty-state" style="grid-column: 1 / -1;background:var(--bg-surface);border:1.5px dashed var(--border);border-radius:12px;padding:32px 20px;">
+          <div class="lms-empty-icon">📝</div>
+          <div class="lms-empty-title">No tienes tareas asignadas por el momento</div>
+          <div class="lms-empty-desc">
+            Cuando tu profesor cree una nueva asignación para tu clase, aparecerá aquí lista para que la respondas.
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = assignments.map(asg => {
+      const sub = asg.submission;
+      const isGraded = asg.isGraded;
+      const isSubmitted = asg.isSubmitted;
+      const dateStr = asg.fechaLimite ? new Date(asg.fechaLimite).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : 'Sin fecha límite';
+
+      let statusHtml = '';
+      let actionBtnHtml = '';
+
+      const safeTitle = escapeHtml(asg.titulo).replace(/'/g, "\\'");
+      const safeDesc = escapeHtml(asg.descripcion).replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      const safeContent = sub ? escapeHtml(sub.contenido).replace(/'/g, "\\'").replace(/\n/g, '\\n') : '';
+      const safeFeedback = sub && sub.retroalimentacion ? escapeHtml(sub.retroalimentacion).replace(/'/g, "\\'").replace(/\n/g, '\\n') : '';
+
+      if (isGraded) {
+        statusHtml = `<span class="assignment-status-tag graded">🟢 Calificada: <strong>${sub.calificacion} / ${asg.puntosMax}</strong></span>`;
+        actionBtnHtml = `
+          <button class="btn btn-secondary" onclick="AuthUI.openFeedbackModal({ title: '${safeTitle}', score: ${sub.calificacion}, maxPoints: ${asg.puntosMax}, feedback: '${safeFeedback}', date: '${sub.calificadoEn || ''}', content: '${safeContent}' })" style="font-size:12.5px;padding:8px 14px;flex:1;">
+            💬 Ver Nota y Feedback
+          </button>
+        `;
+      } else if (isSubmitted) {
+        statusHtml = `<span class="assignment-status-tag submitted">🔵 Entregada (En espera de revisión)</span>`;
+        actionBtnHtml = `
+          <button class="btn btn-secondary" onclick="AuthUI.openSubmitAssignmentModal({ asgId: '${asg.id}', claseId: '${asg.claseId}', title: '${safeTitle}', desc: '${safeDesc}', maxPoints: ${asg.puntosMax}, currentContent: '${safeContent}' })" style="font-size:12.5px;padding:8px 14px;flex:1;">
+            ✏️ Editar / Reenviar Entrega
+          </button>
+        `;
+      } else {
+        statusHtml = `<span class="assignment-status-tag pending">🟡 Pendiente de entrega</span>`;
+        actionBtnHtml = `
+          <button class="btn btn-primary" onclick="AuthUI.openSubmitAssignmentModal({ asgId: '${asg.id}', claseId: '${asg.claseId}', title: '${safeTitle}', desc: '${safeDesc}', maxPoints: ${asg.puntosMax}, currentContent: '' })" style="font-size:12.5px;padding:8px 14px;flex:1;">
+            📝 Responder Asignación
+          </button>
+        `;
+      }
+
+      return `
+        <div class="assignment-card">
+          <div class="assignment-card-header">
+            <div class="assignment-card-title">${escapeHtml(asg.titulo)}</div>
+            <span class="assignment-points-badge">${asg.puntosMax} pts</span>
+          </div>
+          <div class="assignment-card-desc">${escapeHtml(asg.descripcion)}</div>
+          <div style="margin-bottom:12px;">${statusHtml}</div>
+          <div class="assignment-card-meta">
+            <span>📅 Fecha Límite: <strong>${dateStr}</strong></span>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            ${actionBtnHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.error("Error al cargar asignaciones del estudiante:", err);
+    container.innerHTML = '<div style="color:var(--rose);font-size:13px;padding:12px;">Error al cargar tus asignaciones.</div>';
+  }
+}
+
+// Cargar reporte de calificaciones del estudiante
+async function loadStudentGrades() {
+  if (!window.AssignmentService) return;
+  const avgEl = document.getElementById('student-grades-avg');
+  const gradedEl = document.getElementById('student-grades-graded-count');
+  const pendingEl = document.getElementById('student-grades-pending-count');
+  const tbody = document.getElementById('student-grades-tbody');
+  if (!tbody) return;
+
+  const user = window.AuthService ? window.AuthService.getUser() : null;
+  if (!user || user.role !== 'estudiante') return;
+
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:18px;color:var(--text-muted);">Consultando tus calificaciones...</td></tr>`;
+
+  try {
+    const summary = await window.AssignmentService.getStudentGradesSummary(user.id);
+    if (avgEl) avgEl.textContent = summary.totalGraded > 0 ? `${summary.average}%` : '--%';
+    if (gradedEl) gradedEl.textContent = summary.totalGraded;
+    if (pendingEl) pendingEl.textContent = summary.totalPending;
+
+    if (!summary.grades || summary.grades.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">
+            Aún no tienes tareas asignadas ni calificaciones registradas.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = summary.grades.map(g => {
+      const isGraded = g.isGraded;
+      const isSubmitted = g.isSubmitted;
+      const sub = g.submission;
+
+      let statusBadge = '';
+      let scoreBadge = '';
+      let feedbackText = '';
+      let gradeDateText = '';
+      let actionBtn = '';
+
+      const safeTitle = escapeHtml(g.titulo).replace(/'/g, "\\'");
+      const safeFeedback = sub && sub.retroalimentacion ? escapeHtml(sub.retroalimentacion).replace(/'/g, "\\'").replace(/\n/g, '\\n') : '';
+      const safeContent = sub ? escapeHtml(sub.contenido).replace(/'/g, "\\'").replace(/\n/g, '\\n') : '';
+
+      if (isGraded) {
+        statusBadge = '<span class="assignment-status-tag graded">🟢 Calificada</span>';
+        scoreBadge = `<strong style="font-size:15px;color:var(--emerald);font-family:var(--font-mono);">${g.score} / ${g.puntosMax}</strong>`;
+        feedbackText = g.feedback ? `<em>"${escapeHtml(g.feedback)}"</em>` : '<span style="color:var(--text-dim);">Sin comentarios</span>';
+        gradeDateText = g.gradedAt ? new Date(g.gradedAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }) : 'Reciente';
+        actionBtn = `
+          <button class="btn btn-secondary" onclick="AuthUI.openFeedbackModal({ title: '${safeTitle}', score: ${g.score}, maxPoints: ${g.puntosMax}, feedback: '${safeFeedback}', date: '${g.gradedAt || ''}', content: '${safeContent}' })" style="font-size:11.5px;padding:5px 10px;">
+            💬 Ver Detalle
+          </button>
+        `;
+      } else if (isSubmitted) {
+        statusBadge = '<span class="assignment-status-tag submitted">🔵 En Revisión</span>';
+        scoreBadge = '<span style="color:var(--text-dim);">Pendiente</span>';
+        feedbackText = '<span style="color:var(--text-dim);">El profesor aún no califica tu entrega</span>';
+        gradeDateText = '--';
+        actionBtn = `<span style="font-size:12px;color:var(--text-dim);">Enviada</span>`;
+      } else {
+        statusBadge = '<span class="assignment-status-tag pending">🟡 Sin Entregar</span>';
+        scoreBadge = '<span style="color:var(--text-dim);">0 / ' + g.puntosMax + '</span>';
+        feedbackText = '<span style="color:var(--rose);">Tarea pendiente de resolución</span>';
+        gradeDateText = '--';
+        actionBtn = `
+          <button class="btn btn-primary" onclick="AuthUI.openSubmitAssignmentModal({ asgId: '${g.asignacionId}', title: '${safeTitle}', maxPoints: ${g.puntosMax} })" style="font-size:11.5px;padding:5px 10px;">
+            📝 Resolver
+          </button>
+        `;
+      }
+
+      return `
+        <tr>
+          <td style="font-weight:700;color:var(--text-main);">${escapeHtml(g.titulo)}</td>
+          <td>${statusBadge}</td>
+          <td>${scoreBadge}</td>
+          <td style="max-width:320px;font-size:12.5px;line-height:1.5;">${feedbackText}</td>
+          <td style="font-size:12px;color:var(--text-muted);">${gradeDateText}</td>
+          <td>${actionBtn}</td>
+        </tr>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.error("Error al cargar calificaciones del estudiante:", err);
+    tbody.innerHTML = `<tr><td colspan="6" style="color:var(--rose);padding:16px;">Error al consultar calificaciones.</td></tr>`;
+  }
 }
 
 async function loadStudentDashboard() {

@@ -233,6 +233,130 @@ const AuthUI = {
           </form>
         </div>
       </div>
+
+      <!-- MODAL PROFESOR: CREAR ASIGNACIÓN -->
+      <div class="lms-modal-backdrop" id="lms-create-assignment-modal" style="display:none;">
+        <div class="lms-modal-dialog" style="max-width:560px;">
+          <button class="lms-modal-close" onclick="AuthUI.closeCreateAssignmentModal()">&times;</button>
+          <div class="lms-auth-header">
+            <div class="lms-auth-brand">📝 Crear Nueva Asignación</div>
+            <p class="lms-auth-subtitle">Publica una tarea para los estudiantes de esta clase</p>
+          </div>
+          <div id="lms-create-assignment-alert" class="lms-alert" style="display:none;"></div>
+          <form onsubmit="AuthUI.handleCreateAssignment(event)">
+            <input type="hidden" id="asg-clase-id" value="">
+            <div class="lms-form-group">
+              <label for="asg-title">Título de la Asignación</label>
+              <input type="text" id="asg-title" class="lms-input" placeholder="Ej. Tarea 3: Redacción sobre tus pasatiempos" required>
+            </div>
+            <div class="lms-form-group">
+              <label for="asg-desc">Instrucciones Detalladas</label>
+              <textarea id="asg-desc" class="lms-input" rows="4" placeholder="Describe qué debe redactar o responder el estudiante, vocabulario sugerido, etc." required style="resize:vertical;font-family:inherit;"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="lms-form-group">
+                <label for="asg-points">Puntaje Máximo</label>
+                <input type="number" id="asg-points" class="lms-input" value="100" min="1" max="1000" required>
+              </div>
+              <div class="lms-form-group">
+                <label for="asg-deadline">Fecha Límite (Opcional)</label>
+                <input type="date" id="asg-deadline" class="lms-input">
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+              <button type="button" class="btn btn-secondary" onclick="AuthUI.closeCreateAssignmentModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="btn-submit-create-asg">Publicar Asignación</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL ESTUDIANTE: ENTREGAR ASIGNACIÓN -->
+      <div class="lms-modal-backdrop" id="lms-submit-assignment-modal" style="display:none;">
+        <div class="lms-modal-dialog" style="max-width:580px;">
+          <button class="lms-modal-close" onclick="AuthUI.closeSubmitAssignmentModal()">&times;</button>
+          <div class="lms-auth-header">
+            <div class="lms-auth-brand" id="modal-submit-asg-title">📝 Responder Asignación</div>
+            <p class="lms-auth-subtitle" id="modal-submit-asg-subtitle">Completa y envía tu trabajo para revisión del profesor</p>
+          </div>
+          <div id="modal-submit-instructions-box" style="background:var(--bg-surface-alt);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);line-height:1.5;"></div>
+          <div id="lms-submit-asg-alert" class="lms-alert" style="display:none;"></div>
+          <form onsubmit="AuthUI.handleSubmitAssignment(event)">
+            <input type="hidden" id="submit-asg-id" value="">
+            <input type="hidden" id="submit-clase-id" value="">
+            <div class="lms-form-group">
+              <label for="submit-asg-content">Tu Respuesta / Redacción en Inglés</label>
+              <textarea id="submit-asg-content" class="lms-input" rows="7" placeholder="Write your answer or paragraph here in English..." required style="resize:vertical;font-family:inherit;line-height:1.6;font-size:14px;"></textarea>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+              <button type="button" class="btn btn-secondary" onclick="AuthUI.closeSubmitAssignmentModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="btn-submit-student-asg">🚀 Enviar Asignación</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL MAESTRO: CALIFICAR ENTREGA -->
+      <div class="lms-modal-backdrop" id="lms-grade-submission-modal" style="display:none;">
+        <div class="lms-modal-dialog" style="max-width:600px;">
+          <button class="lms-modal-close" onclick="AuthUI.closeGradeSubmissionModal()">&times;</button>
+          <div class="lms-auth-header">
+            <div class="lms-auth-brand">✍️ Calificar Entrega de Estudiante</div>
+            <p class="lms-auth-subtitle" id="grade-modal-student-name">Revisa la respuesta y asigna nota con retroalimentación</p>
+          </div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">Respuesta del Alumno:</div>
+            <div id="grade-modal-submission-content" style="background:var(--bg-surface-alt);border:1.5px solid var(--border);border-radius:10px;padding:14px;font-size:13.5px;color:var(--text-main);white-space:pre-wrap;max-height:180px;overflow-y:auto;line-height:1.6;"></div>
+          </div>
+          <div id="lms-grade-asg-alert" class="lms-alert" style="display:none;"></div>
+          <form onsubmit="AuthUI.handleGradeSubmission(event)">
+            <input type="hidden" id="grade-submission-id" value="">
+            <div style="display:grid;grid-template-columns:140px 1fr;gap:14px;">
+              <div class="lms-form-group">
+                <label for="grade-score">Nota (<span id="grade-max-points">/ 100</span>)</label>
+                <input type="number" id="grade-score" class="lms-input" min="0" max="1000" step="0.5" required style="font-size:18px;font-weight:800;color:var(--primary);text-align:center;">
+              </div>
+              <div class="lms-form-group">
+                <label for="grade-feedback">Retroalimentación / Comentarios</label>
+                <textarea id="grade-feedback" class="lms-input" rows="3" placeholder="Escribe consejos pedagógicos, correcciones o felicitaciones..." style="resize:vertical;font-family:inherit;"></textarea>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+              <button type="button" class="btn btn-secondary" onclick="AuthUI.closeGradeSubmissionModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="btn-submit-grade">Guardar Calificación</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL ESTUDIANTE: VER CALIFICACIÓN Y FEEDBACK -->
+      <div class="lms-modal-backdrop" id="lms-view-feedback-modal" style="display:none;">
+        <div class="lms-modal-dialog" style="max-width:560px;">
+          <button class="lms-modal-close" onclick="AuthUI.closeFeedbackModal()">&times;</button>
+          <div class="lms-auth-header">
+            <div class="lms-auth-brand" id="feedback-modal-title">💬 Retroalimentación del Profesor</div>
+            <p class="lms-auth-subtitle" id="feedback-modal-subtitle">Revisión de tu asignación</p>
+          </div>
+          <div id="feedback-modal-score-wrap" style="display:flex;align-items:center;justify-content:space-between;background:var(--emerald-light);border:1.5px solid var(--emerald-border);border-radius:12px;padding:12px 18px;margin-bottom:16px;">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--emerald);text-transform:uppercase;">Calificación Obtenida</div>
+              <div id="feedback-modal-date" style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Calificado recientemente</div>
+            </div>
+            <div id="feedback-modal-score-pill" style="font-size:22px;font-weight:900;color:var(--emerald);font-family:var(--font-mono);">-- / 100</div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;">Comentarios del Maestro:</div>
+            <div id="feedback-modal-text" style="background:var(--bg-surface-alt);border-left:4px solid var(--primary);border-radius:6px;padding:12px 14px;font-size:13.5px;color:var(--text-main);line-height:1.6;font-style:italic;"></div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;">Tu Entrega Enviada:</div>
+            <div id="feedback-modal-original-text" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;color:var(--text-secondary);max-height:140px;overflow-y:auto;white-space:pre-wrap;"></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+            <button type="button" class="btn btn-primary" onclick="AuthUI.closeFeedbackModal()">Entendido</button>
+          </div>
+        </div>
+      </div>
     `;
     document.body.appendChild(root);
   },
@@ -378,9 +502,9 @@ const AuthUI = {
             <span class="settings-item-text">Crear Nueva Clase</span>
             <span class="settings-item-arrow">›</span>
           </div>
-          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='teacher-dashboard-panel';}else{location.href='index.html#teacher-dashboard-panel';}">
-            <span class="settings-item-icon">🏫</span>
-            <span class="settings-item-text">Mis Clases de Maestro</span>
+          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='teacher-dashboard-panel';if(typeof switchTeacherClassTab==='function')switchTeacherClassTab('assignments');}else{location.href='index.html#teacher-dashboard-panel';}">
+            <span class="settings-item-icon">📝</span>
+            <span class="settings-item-text">Asignaciones y Calificaciones</span>
             <span class="settings-item-arrow">›</span>
           </div>
         `;
@@ -394,6 +518,16 @@ const AuthUI = {
           <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='student-classes-panel';}else{location.href='index.html#student-classes-panel';}">
             <span class="settings-item-icon">📚</span>
             <span class="settings-item-text">Mis Clases y Profesores</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
+          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='student-assignments-panel';}else{location.href='index.html#student-assignments-panel';}">
+            <span class="settings-item-icon">📝</span>
+            <span class="settings-item-text">Mis Asignaciones</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
+          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='student-grades-panel';}else{location.href='index.html#student-grades-panel';}">
+            <span class="settings-item-icon">📊</span>
+            <span class="settings-item-text">Mis Calificaciones</span>
             <span class="settings-item-arrow">›</span>
           </div>
         `;
@@ -530,6 +664,83 @@ const AuthUI = {
 
   closeJoinClassModal() {
     const modal = document.getElementById('lms-join-class-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  openCreateAssignmentModal(claseId) {
+    const modal = document.getElementById('lms-create-assignment-modal');
+    if (modal) {
+      document.getElementById('asg-clase-id').value = claseId || window.selectedClassId || '';
+      document.getElementById('asg-title').value = '';
+      document.getElementById('asg-desc').value = '';
+      document.getElementById('asg-points').value = '100';
+      document.getElementById('asg-deadline').value = '';
+      document.getElementById('lms-create-assignment-alert').style.display = 'none';
+      modal.style.display = 'flex';
+    }
+  },
+
+  closeCreateAssignmentModal() {
+    const modal = document.getElementById('lms-create-assignment-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  openSubmitAssignmentModal({ asgId, claseId, title, desc, maxPoints, currentContent = '' }) {
+    const modal = document.getElementById('lms-submit-assignment-modal');
+    if (modal) {
+      document.getElementById('submit-asg-id').value = asgId || '';
+      document.getElementById('submit-clase-id').value = claseId || '';
+      document.getElementById('modal-submit-asg-title').textContent = `📝 ${title || 'Responder Asignación'}`;
+      document.getElementById('modal-submit-asg-subtitle').textContent = `Puntaje máximo: ${maxPoints || 100} pts`;
+      document.getElementById('modal-submit-instructions-box').innerHTML = `
+        <div style="font-weight:700;color:var(--text-main);margin-bottom:4px;">Instrucciones:</div>
+        <div>${(desc || '').replace(/\n/g, '<br>')}</div>
+      `;
+      document.getElementById('submit-asg-content').value = currentContent || '';
+      document.getElementById('lms-submit-asg-alert').style.display = 'none';
+      modal.style.display = 'flex';
+    }
+  },
+
+  closeSubmitAssignmentModal() {
+    const modal = document.getElementById('lms-submit-assignment-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  openGradeSubmissionModal({ submissionId, studentName, content, maxPoints = 100, currentGrade = '', currentFeedback = '' }) {
+    const modal = document.getElementById('lms-grade-submission-modal');
+    if (modal) {
+      document.getElementById('grade-submission-id').value = submissionId;
+      document.getElementById('grade-modal-student-name').textContent = `Alumno: ${studentName || 'Estudiante'}`;
+      document.getElementById('grade-modal-submission-content').textContent = content || '(Sin respuesta enviada)';
+      document.getElementById('grade-max-points').textContent = `/ ${maxPoints}`;
+      document.getElementById('grade-score').value = (currentGrade !== null && currentGrade !== undefined) ? currentGrade : '';
+      document.getElementById('grade-score').max = maxPoints;
+      document.getElementById('grade-feedback').value = currentFeedback || '';
+      document.getElementById('lms-grade-asg-alert').style.display = 'none';
+      modal.style.display = 'flex';
+    }
+  },
+
+  closeGradeSubmissionModal() {
+    const modal = document.getElementById('lms-grade-submission-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  openFeedbackModal({ title, score, maxPoints = 100, feedback, date, content }) {
+    const modal = document.getElementById('lms-view-feedback-modal');
+    if (modal) {
+      document.getElementById('feedback-modal-title').textContent = `💬 ${title || 'Retroalimentación'}`;
+      document.getElementById('feedback-modal-date').textContent = date ? `Calificado el ${new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}` : 'Reciente';
+      document.getElementById('feedback-modal-score-pill').textContent = `${score} / ${maxPoints}`;
+      document.getElementById('feedback-modal-text').textContent = feedback || 'Sin comentarios adicionales por el profesor.';
+      document.getElementById('feedback-modal-original-text').textContent = content || '(Sin texto)';
+      modal.style.display = 'flex';
+    }
+  },
+
+  closeFeedbackModal() {
+    const modal = document.getElementById('lms-view-feedback-modal');
     if (modal) modal.style.display = 'none';
   },
 
@@ -730,6 +941,134 @@ const AuthUI = {
       alert.className = 'lms-alert error';
       alert.innerHTML = err.message || 'Código de clase inválido.';
       alert.style.display = 'block';
+    }
+  },
+
+  async handleCreateAssignment(e) {
+    e.preventDefault();
+    const claseId = document.getElementById('asg-clase-id').value;
+    const title = document.getElementById('asg-title').value;
+    const desc = document.getElementById('asg-desc').value;
+    const points = document.getElementById('asg-points').value;
+    const deadline = document.getElementById('asg-deadline').value;
+    const alertEl = document.getElementById('lms-create-assignment-alert');
+    const btn = document.getElementById('btn-submit-create-asg');
+
+    try {
+      btn.disabled = true;
+      btn.textContent = 'Publicando...';
+      await window.AssignmentService.createAssignment({
+        claseId,
+        titulo: title,
+        descripcion: desc,
+        puntosMax: points,
+        fechaLimite: deadline || null
+      });
+
+      alertEl.className = 'lms-alert success';
+      alertEl.innerHTML = `¡Asignación <strong>"${title}"</strong> publicada exitosamente!`;
+      alertEl.style.display = 'block';
+
+      setTimeout(() => {
+        this.closeCreateAssignmentModal();
+        btn.disabled = false;
+        btn.textContent = 'Publicar Asignación';
+        if (typeof window.loadClassAssignments === 'function') {
+          window.loadClassAssignments(claseId || window.selectedClassId);
+        }
+        if (typeof window.loadClassGradebook === 'function') {
+          window.loadClassGradebook(claseId || window.selectedClassId);
+        }
+      }, 1000);
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Publicar Asignación';
+      alertEl.className = 'lms-alert error';
+      alertEl.innerHTML = err.message || 'Error al crear la asignación.';
+      alertEl.style.display = 'block';
+    }
+  },
+
+  async handleSubmitAssignment(e) {
+    e.preventDefault();
+    const asgId = document.getElementById('submit-asg-id').value;
+    const claseId = document.getElementById('submit-clase-id').value;
+    const content = document.getElementById('submit-asg-content').value;
+    const alertEl = document.getElementById('lms-submit-asg-alert');
+    const btn = document.getElementById('btn-submit-student-asg');
+
+    try {
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      await window.AssignmentService.submitAssignment({
+        asignacionId: asgId,
+        claseId,
+        contenido: content
+      });
+
+      alertEl.className = 'lms-alert success';
+      alertEl.innerHTML = `¡Tu asignación ha sido enviada con éxito! Tu profesor la revisará pronto.`;
+      alertEl.style.display = 'block';
+
+      setTimeout(() => {
+        this.closeSubmitAssignmentModal();
+        btn.disabled = false;
+        btn.textContent = '🚀 Enviar Asignación';
+        if (typeof window.loadStudentAssignments === 'function') {
+          window.loadStudentAssignments();
+        }
+        if (typeof window.loadStudentGrades === 'function') {
+          window.loadStudentGrades();
+        }
+      }, 1000);
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = '🚀 Enviar Asignación';
+      alertEl.className = 'lms-alert error';
+      alertEl.innerHTML = err.message || 'Error al enviar la asignación.';
+      alertEl.style.display = 'block';
+    }
+  },
+
+  async handleGradeSubmission(e) {
+    e.preventDefault();
+    const subId = document.getElementById('grade-submission-id').value;
+    const score = document.getElementById('grade-score').value;
+    const feedback = document.getElementById('grade-feedback').value;
+    const alertEl = document.getElementById('lms-grade-asg-alert');
+    const btn = document.getElementById('btn-submit-grade');
+
+    try {
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+      await window.AssignmentService.gradeSubmission({
+        entregaId: subId,
+        calificacion: score,
+        retroalimentacion: feedback
+      });
+
+      alertEl.className = 'lms-alert success';
+      alertEl.innerHTML = `¡Calificación de <strong>${score} pts</strong> guardada con éxito!`;
+      alertEl.style.display = 'block';
+
+      setTimeout(() => {
+        this.closeGradeSubmissionModal();
+        btn.disabled = false;
+        btn.textContent = 'Guardar Calificación';
+        const activeClassId = window.selectedClassId;
+        if (typeof window.loadClassAssignments === 'function') {
+          window.loadClassAssignments(activeClassId);
+        }
+        if (typeof window.loadClassGradebook === 'function') {
+          window.loadClassGradebook(activeClassId);
+        }
+      }, 900);
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Guardar Calificación';
+      alertEl.className = 'lms-alert error';
+      alertEl.innerHTML = err.message || 'Error al guardar la calificación.';
+      alertEl.style.display = 'block';
     }
   },
 

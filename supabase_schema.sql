@@ -352,4 +352,137 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- -----------------------------------------------------------------------------
+-- 6. TABLA: asignaciones (Tareas creadas por los profesores)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.asignaciones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_clase UUID NOT NULL REFERENCES public.clases(id) ON DELETE CASCADE,
+    id_profesor UUID NOT NULL REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    titulo TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    puntos_max INTEGER NOT NULL DEFAULT 100,
+    fecha_limite TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- -----------------------------------------------------------------------------
+-- 7. TABLA: entregas_asignaciones (Respuestas y calificaciones de estudiantes)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.entregas_asignaciones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_asignacion UUID NOT NULL REFERENCES public.asignaciones(id) ON DELETE CASCADE,
+    id_estudiante UUID NOT NULL REFERENCES public.usuarios(id) ON DELETE CASCADE,
+    id_clase UUID NOT NULL REFERENCES public.clases(id) ON DELETE CASCADE,
+    contenido_entrega TEXT NOT NULL,
+    fecha_entrega TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    calificacion NUMERIC DEFAULT NULL,
+    retroalimentacion TEXT DEFAULT NULL,
+    calificado_en TIMESTAMPTZ DEFAULT NULL,
+    UNIQUE(id_asignacion, id_estudiante)
+);
+
+-- Índices de asignaciones y entregas
+CREATE INDEX IF NOT EXISTS idx_asignaciones_clase ON public.asignaciones(id_clase);
+CREATE INDEX IF NOT EXISTS idx_asignaciones_profesor ON public.asignaciones(id_profesor);
+CREATE INDEX IF NOT EXISTS idx_entregas_asignacion ON public.entregas_asignaciones(id_asignacion);
+CREATE INDEX IF NOT EXISTS idx_entregas_estudiante ON public.entregas_asignaciones(id_estudiante);
+CREATE INDEX IF NOT EXISTS idx_entregas_clase ON public.entregas_asignaciones(id_clase);
+
+-- Habilitar RLS
+ALTER TABLE public.asignaciones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.entregas_asignaciones ENABLE ROW LEVEL SECURITY;
+
+-- POLÍTICAS RLS: asignaciones
+-- 1. Alumnos inscritos y profesores pueden ver las asignaciones de sus clases
+CREATE POLICY "asignaciones_select"
+    ON public.asignaciones FOR SELECT
+    TO authenticated
+    USING (
+        id_profesor = auth.uid()
+        OR EXISTS (
+            SELECT 1 FROM public.inscripciones i
+            WHERE i.id_clase = public.asignaciones.id_clase
+            AND i.id_usuario = auth.uid()
+        )
+    );
+
+-- 2. Solo el profesor de la clase puede crear asignaciones
+CREATE POLICY "asignaciones_insert_teacher"
+    ON public.asignaciones FOR INSERT
+    TO authenticated
+    WITH CHECK (
+        id_profesor = auth.uid()
+        AND EXISTS (
+            SELECT 1 FROM public.clases c
+            WHERE c.id = public.asignaciones.id_clase
+            AND c.id_profesor = auth.uid()
+        )
+    );
+
+-- 3. Solo el profesor puede actualizar o eliminar sus asignaciones
+CREATE POLICY "asignaciones_update_teacher"
+    ON public.asignaciones FOR UPDATE
+    TO authenticated
+    USING (id_profesor = auth.uid())
+    WITH CHECK (id_profesor = auth.uid());
+
+CREATE POLICY "asignaciones_delete_teacher"
+    ON public.asignaciones FOR DELETE
+    TO authenticated
+    USING (id_profesor = auth.uid());
+
+-- POLÍTICAS RLS: entregas_asignaciones
+-- 1. El estudiante puede ver sus propias entregas; el profesor de la clase puede ver todas las entregas
+CREATE POLICY "entregas_select"
+    ON public.entregas_asignaciones FOR SELECT
+    TO authenticated
+    USING (
+        id_estudiante = auth.uid()
+        OR EXISTS (
+            SELECT 1 FROM public.clases c
+            WHERE c.id = public.entregas_asignaciones.id_clase
+            AND c.id_profesor = auth.uid()
+        )
+    );
+
+-- 2. El estudiante puede registrar o actualizar su entrega
+CREATE POLICY "entregas_insert_student"
+    ON public.entregas_asignaciones FOR INSERT
+    TO authenticated
+    WITH CHECK (
+        id_estudiante = auth.uid()
+        AND EXISTS (
+            SELECT 1 FROM public.inscripciones i
+            WHERE i.id_clase = public.entregas_asignaciones.id_clase
+            AND i.id_usuario = auth.uid()
+        )
+    );
+
+CREATE POLICY "entregas_update_student"
+    ON public.entregas_asignaciones FOR UPDATE
+    TO authenticated
+    USING (id_estudiante = auth.uid())
+    WITH CHECK (id_estudiante = auth.uid());
+
+-- 3. El profesor puede actualizar entregas para asignar calificación y retroalimentación
+CREATE POLICY "entregas_update_teacher_grade"
+    ON public.entregas_asignaciones FOR UPDATE
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.clases c
+            WHERE c.id = public.entregas_asignaciones.id_clase
+            AND c.id_profesor = auth.uid()
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.clases c
+            WHERE c.id = public.entregas_asignaciones.id_clase
+            AND c.id_profesor = auth.uid()
+        )
+    );
+
+
 

@@ -1790,3 +1790,274 @@ a {
   background: var(--bg-surface-hover);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+/* =============================================================================
+   PESTAÑAS DEL PANEL DEL MAESTRO (Alumnos, Asignaciones, Libro de Notas)
+   ============================================================================= */
+.teacher-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.teacher-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  border-radius: 8px 8px 0 0;
+}
+.teacher-nav-tab:hover {
+  color: var(--primary);
+  background: var(--bg-surface-alt);
+}
+.teacher-nav-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: var(--primary-light);
+}
+.teacher-tab-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background: var(--bg-surface-alt);
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+.teacher-nav-tab.active .teacher-tab-badge {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* =============================================================================
+   ASIGNACIONES (MAESTRO Y ESTUDIANTE)
+   ============================================================================= */
+.assignments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.assignment-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.assignment-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.assignment-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.assignment-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+.assignment-points-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px solid var(--border-focus);
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+.assignment-card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.assignment-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+  margin-top: auto;
+}
+.assignment-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 12px;
+}
+.assignment-status-tag.pending {
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+}
+.assignment-status-tag.submitted {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--border-focus);
+}
+.assignment-status-tag.graded {
+  background: var(--emerald-light);
+  color: var(--emerald);
+  border: 1px solid var(--emerald-border);
+}
+
+/* Submissions List View for Teacher */
+.submissions-drawer {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.submission-item-row {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+.submission-item-row:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.submission-student-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =============================================================================
+   LIBRO DE CALIFICACIONES (GRADEBOOK)
+   ============================================================================= */
+.gradebook-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-top: 16px;
+}
+.gradebook-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  text-align: left;
+}
+.gradebook-table th {
+  background: var(--bg-surface-alt);
+  color: var(--text-main);
+  font-weight: 800;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.gradebook-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+.gradebook-table tr:hover td {
+  background: var(--bg-surface-hover);
+}
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 14px;
+}
+.grade-badge.high {
+  background: var(--emerald-light);
+  color: var(--emerald);
+  border: 1px solid var(--emerald-border);
+}
+.grade-badge.mid {
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+}
+.grade-badge.none {
+  background: var(--bg-surface-alt);
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+}
+
+/* =============================================================================
+   RESUMEN DE CALIFICACIONES DEL ESTUDIANTE
+   ============================================================================= */
+.student-grades-kpi-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.student-grades-kpi-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.student-grades-kpi-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.student-grades-kpi-val {
+  font-size: 24px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+}
+
