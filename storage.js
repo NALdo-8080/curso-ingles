@@ -622,6 +622,8 @@ const StorageManager = {
       if (btn) btn.textContent = t === 'light' ? 'Modo Oscuro' : 'Modo Claro';
       const icon = document.getElementById('theme-toggle-icon');
       if (icon) icon.textContent = t === 'light' ? '🌙' : '☀️';
+      const settingsIcon = document.getElementById('settings-theme-icon');
+      if (settingsIcon) settingsIcon.textContent = t === 'light' ? '☀️' : '🌙';
     }
   },
 

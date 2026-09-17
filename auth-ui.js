@@ -263,45 +263,205 @@ const AuthUI = {
       }
     }
 
-    if (!container) return;
+    // Asegurar que el botón de configuración (.settings-dropdown-wrapper) exista en el navbar
+    let settingsWrapper = document.querySelector('.settings-dropdown-wrapper');
+    if (!settingsWrapper) {
+      const navActions = document.querySelector('.nav-actions') || document.querySelector('.nav-right');
+      if (navActions) {
+        settingsWrapper = document.createElement('div');
+        settingsWrapper.className = 'settings-dropdown-wrapper';
+        settingsWrapper.innerHTML = `
+          <button class="settings-btn" id="open-settings-btn" onclick="AuthUI.toggleSettingsDropdown(event)" aria-label="Configuración" title="Configuración">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+          <div class="settings-dropdown" id="settings-dropdown"></div>
+        `;
+        navActions.appendChild(settingsWrapper);
+      }
+    }
 
-    if (!user) {
-      container.innerHTML = `
-        <button class="btn btn-sm btn-outline lms-nav-auth-btn" onclick="AuthUI.openAuthModal('login')">
-          <span>👤</span> Iniciar Sesión
-        </button>
-      `;
-    } else {
-      const isTeacher = user.role === 'profesor';
-      const roleLabel = isTeacher ? '👨‍🏫 Profesor' : '🎓 Estudiante';
-      const roleClass = isTeacher ? 'badge-teacher' : 'badge-student';
-
-      let extraAction = '';
-      if (isTeacher) {
-        extraAction = `
-          <button class="lms-nav-chip-btn" onclick="AuthUI.openCreateClassModal()" title="Crear nueva clase">
-            ➕ Crear Clase
+    if (container) {
+      if (!user) {
+        container.innerHTML = `
+          <button class="btn btn-sm btn-outline lms-nav-auth-btn" onclick="AuthUI.openAuthModal('login')">
+            <span>👤</span> Iniciar Sesión
           </button>
         `;
       } else {
-        extraAction = `
-          <button class="lms-nav-chip-btn" onclick="AuthUI.openJoinClassModal()" title="Unirse a una clase con código">
-            🎒 Unirse a Clase
-          </button>
+        const isTeacher = user.role === 'profesor';
+        const roleLabel = isTeacher ? '👨‍🏫 Profesor' : '🎓 Estudiante';
+        const roleClass = isTeacher ? 'badge-teacher' : 'badge-student';
+
+        // Píldora de usuario limpia, sin botón de puerta ni clutter:
+        container.innerHTML = `
+          <div class="lms-user-pill" onclick="AuthUI.toggleSettingsDropdown(event)" role="button" tabindex="0" title="Cuenta: ${user.nombre} (${user.email}) — Clic para abrir configuración">
+            <span class="lms-role-tag ${roleClass}">${roleLabel}</span>
+            <span class="lms-user-name" title="${user.email}">${user.nombre}</span>
+          </div>
+        `;
+      }
+    }
+
+    // Actualizar dinámicamente el contenido del menú desplegable de Configuración
+    this.renderSettingsDropdown();
+  },
+
+  // ---------------------------------------------------------------------------
+  // Módulo de Configuración (Estilo Curso ML)
+  // ---------------------------------------------------------------------------
+  toggleSettingsDropdown(e) {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    const dropdown = document.getElementById('settings-dropdown');
+    if (!dropdown) return;
+    const isOpen = dropdown.classList.contains('open');
+    if (!isOpen) {
+      this.renderSettingsDropdown();
+      dropdown.classList.add('open');
+    } else {
+      dropdown.classList.remove('open');
+    }
+  },
+
+  closeSettingsDropdown() {
+    const dropdown = document.getElementById('settings-dropdown');
+    if (dropdown) dropdown.classList.remove('open');
+  },
+
+  renderSettingsDropdown() {
+    const dropdown = document.getElementById('settings-dropdown');
+    if (!dropdown) return;
+
+    const user = window.AuthService ? window.AuthService.getUser() : null;
+    const theme = window.StorageManager ? window.StorageManager.getTheme() : 'dark';
+    const isTeacher = user && user.role === 'profesor';
+    const isStudent = user && user.role === 'estudiante';
+
+    let userHeaderHtml = '';
+    let accountActionsHtml = '';
+    let logoutHtml = '';
+
+    if (user) {
+      const roleText = isTeacher ? 'Profesor' : 'Estudiante';
+      const roleBadgeClass = isTeacher ? 'teacher' : 'student';
+      const roleAvatar = isTeacher ? '👨‍🏫' : '🎓';
+
+      userHeaderHtml = `
+        <div class="settings-user-header">
+          <div class="settings-user-avatar">${roleAvatar}</div>
+          <div class="settings-user-meta">
+            <div class="settings-user-name">${user.nombre || 'Usuario'}</div>
+            <div class="settings-user-email">${user.email || ''}</div>
+            <span class="settings-role-badge ${roleBadgeClass}">${roleText}</span>
+          </div>
+        </div>
+      `;
+
+      if (isTeacher) {
+        accountActionsHtml = `
+          <div class="settings-menu-item" onclick="AuthUI.openCreateClassModal();AuthUI.closeSettingsDropdown();">
+            <span class="settings-item-icon">➕</span>
+            <span class="settings-item-text">Crear Nueva Clase</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
+          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='teacher-dashboard-panel';}else{location.href='index.html#teacher-dashboard-panel';}">
+            <span class="settings-item-icon">🏫</span>
+            <span class="settings-item-text">Mis Clases de Maestro</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
+        `;
+      } else if (isStudent) {
+        accountActionsHtml = `
+          <div class="settings-menu-item" onclick="AuthUI.openJoinClassModal();AuthUI.closeSettingsDropdown();">
+            <span class="settings-item-icon">🎒</span>
+            <span class="settings-item-text">Unirse a una Clase</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
+          <div class="settings-menu-item" onclick="AuthUI.closeSettingsDropdown();if(location.pathname.endsWith('index.html')||location.pathname.endsWith('/')){location.hash='student-classes-panel';}else{location.href='index.html#student-classes-panel';}">
+            <span class="settings-item-icon">📚</span>
+            <span class="settings-item-text">Mis Clases y Profesores</span>
+            <span class="settings-item-arrow">›</span>
+          </div>
         `;
       }
 
-      container.innerHTML = `
-        <div class="lms-user-pill">
-          <span class="lms-role-tag ${roleClass}">${roleLabel}</span>
-          <span class="lms-user-name" title="${user.email}">${user.nombre}</span>
-          ${extraAction}
-          <button class="lms-logout-btn" onclick="AuthUI.handleLogout()" title="Cerrar sesión">
-            🚪
-          </button>
+      logoutHtml = `
+        <div class="settings-divider"></div>
+        <div class="settings-menu-item logout-item" onclick="AuthUI.handleLogout();AuthUI.closeSettingsDropdown();">
+          <span class="settings-item-icon" style="color:var(--rose,#ef4444);">🚪</span>
+          <span class="settings-item-text" style="color:var(--rose,#ef4444);font-weight:700;">Cerrar Sesión</span>
+          <span class="settings-item-arrow" style="color:var(--rose,#ef4444);">›</span>
+        </div>
+      `;
+    } else {
+      userHeaderHtml = `
+        <div class="settings-user-header">
+          <div class="settings-user-avatar">👤</div>
+          <div class="settings-user-meta">
+            <div class="settings-user-name">Invitado</div>
+            <div class="settings-user-email">Sin sesión iniciada</div>
+          </div>
+        </div>
+      `;
+
+      accountActionsHtml = `
+        <div class="settings-menu-item" onclick="AuthUI.openAuthModal('login');AuthUI.closeSettingsDropdown();">
+          <span class="settings-item-icon">🔑</span>
+          <span class="settings-item-text">Iniciar Sesión / Registro</span>
+          <span class="settings-item-arrow">›</span>
+        </div>
+        <div class="settings-menu-item" onclick="AuthUI.loginAsDemoTeacher();AuthUI.closeSettingsDropdown();">
+          <span class="settings-item-icon">👨‍🏫</span>
+          <span class="settings-item-text">Probar Demo Maestro</span>
+          <span class="settings-item-arrow">›</span>
+        </div>
+        <div class="settings-menu-item" onclick="AuthUI.loginAsDemoStudent();AuthUI.closeSettingsDropdown();">
+          <span class="settings-item-icon">🎓</span>
+          <span class="settings-item-text">Probar Demo Estudiante</span>
+          <span class="settings-item-arrow">›</span>
         </div>
       `;
     }
+
+    dropdown.innerHTML = `
+      ${userHeaderHtml}
+
+      ${accountActionsHtml}
+
+      <div class="settings-divider"></div>
+
+      <!-- Fila de Tema Claro / Oscuro (Idéntica a Curso ML) -->
+      <div class="settings-row">
+        <span class="settings-label">Tema</span>
+        <button class="settings-theme-switch theme-toggle-btn" id="settings-theme-switch" onclick="StorageManager.toggleTheme();AuthUI.renderSettingsDropdown();" aria-label="Cambiar tema" title="Alternar entre modo claro y oscuro">
+          <span class="theme-switch-thumb">
+            <span class="theme-toggle-icon" id="settings-theme-icon">${theme === 'light' ? '☀️' : '🌙'}</span>
+          </span>
+        </button>
+      </div>
+
+      <!-- Conexión a Supabase (Base de Datos) -->
+      <div class="settings-menu-item" onclick="AuthUI.openConfigModal();AuthUI.closeSettingsDropdown();">
+        <span class="settings-item-icon">⚡</span>
+        <span class="settings-item-text">Conexión Supabase</span>
+        <span class="settings-item-arrow">›</span>
+      </div>
+
+      ${(isStudent || !user) ? `
+        <div class="settings-menu-item" onclick="if(typeof openResetModal==='function')openResetModal();else if(confirm('¿Deseas reiniciar tu progreso local?')){StorageManager.resetAll();location.reload();}AuthUI.closeSettingsDropdown();">
+          <span class="settings-item-icon">↺</span>
+          <span class="settings-item-text">Reiniciar Progreso</span>
+          <span class="settings-item-arrow">›</span>
+        </div>
+      ` : ''}
+
+      ${logoutHtml}
+    `;
   },
 
   // ---------------------------------------------------------------------------
@@ -586,12 +746,24 @@ const AuthUI = {
       if (e.target.classList.contains('lms-modal-backdrop')) {
         e.target.style.display = 'none';
       }
+
+      // Cerrar dropdown de configuración al hacer clic fuera
+      const dropdown = document.getElementById('settings-dropdown');
+      const btn = document.getElementById('open-settings-btn');
+      const userPill = document.querySelector('.lms-user-pill');
+      if (dropdown && dropdown.classList.contains('open')) {
+        if (!dropdown.contains(e.target) && (!btn || !btn.contains(e.target)) && (!userPill || !userPill.contains(e.target))) {
+          dropdown.classList.remove('open');
+        }
+      }
     });
 
     // Cerrar con Escape
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         document.querySelectorAll('.lms-modal-backdrop').forEach(m => m.style.display = 'none');
+        const dropdown = document.getElementById('settings-dropdown');
+        if (dropdown) dropdown.classList.remove('open');
       }
     });
   },
@@ -915,9 +1087,17 @@ const AuthUI = {
         gap: 8px;
         background: var(--bg-surface-alt, #f1f5f9);
         border: 1.5px solid var(--border, #e2e8f0);
-        padding: 4px 10px;
+        padding: 5px 12px 5px 8px;
         border-radius: 20px;
-        font-size: 13px;
+        font-size: 12.5px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        user-select: none;
+      }
+      .lms-user-pill:hover {
+        border-color: var(--primary, #2563eb);
+        background: var(--bg-surface-hover, #e2e8f0);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       }
       .lms-role-tag {
         font-size: 11px;
@@ -935,31 +1115,10 @@ const AuthUI = {
       }
       .lms-user-name {
         font-weight: 700;
-        max-width: 120px;
+        max-width: 130px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-      .lms-nav-chip-btn {
-        background: var(--bg-surface, #ffffff);
-        border: 1px solid var(--border, #e2e8f0);
-        padding: 3px 8px;
-        border-radius: 12px;
-        font-size: 11.5px;
-        font-weight: 700;
-        cursor: pointer;
-        color: var(--primary, #2563eb);
-        transition: all 0.15s ease;
-      }
-      .lms-nav-chip-btn:hover {
-        background: var(--primary-light, #eff6ff);
-      }
-      .lms-logout-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-        padding: 0 2px;
       }
     `;
     document.head.appendChild(style);
