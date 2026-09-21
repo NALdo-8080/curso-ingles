@@ -129,12 +129,14 @@ ALTER TABLE public.badges ENABLE ROW LEVEL SECURITY;
 -- POLÍTICAS RLS: usuarios
 -- -----------------------------------------------------------------------------
 -- 1. Un usuario autenticado puede leer su propio perfil
+DROP POLICY IF EXISTS "usuarios_select_own" ON public.usuarios;
 CREATE POLICY "usuarios_select_own"
     ON public.usuarios FOR SELECT
     TO authenticated
     USING (id = auth.uid());
 
 -- 2. Un profesor puede ver los perfiles de los estudiantes de sus clases
+DROP POLICY IF EXISTS "usuarios_teacher_view_students" ON public.usuarios;
 CREATE POLICY "usuarios_teacher_view_students"
     ON public.usuarios FOR SELECT
     TO authenticated
@@ -148,6 +150,7 @@ CREATE POLICY "usuarios_teacher_view_students"
     );
 
 -- 3. Un estudiante puede ver el perfil del profesor de su clase
+DROP POLICY IF EXISTS "usuarios_student_view_teacher" ON public.usuarios;
 CREATE POLICY "usuarios_student_view_teacher"
     ON public.usuarios FOR SELECT
     TO authenticated
@@ -161,12 +164,14 @@ CREATE POLICY "usuarios_student_view_teacher"
     );
 
 -- 4. El usuario puede insertar su propio perfil (respaldo de cliente si no corre trigger)
+DROP POLICY IF EXISTS "usuarios_insert_own" ON public.usuarios;
 CREATE POLICY "usuarios_insert_own"
     ON public.usuarios FOR INSERT
     TO authenticated
     WITH CHECK (id = auth.uid());
 
 -- 5. El usuario puede actualizar su propio perfil
+DROP POLICY IF EXISTS "usuarios_update_own" ON public.usuarios;
 CREATE POLICY "usuarios_update_own"
     ON public.usuarios FOR UPDATE
     TO authenticated
@@ -177,18 +182,21 @@ CREATE POLICY "usuarios_update_own"
 -- POLÍTICAS RLS: clases
 -- -----------------------------------------------------------------------------
 -- 1. Cualquier usuario autenticado puede buscar/leer clases (necesario para unirse con código)
+DROP POLICY IF EXISTS "clases_select_authenticated" ON public.clases;
 CREATE POLICY "clases_select_authenticated"
     ON public.clases FOR SELECT
     TO authenticated
     USING (true);
 
 -- 2. Solo el profesor creador puede insertar clases
+DROP POLICY IF EXISTS "clases_insert_teacher" ON public.clases;
 CREATE POLICY "clases_insert_teacher"
     ON public.clases FOR INSERT
     TO authenticated
     WITH CHECK (id_profesor = auth.uid());
 
 -- 3. Solo el profesor creador puede actualizar su clase
+DROP POLICY IF EXISTS "clases_update_teacher" ON public.clases;
 CREATE POLICY "clases_update_teacher"
     ON public.clases FOR UPDATE
     TO authenticated
@@ -196,6 +204,7 @@ CREATE POLICY "clases_update_teacher"
     WITH CHECK (id_profesor = auth.uid());
 
 -- 4. Solo el profesor creador puede eliminar su clase
+DROP POLICY IF EXISTS "clases_delete_teacher" ON public.clases;
 CREATE POLICY "clases_delete_teacher"
     ON public.clases FOR DELETE
     TO authenticated
@@ -205,12 +214,14 @@ CREATE POLICY "clases_delete_teacher"
 -- POLÍTICAS RLS: inscripciones
 -- -----------------------------------------------------------------------------
 -- 1. El estudiante puede ver sus propias inscripciones
+DROP POLICY IF EXISTS "inscripciones_select_student" ON public.inscripciones;
 CREATE POLICY "inscripciones_select_student"
     ON public.inscripciones FOR SELECT
     TO authenticated
     USING (id_usuario = auth.uid());
 
 -- 2. El profesor puede ver las inscripciones pertenecientes a sus clases
+DROP POLICY IF EXISTS "inscripciones_select_teacher" ON public.inscripciones;
 CREATE POLICY "inscripciones_select_teacher"
     ON public.inscripciones FOR SELECT
     TO authenticated
@@ -223,12 +234,14 @@ CREATE POLICY "inscripciones_select_teacher"
     );
 
 -- 3. El estudiante puede inscribirse a sí mismo
+DROP POLICY IF EXISTS "inscripciones_insert_student" ON public.inscripciones;
 CREATE POLICY "inscripciones_insert_student"
     ON public.inscripciones FOR INSERT
     TO authenticated
     WITH CHECK (id_usuario = auth.uid());
 
 -- 4. El estudiante puede abandonar una clase o el profesor puede removerlo
+DROP POLICY IF EXISTS "inscripciones_delete" ON public.inscripciones;
 CREATE POLICY "inscripciones_delete"
     ON public.inscripciones FOR DELETE
     TO authenticated
@@ -245,12 +258,14 @@ CREATE POLICY "inscripciones_delete"
 -- POLÍTICAS RLS: progreso
 -- -----------------------------------------------------------------------------
 -- 1. El estudiante puede ver su propio progreso
+DROP POLICY IF EXISTS "progreso_select_student" ON public.progreso;
 CREATE POLICY "progreso_select_student"
     ON public.progreso FOR SELECT
     TO authenticated
     USING (id_usuario = auth.uid());
 
 -- 2. El profesor puede ver el progreso de los estudiantes de sus clases
+DROP POLICY IF EXISTS "progreso_select_teacher" ON public.progreso;
 CREATE POLICY "progreso_select_teacher"
     ON public.progreso FOR SELECT
     TO authenticated
@@ -264,11 +279,13 @@ CREATE POLICY "progreso_select_teacher"
     );
 
 -- 3. El estudiante puede registrar o actualizar su propio progreso
+DROP POLICY IF EXISTS "progreso_insert_student" ON public.progreso;
 CREATE POLICY "progreso_insert_student"
     ON public.progreso FOR INSERT
     TO authenticated
     WITH CHECK (id_usuario = auth.uid());
 
+DROP POLICY IF EXISTS "progreso_update_student" ON public.progreso;
 CREATE POLICY "progreso_update_student"
     ON public.progreso FOR UPDATE
     TO authenticated
@@ -279,12 +296,14 @@ CREATE POLICY "progreso_update_student"
 -- POLÍTICAS RLS: badges
 -- -----------------------------------------------------------------------------
 -- 1. El estudiante puede ver sus propias insignias
+DROP POLICY IF EXISTS "badges_select_student" ON public.badges;
 CREATE POLICY "badges_select_student"
     ON public.badges FOR SELECT
     TO authenticated
     USING (id_usuario = auth.uid());
 
 -- 2. El profesor puede ver las insignias de los estudiantes de sus clases
+DROP POLICY IF EXISTS "badges_select_teacher" ON public.badges;
 CREATE POLICY "badges_select_teacher"
     ON public.badges FOR SELECT
     TO authenticated
@@ -298,6 +317,7 @@ CREATE POLICY "badges_select_teacher"
     );
 
 -- 3. El estudiante puede registrar sus propias insignias
+DROP POLICY IF EXISTS "badges_insert_student" ON public.badges;
 CREATE POLICY "badges_insert_student"
     ON public.badges FOR INSERT
     TO authenticated
@@ -395,6 +415,7 @@ ALTER TABLE public.entregas_asignaciones ENABLE ROW LEVEL SECURITY;
 
 -- POLÍTICAS RLS: asignaciones
 -- 1. Alumnos inscritos y profesores pueden ver las asignaciones de sus clases
+DROP POLICY IF EXISTS "asignaciones_select" ON public.asignaciones;
 CREATE POLICY "asignaciones_select"
     ON public.asignaciones FOR SELECT
     TO authenticated
@@ -408,6 +429,7 @@ CREATE POLICY "asignaciones_select"
     );
 
 -- 2. Solo el profesor de la clase puede crear asignaciones
+DROP POLICY IF EXISTS "asignaciones_insert_teacher" ON public.asignaciones;
 CREATE POLICY "asignaciones_insert_teacher"
     ON public.asignaciones FOR INSERT
     TO authenticated
@@ -421,12 +443,14 @@ CREATE POLICY "asignaciones_insert_teacher"
     );
 
 -- 3. Solo el profesor puede actualizar o eliminar sus asignaciones
+DROP POLICY IF EXISTS "asignaciones_update_teacher" ON public.asignaciones;
 CREATE POLICY "asignaciones_update_teacher"
     ON public.asignaciones FOR UPDATE
     TO authenticated
     USING (id_profesor = auth.uid())
     WITH CHECK (id_profesor = auth.uid());
 
+DROP POLICY IF EXISTS "asignaciones_delete_teacher" ON public.asignaciones;
 CREATE POLICY "asignaciones_delete_teacher"
     ON public.asignaciones FOR DELETE
     TO authenticated
@@ -434,6 +458,7 @@ CREATE POLICY "asignaciones_delete_teacher"
 
 -- POLÍTICAS RLS: entregas_asignaciones
 -- 1. El estudiante puede ver sus propias entregas; el profesor de la clase puede ver todas las entregas
+DROP POLICY IF EXISTS "entregas_select" ON public.entregas_asignaciones;
 CREATE POLICY "entregas_select"
     ON public.entregas_asignaciones FOR SELECT
     TO authenticated
@@ -447,6 +472,7 @@ CREATE POLICY "entregas_select"
     );
 
 -- 2. El estudiante puede registrar o actualizar su entrega
+DROP POLICY IF EXISTS "entregas_insert_student" ON public.entregas_asignaciones;
 CREATE POLICY "entregas_insert_student"
     ON public.entregas_asignaciones FOR INSERT
     TO authenticated
@@ -459,6 +485,7 @@ CREATE POLICY "entregas_insert_student"
         )
     );
 
+DROP POLICY IF EXISTS "entregas_update_student" ON public.entregas_asignaciones;
 CREATE POLICY "entregas_update_student"
     ON public.entregas_asignaciones FOR UPDATE
     TO authenticated
@@ -466,6 +493,7 @@ CREATE POLICY "entregas_update_student"
     WITH CHECK (id_estudiante = auth.uid());
 
 -- 3. El profesor puede actualizar entregas para asignar calificación y retroalimentación
+DROP POLICY IF EXISTS "entregas_update_teacher_grade" ON public.entregas_asignaciones;
 CREATE POLICY "entregas_update_teacher_grade"
     ON public.entregas_asignaciones FOR UPDATE
     TO authenticated
@@ -483,6 +511,3 @@ CREATE POLICY "entregas_update_teacher_grade"
             AND c.id_profesor = auth.uid()
         )
     );
-
-
-
